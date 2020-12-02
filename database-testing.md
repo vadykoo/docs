@@ -1,28 +1,29 @@
-# Database Testing
+# Тестування бази даних
 
-- [Introduction](#introduction)
-- [Resetting The Database After Each Test](#resetting-the-database-after-each-test)
-- [Creating Factories](#creating-factories)
-- [Writing Factories](#writing-factories)
-    - [Factory States](#factory-states)
-    - [Factory Callbacks](#factory-callbacks)
-- [Using Factories](#using-factories)
-    - [Creating Models](#creating-models)
-    - [Persisting Models](#persisting-models)
-    - [Sequences](#sequences)
-- [Factory Relationships](#factory-relationships)
-    - [Relationships Within Definitions](#relationships-within-definition)
-    - [Has Many Relationships](#has-many-relationships)
-    - [Belongs To Relationships](#belongs-to-relationships)
-    - [Many To Many Relationships](#many-to-many-relationships)
-    - [Polymorphic Relationships](#polymorphic-relationships)
-- [Using Seeds](#using-seeds)
-- [Available Assertions](#available-assertions)
+-   [Вступ](#introduction)
+-   [Скидання бази даних після кожного тесту](#resetting-the-database-after-each-test)
+-   [Створення фабрик](#creating-factories)
+-   [Написання фабрик](#writing-factories)
+    -   [Заводські штати](#factory-states)
+    -   [Фабричні зворотні дзвінки](#factory-callbacks)
+-   [Використання заводів](#using-factories)
+    -   [Створення моделей](#creating-models)
+    -   [Персистуючі моделі](#persisting-models)
+    -   [Послідовності](#sequences)
+-   [Заводські відносини](#factory-relationships)
+    -   [Відносини у межах визначень](#relationships-within-definition)
+    -   [Має багато стосунків](#has-many-relationships)
+    -   [Належить до стосунків](#belongs-to-relationships)
+    -   [Багато до багатьох відносин](#many-to-many-relationships)
+    -   [Поліморфні відносини](#polymorphic-relationships)
+-   [Використання насіння](#using-seeds)
+-   [Доступні твердження](#available-assertions)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel provides a variety of helpful tools to make it easier to test your database driven applications. First, you may use the `assertDatabaseHas` helper to assert that data exists in the database matching a given set of criteria. For example, if you would like to verify that there is a record in the `users` table with the `email` value of `sally@example.com`, you can do the following:
+## Вступ
+
+Laravel пропонує безліч корисних інструментів для спрощення тестування програм, керованих базами даних. По-перше, ви можете використовувати`assertDatabaseHas`помічник стверджувати, що дані існують у базі даних, що відповідають заданому набору критеріїв. Наприклад, якщо ви хочете перевірити, чи є запис у файлі`users`таблиця з`email`значення`sally@example.com`, ви можете зробити наступне:
 
     public function testDatabase()
     {
@@ -33,14 +34,15 @@ Laravel provides a variety of helpful tools to make it easier to test your datab
         ]);
     }
 
-You can also use the `assertDatabaseMissing` helper to assert that data does not exist in the database.
+Ви також можете використовувати`assertDatabaseMissing`помічник стверджувати, що дані не існують у базі даних.
 
-The `assertDatabaseHas` method and other helpers like it are for convenience. You are free to use any of PHPUnit's built-in assertion methods to supplement your feature tests.
+`assertDatabaseHas`метод та інші подібні помічники для зручності. Ви можете використовувати будь-який із вбудованих методів твердження PHPUnit для доповнення тестів функцій.
 
 <a name="resetting-the-database-after-each-test"></a>
-## Resetting The Database After Each Test
 
-It is often useful to reset your database after each test so that data from a previous test does not interfere with subsequent tests. The `RefreshDatabase` trait takes the most optimal approach to migrating your test database depending on if you are using an in-memory database or a traditional database. Use the trait on your test class and everything will be handled for you:
+## Скидання бази даних після кожного тесту
+
+Часто корисно скидати базу даних після кожного тесту, щоб дані попереднього тесту не перешкоджали подальшим тестам.`RefreshDatabase`trait використовує найбільш оптимальний підхід до міграції тестової бази даних, залежно від того, використовуєте ви базу даних в пам'яті або традиційну базу даних. Використовуйте ознаку у своєму тестовому класі, і все буде оброблено для вас:
 
     <?php
 
@@ -68,24 +70,26 @@ It is often useful to reset your database after each test so that data from a pr
     }
 
 <a name="creating-factories"></a>
-## Creating Factories
 
-When testing, you may need to insert a few records into your database before executing your test. Instead of manually specifying the value of each column when you create this test data, Laravel allows you to define a default set of attributes for each of your [Eloquent models](/docs/{{version}}/eloquent) using model factories.
+## Створення фабрик
 
-To create a factory, use the `make:factory` [Artisan command](/docs/{{version}}/artisan):
+Під час тестування вам може знадобитися вставити кілька записів у вашу базу даних перед виконанням тесту. Замість того, щоб вручну вказувати значення кожного стовпця під час створення цих тестових даних, Laravel дозволяє визначити набір атрибутів за замовчуванням для кожного з ваших[Красномовні моделі](/docs/{{version}}/eloquent)за допомогою модельних фабрик.
+
+Щоб створити фабрику, використовуйте`make:factory`[Ремісниче командування](/docs/{{version}}/artisan):
 
     php artisan make:factory PostFactory
 
-The new factory will be placed in your `database/factories` directory.
+Нова фабрика буде розміщена у вашому`database/factories`каталог.
 
-The `--model` option may be used to indicate the name of the model created by the factory. This option will pre-fill the generated factory file with the given model:
+`--model`Опція може використовуватися для позначення назви моделі, створеної на заводі. Цей параметр попередньо заповнить згенерований заводський файл заданою моделлю:
 
     php artisan make:factory PostFactory --model=Post
 
 <a name="writing-factories"></a>
-## Writing Factories
 
-To get started, take a look at the `database/factories/UserFactory.php` file in your application. Out of the box, this file contains the following factory definition:
+## Написання фабрик
+
+Для початку погляньте на`database/factories/UserFactory.php`файл у вашій заявці. Зразу, цей файл містить таке заводське визначення:
 
     namespace Database\Factories;
 
@@ -119,16 +123,17 @@ To get started, take a look at the `database/factories/UserFactory.php` file in 
         }
     }
 
-As you can see, in their most basic form, factories are classes that extend Laravel's base factory class and define a `model` property and `definition` method. The `definition` method returns the default set of attribute values that should be applied when creating a model using the factory.
+Як бачимо, у найосновнішому вигляді фабрики - це класи, які розширюють базовий заводський клас Laravel і визначають a`model`майно і`definition`метод.`definition`Метод повертає набір значень атрибутів за замовчуванням, які слід застосовувати при створенні моделі за допомогою заводу.
 
-Via the `faker` property, factories have access to the [Faker](https://github.com/FakerPHP/Faker) PHP library, which allows you to conveniently generate various kinds of random data for testing.
+Через`faker`власності, фабрики мають доступ до[Факер](https://github.com/FakerPHP/Faker)Бібліотека PHP, яка дозволяє зручно генерувати різні види випадкових даних для тестування.
 
-> {tip} You can set the Faker locale by adding a `faker_locale` option to your `config/app.php` configuration file.
+> {tip} Ви можете встановити локаль Faker, додавши a`faker_locale`варіант для вашого`config/app.php`файл конфігурації.
 
 <a name="factory-states"></a>
-### Factory States
 
-State manipulation methods allow you to define discrete modifications that can be applied to your model factories in any combination. For example, your `User` model might have a `suspended` state that modifies one of its default attribute values. You may define your state transformations using the base factory's `state` method. You may name your state method anything you like. After all, it's just a typical PHP method. The provided state manipulation callback will receive the array of raw attributes defined for the factory and should return an array of attributes to modify:
+### Заводські штати
+
+Методи державного маніпулювання дозволяють визначити дискретні модифікації, які можна застосувати до ваших модельних заводів у будь-якій комбінації. Наприклад, ваш`User`модель може мати`suspended`стан, який змінює одне зі значень атрибута за замовчуванням. Ви можете визначити свої перетворення стану, використовуючи базові заводи`state`метод. Ви можете називати свій метод стану як завгодно. Зрештою, це лише типовий метод PHP. Наданий зворотний виклик маніпуляції станом отримає масив необроблених атрибутів, визначених для заводу, і повинен повернути масив атрибутів для модифікації:
 
     /**
      * Indicate that the user is suspended.
@@ -145,9 +150,10 @@ State manipulation methods allow you to define discrete modifications that can b
     }
 
 <a name="factory-callbacks"></a>
-### Factory Callbacks
 
-Factory callbacks are registered using the `afterMaking` and `afterCreating` methods and allow you to perform additional tasks after making or creating a model. You should register these callbacks by defining a `configure` method on the factory class. This method will automatically be called by Laravel when the factory is instantiated:
+### Фабричні зворотні дзвінки
+
+Заводські зворотні дзвінки реєструються за допомогою`afterMaking`і`afterCreating`методи і дозволяють виконувати додаткові завдання після виготовлення або створення моделі. Вам слід зареєструвати ці зворотні дзвінки, визначивши a`configure`метод на заводському класі. Цей метод буде автоматично викликаний Laravel, коли буде створено екземпляр заводу:
 
     namespace Database\Factories;
 
@@ -182,12 +188,14 @@ Factory callbacks are registered using the `afterMaking` and `afterCreating` met
     }
 
 <a name="using-factories"></a>
-## Using Factories
+
+## Використання заводів
 
 <a name="creating-models"></a>
-### Creating Models
 
-Once you have defined your factories, you may use the static `factory` method provided by the `Illuminate\Database\Eloquent\Factories\HasFactory` trait on your Eloquent models in order to instantiate a factory instance for that model:
+### Створення моделей
+
+Визначивши свої заводи, ви можете використовувати статику`factory`метод, передбачений`Illuminate\Database\Eloquent\Factories\HasFactory`риси на ваших красномовних моделях, щоб створити екземпляр заводського екземпляра для цієї моделі:
 
     namespace App\Models;
 
@@ -199,7 +207,7 @@ Once you have defined your factories, you may use the static `factory` method pr
         use HasFactory;
     }
 
-Let's take a look at a few examples of creating models. First, we'll use the `make` method to create models without persisting them to the database:
+Давайте розглянемо кілька прикладів створення моделей. Спочатку ми використаємо`make`метод створення моделей без збереження їх у базі даних:
 
     use App\Models\User;
 
@@ -210,12 +218,12 @@ Let's take a look at a few examples of creating models. First, we'll use the `ma
         // Use model in tests...
     }
 
-You may create a collection of many models using the `count` method:
+You may create a collection of many models using the `count`метод:
 
     // Create three App\Models\User instances...
     $users = User::factory()->count(3)->make();
 
-The `HasFactory` trait's `factory` method will use conventions to determine the proper factory for the model. Specifically, the method will look for a factory in the `Database\Factories` namespace that has a class name matching the model name and is suffixed with `Factory`. If these conventions do not apply to your particular application or factory, you may overwrite the `newFactory` method on your model to return an instance of the model's corresponding factory directly:
+`HasFactory`особливості`factory`Метод буде використовувати конвенції для визначення належної фабрики для моделі. Зокрема, метод буде шукати фабрику в`Database\Factories`простір імен, який має ім'я класу, що відповідає імені моделі і суфіксом якого є`Factory`. Якщо ці умови не стосуються конкретного додатка чи заводу, ви можете замінити`newFactory`метод на вашій моделі, щоб повернути екземпляр відповідного заводу моделі безпосередньо:
 
     /**
      * Create a new factory instance for the model.
@@ -228,33 +236,36 @@ The `HasFactory` trait's `factory` method will use conventions to determine the 
     }
 
 <a name="applying-states"></a>
-#### Applying States
 
-You may also apply any of your [states](#factory-states) to the models. If you would like to apply multiple state transformations to the models, you may simply call state methods directly:
+#### Держави, що застосовують
+
+Ви також можете застосувати будь-який із своїх[штатів](#factory-states)до моделей. Якщо ви хочете застосувати до моделей кілька перетворень стану, ви можете просто викликати методи стану безпосередньо:
 
     $users = User::factory()->count(5)->suspended()->make();
 
 <a name="overriding-attributes"></a>
-#### Overriding Attributes
 
-If you would like to override some of the default values of your models, you may pass an array of values to the `make` method. Only the specified values will be replaced while the rest of the values remain set to their default values as specified by the factory:
+#### Заміна атрибутів
+
+Якщо ви хочете замінити деякі значення за замовчуванням для своїх моделей, ви можете передати масив значень в`make`метод. Тільки зазначені значення будуть замінені, тоді як для решти значень залишаються встановлені значення за замовчуванням, як це вказано на заводі:
 
     $user = User::factory()->make([
         'name' => 'Abigail Otwell',
     ]);
 
-Alternatively, the `state` method may be called directly on the factory instance to perform an inline state transformation:
+Крім того,`state`метод може бути викликаний безпосередньо на заводському екземплярі для виконання вбудованого перетворення стану:
 
     $user = User::factory()->state([
         'name' => 'Abigail Otwell',
     ])->make();
 
-> {tip} [Mass assignment protection](/docs/{{version}}/eloquent#mass-assignment) is automatically disabled when creating models using factories.
+> {порада}[Захист від масового призначення](/docs/{{version}}/eloquent#mass-assignment)автоматично вимикається при створенні моделей на заводах.
 
 <a name="persisting-models"></a>
-### Persisting Models
 
-The `create` method creates model instances and persists them to the database using Eloquent's `save` method:
+### Персистуючі моделі
+
+`create` method creates model instances and persists them to the database using Eloquent's `save`метод:
 
     use App\Models\User;
 
@@ -269,16 +280,17 @@ The `create` method creates model instances and persists them to the database us
         // Use model in tests...
     }
 
-You may override attributes on the model by passing an array of attributes to the `create` method:
+Ви можете замінити атрибути на моделі, передавши масив атрибутів в`create`метод:
 
     $user = User::factory()->create([
         'name' => 'Abigail',
     ]);
 
 <a name="sequences"></a>
-### Sequences
 
-Sometimes you may wish to alternate the value of a given model attribute for each created model. You may accomplish this by defining a state transformation as a `Sequence` instance. For example, we may wish to alternate the value of an `admin` column on a `User` model between `Y` and `N` for each created user:
+### Послідовності
+
+Іноді вам може знадобитися чергувати значення даного атрибута моделі для кожної створеної моделі. Ви можете досягти цього, визначивши перетворення держави як`Sequence`екземпляр. Наприклад, ми можемо побажати чергувати значення`admin`стовпець на a`User`модель між`Y`і`N`для кожного створеного користувача:
 
     use App\Models\User;
     use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -291,15 +303,17 @@ Sometimes you may wish to alternate the value of a given model attribute for eac
                     ))
                     ->create();
 
-In this example, five users will be created with an `admin` value of `Y` and five users will be created with an `admin` value of `N`.
+У цьому прикладі буде створено п'ять користувачів із`admin`значення`Y`і п'ять користувачів будуть створені з`admin`значення`N`.
 
 <a name="factory-relationships"></a>
-## Factory Relationships
+
+## Заводські відносини
 
 <a name="relationships-within-definition"></a>
-### Relationships Within Definitions
 
-You may attach relationships to models in your factory definitions. For example, if you would like to create a new `User` instance when creating a `Post`, you may do the following:
+### Відносини у межах визначень
+
+Ви можете прив’язати стосунки до моделей у своїх заводських визначеннях. Наприклад, якщо ви хочете створити новий`User`при створенні`Post`, ви можете зробити наступне:
 
     use App\Models\User;
 
@@ -317,7 +331,7 @@ You may attach relationships to models in your factory definitions. For example,
         ];
     }
 
-If the relationship's columns depend on the factory that defines it you may provide a callback which accepts the evaluated attribute array:
+Якщо стовпці відношення залежать від заводу, який його визначає, ви можете надати зворотний виклик, який приймає обчислюваний масив атрибутів:
 
     /**
      * Define the model's default state.
@@ -337,9 +351,10 @@ If the relationship's columns depend on the factory that defines it you may prov
     }
 
 <a name="has-many-relationships"></a>
-### Has Many Relationships
 
-Next, let's explore building Eloquent model relationships using Laravel's fluent factory methods. First, let's assume our application has a `User` model and a `Post` model. Also, let's assume that the `User` model defines a `hasMany` relationship with `Post`. We can create a user that has three posts using the `has` method provided by the factory. The `has` method accepts a factory instance:
+### Має багато стосунків
+
+Далі, давайте дослідимо побудову красномовних зв’язків між моделями, використовуючи вільні фабричні методи Laravel. По-перше, припустимо, що наш додаток має`User`модель та a`Post`модель. Крім того, припустимо, що`User`модель визначає a`hasMany`відносини з`Post`. Ми можемо створити користувача, який має три дописи за допомогою`has`метод, що надається заводом.`has`метод приймає заводський екземпляр:
 
     use App\Models\Post;
     use App\Models\User;
@@ -348,13 +363,13 @@ Next, let's explore building Eloquent model relationships using Laravel's fluent
                 ->has(Post::factory()->count(3))
                 ->create();
 
-By convention, when passing a `Post` model to the `has` method, Laravel will assume that the `User` model must have a `posts` method that defines the relationship. If necessary, you may explicitly specify the name of the relationship that you would like to manipulate:
+By convention, when passing a `Post`модель до`has`методом, Laravel припустить, що`User`модель повинна мати a`posts`метод, що визначає взаємозв'язок. За необхідності ви можете чітко вказати назву відносин, якими ви хочете маніпулювати:
 
     $user = User::factory()
                 ->has(Post::factory()->count(3), 'posts')
                 ->create();
 
-Of course, you may perform state manipulations on the related models. In addition, you may pass a Closure based state transformation if your state change requires access to the parent model:
+Звичайно, ви можете виконувати державні маніпуляції на відповідних моделях. Крім того, ви можете пройти перетворення стану на основі закриття, якщо зміна стану вимагає доступу до батьківської моделі:
 
     $user = User::factory()
                 ->has(
@@ -367,15 +382,16 @@ Of course, you may perform state manipulations on the related models. In additio
                 ->create();
 
 <a name="has-many-relationships-using-magic-methods"></a>
-#### Using Magic Methods
 
-For convenience, you may use the factory's magic relationship methods to define relationships. For example, the following example will use convention to determine that the related models should be created via a `posts` relationship method on the `User` model:
+#### Використання магічних методів
+
+Для зручності ви можете використовувати фабричні методи магічних відносин для визначення відносин. Наприклад, у наступному прикладі буде використано конвенцію, щоб визначити, що відповідні моделі слід створювати за допомогою`posts`метод відносин на`User`модель:
 
     $user = User::factory()
                 ->hasPosts(3)
                 ->create();
 
-When using magic methods to create factory relationships, you may pass an array of attributes to override on the related models:
+Використовуючи магічні методи для створення фабричних відносин, ви можете передати масив атрибутів, щоб замінити їх на відповідні моделі:
 
     $user = User::factory()
                 ->hasPosts(3, [
@@ -383,7 +399,7 @@ When using magic methods to create factory relationships, you may pass an array 
                 ])
                 ->create();
 
-You may provide a Closure based state transformation if your state change requires access to the parent model:
+Ви можете надати перетворення стану на основі закриття, якщо зміна стану вимагає доступу до батьківської моделі:
 
     $user = User::factory()
                 ->hasPosts(3, function (array $attributes, User $user) {
@@ -392,9 +408,10 @@ You may provide a Closure based state transformation if your state change requir
                 ->create();
 
 <a name="belongs-to-relationships"></a>
-### Belongs To Relationships
 
-Now that we have explored how to build "has many" relationships using factories, let's explore the inverse of the relationship. The `for` method may be used to define the model that factory created models belong to. For example, we can create three `Post` model instances that belong to a single user:
+### Належить до стосунків
+
+Тепер, коли ми дослідили, як побудувати відносини "має багато" за допомогою фабрик, давайте дослідимо зворотний зв'язок.`for`метод може бути використаний для визначення моделі, якій належать створені на заводі моделі. Наприклад, ми можемо створити три`Post`екземпляри моделі, що належать одному користувачеві:
 
     use App\Models\Post;
     use App\Models\User;
@@ -407,9 +424,10 @@ Now that we have explored how to build "has many" relationships using factories,
                 ->create();
 
 <a name="belongs-to-relationships-using-magic-methods"></a>
-#### Using Magic Methods
 
-For convenience, you may use the factory's magic relationship methods to define "belongs to" relationships. For example, the following example will use convention to determine that the three posts should belong to the `user` relationship on the `Post` model:
+#### Використання магічних методів
+
+Для зручності ви можете використовувати фабричні методи магічних відносин для визначення відносин "належить". Наприклад, у наступному прикладі буде використано конвенцію, щоб визначити, що три посади повинні належати до`user`відносини на`Post`модель:
 
     $posts = Post::factory()
                 ->count(3)
@@ -419,9 +437,10 @@ For convenience, you may use the factory's magic relationship methods to define 
                 ->create();
 
 <a name="many-to-many-relationships"></a>
-### Many To Many Relationships
 
-Like [has many relationships](#has-many-relationships), "many to many" relationships may be created using the `has` method:
+### Багато до багатьох відносин
+
+Люблю[має багато стосунків](#has-many-relationships), відносини "багато до багатьох" можуть бути створені за допомогою`has`метод:
 
     use App\Models\Role;
     use App\Models\User;
@@ -431,9 +450,10 @@ Like [has many relationships](#has-many-relationships), "many to many" relations
                 ->create();
 
 <a name="pivot-table-attributes"></a>
-#### Pivot Table Attributes
 
-If you need to define attributes that should be set on the pivot / intermediate table linking the models, you may use the `hasAttached` method. This method accepts an array of pivot table attribute names and values as its second argument:
+#### Атрибути зведеної таблиці
+
+Якщо вам потрібно визначити атрибути, які слід встановити у зведеній / проміжній таблиці, що пов'язує моделі, ви можете використовувати`hasAttached`метод. Цей метод приймає масив імен та значень атрибутів зведеної таблиці як другий аргумент:
 
     use App\Models\Role;
     use App\Models\User;
@@ -445,7 +465,7 @@ If you need to define attributes that should be set on the pivot / intermediate 
                 )
                 ->create();
 
-You may provide a Closure based state transformation if your state change requires access to the related model:
+Ви можете надати перетворення стану на основі закриття, якщо зміна стану вимагає доступу до відповідної моделі:
 
     $users = User::factory()
                 ->hasAttached(
@@ -459,9 +479,10 @@ You may provide a Closure based state transformation if your state change requir
                 ->create();
 
 <a name="many-to-many-relationships-using-magic-methods"></a>
-#### Using Magic Methods
 
-For convenience, you may use the factory's magic relationship methods to define many to many relationships. For example, the following example will use convention to determine that the related models should be created via a `roles` relationship method on the `User` model:
+#### Використання магічних методів
+
+Для зручності ви можете використовувати фабричні методи магічних відносин, щоб визначити багато-багато відносин. Наприклад, у наступному прикладі буде використано конвенцію, щоб визначити, що відповідні моделі слід створювати за допомогою`roles`метод відносин на`User`модель:
 
     $users = User::factory()
                 ->hasRoles(1, [
@@ -470,27 +491,30 @@ For convenience, you may use the factory's magic relationship methods to define 
                 ->create();
 
 <a name="polymorphic-relationships"></a>
-### Polymorphic Relationships
 
-[Polymorphic relationships](/docs/{{version}}/eloquent-relationships#polymorphic-relationships) may also be created using factories. Polymorphic "morph many" relationships are created in the same way as typical "has many" relationships. For example, if a `Post` model has a `morphMany` relationship with a `Comment` model:
+### Поліморфні відносини
+
+[Поліморфні зв’язки](/docs/{{version}}/eloquent-relationships#polymorphic-relationships)також можуть бути створені за допомогою заводів. Поліморфні відносини "морф багато" створюються так само, як типові відносини "має багато". Наприклад, якщо a`Post`модель має`morphMany`відносини з а`Comment`модель:
 
     use App\Models\Post;
 
     $post = Post::factory()->hasComments(3)->create();
 
 <a name="morph-to-relationships"></a>
-#### Morph To Relationships
 
-Magic methods may not be used to create `morphTo` relationships. Instead, the `for` method must be used directly and the name of the relationship must be explicitly provided. For example, imagine that the `Comment` model has a `commentable` method that defines a `morphTo` relationship. In this situation, we may create three comments that belong to a single post using the `for` method directly:
+#### Морф до відносин
+
+Магічні методи не можуть використовуватися для створення`morphTo`стосунки. Натомість,`for`метод повинен використовуватися безпосередньо, а назва відносин має бути чітко вказана. Наприклад, уявіть, що`Comment`модель має`commentable`метод, що визначає a`morphTo`відносини. У цій ситуації ми можемо створити три коментарі, які належать до однієї публікації, використовуючи`for`метод безпосередньо:
 
     $comments = Comment::factory()->count(3)->for(
         Post::factory(), 'commentable'
     )->create();
 
 <a name="polymorphic-many-to-many-relationships"></a>
-#### Polymorphic Many To Many Relationships
 
-Polymorphic "many to many" relationships may be created just like non-polymorphic "many to many" relationships:
+#### Поліморфні відносини багато-багато-багато
+
+Поліморфні відносини "багато-до-багатьох" можуть бути створені так само, як неполіморфні відносини "багато до багатьох":
 
     use App\Models\Tag;
     use App\Models\Video;
@@ -502,16 +526,17 @@ Polymorphic "many to many" relationships may be created just like non-polymorphi
                 )
                 ->create();
 
-Of course, the magic `has` method may also be used to create polymorphic "many to many" relationships:
+Звичайно, магія`has`метод також може бути використаний для створення поліморфних зв'язків "багато до багатьох":
 
     $videos = Video::factory()
                 ->hasTags(3, ['public' => true])
                 ->create();
 
 <a name="using-seeds"></a>
-## Using Seeds
 
-If you would like to use [database seeders](/docs/{{version}}/seeding) to populate your database during a feature test, you may use the `seed` method. By default, the `seed` method will return the `DatabaseSeeder`, which should execute all of your other seeders. Alternatively, you pass a specific seeder class name to the `seed` method:
+## Використання насіння
+
+Якщо ви хочете використовувати[сівалки баз даних](/docs/{{version}}/seeding)щоб заповнити базу даних під час тестування функцій, ви можете використовувати`seed`метод. За замовчуванням`seed`метод поверне файл`DatabaseSeeder`, який повинен стратити всіх інших ваших сівалок. Крім того, ви передаєте конкретну назву класу сівалки в`seed`метод:
 
     <?php
 
@@ -543,7 +568,7 @@ If you would like to use [database seeders](/docs/{{version}}/seeding) to popula
         }
     }
 
-Alternatively, you may instruct the `RefreshDatabase` trait to automatically seed the database before each test. You may accomplish this by defining a `$seed` property on your test class:
+Alternatively, you may instruct the `RefreshDatabase`ознака для автоматичного залучення бази даних перед кожним тестом. Ви можете досягти цього, визначивши a`$seed`властивість у вашому тестовому класі:
 
     <?php
 
@@ -565,21 +590,22 @@ Alternatively, you may instruct the `RefreshDatabase` trait to automatically see
     }
 
 <a name="available-assertions"></a>
-## Available Assertions
 
-Laravel provides several database assertions for your [PHPUnit](https://phpunit.de/) feature tests:
+## Доступні твердження
 
-Method  | Description
-------------- | -------------
-`$this->assertDatabaseCount($table, int $count);`  |  Assert that a table in the database contains the given amount of entries.
-`$this->assertDatabaseHas($table, array $data);`  |  Assert that a table in the database contains the given data.
-`$this->assertDatabaseMissing($table, array $data);`  |  Assert that a table in the database does not contain the given data.
-`$this->assertDeleted($table, array $data);`  |  Assert that the given record has been deleted.
-`$this->assertSoftDeleted($table, array $data);`  |  Assert that the given record has been soft deleted.
+Laravel пропонує кілька тверджень бази даних для вашого[PHPUnit](https://phpunit.de/)тести функцій:
 
-For convenience, you may pass a model to the `assertDeleted` and `assertSoftDeleted` helpers to assert the record was deleted or soft deleted, respectively, from the database based on the model's primary key.
+| Метод                                                | Опис                                                                   |
+| ---------------------------------------------------- | ---------------------------------------------------------------------- |
+| `$this->assertDatabaseCount($table, int $count);`    | Стверджуйте, що таблиця в базі даних містить задану кількість записів. |
+| `$this->assertDatabaseHas($table, array $data);`     | Стверджуйте, що таблиця в базі даних містить дані.                     |
+| `$this->assertDatabaseMissing($table, array $data);` | Стверджуйте, що таблиця в базі даних не містить даних.                 |
+| `$this->assertDeleted($table, array $data);`         | Стверджуйте, що даний запис було видалено.                             |
+| `$this->assertSoftDeleted($table, array $data);`     | Стверджуйте, що даний запис було видалено м’яко.                       |
 
-For example, if you are using a model factory in your test, you may pass this model to one of these helpers to test your application properly deleted the record from the database:
+Для зручності ви можете передати модель`assertDeleted`і`assertSoftDeleted`Помічники для затвердження запису були видалені або видалені з бази даних відповідно на основі первинного ключа моделі.
+
+Наприклад, якщо ви використовуєте фабрику моделей у своєму тесті, ви можете передати цю модель одному з таких помічників, щоб протестувати вашу програму, щоб правильно видалити запис із бази даних:
 
     public function testDatabase()
     {

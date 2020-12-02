@@ -1,17 +1,19 @@
-# Console Tests
+# Консольні тести
 
-- [Introduction](#introduction)
-- [Expecting Input / Output](#expecting-input-and-output)
+-   [Вступ](#introduction)
+-   [Очікуваний вхід / вихід](#expecting-input-and-output)
 
 <a name="introduction"></a>
-## Introduction
 
-In addition to simplifying HTTP testing, Laravel provides a simple API for testing console applications that ask for user input.
+## Вступ
+
+На додаток до спрощення тестування HTTP, Laravel пропонує простий API для тестування консольних програм, які вимагають введення користувачем.
 
 <a name="expecting-input-and-output"></a>
-## Expecting Input / Output
 
-Laravel allows you to easily "mock" user input for your console commands using the `expectsQuestion` method. In addition, you may specify the exit code and text that you expect to be output by the console command using the `assertExitCode` and `expectsOutput` methods. For example, consider the following console command:
+## Очікуваний вхід / вихід
+
+Laravel дозволяє вам легко "висміяти" введення користувачем команд консолі за допомогою`expectsQuestion`метод. Крім того, ви можете вказати код виходу та текст, який, як ви очікуєте, буде виведено командою консолі за допомогою`assertExitCode`і`expectsOutput`методи. Наприклад, розглянемо таку команду консолі:
 
     Artisan::command('question', function () {
         $name = $this->ask('What is your name?');
@@ -25,7 +27,7 @@ Laravel allows you to easily "mock" user input for your console commands using t
         $this->line('Your name is '.$name.' and you program in '.$language.'.');
     });
 
-You may test this command with the following test which utilizes the `expectsQuestion`, `expectsOutput`, and `assertExitCode` methods:
+Ви можете протестувати цю команду за допомогою наступного тесту, який використовує`expectsQuestion`,`expectsOutput`, і`assertExitCode`методи:
 
     /**
      * Test a console command.
@@ -41,7 +43,7 @@ You may test this command with the following test which utilizes the `expectsQue
              ->assertExitCode(0);
     }
 
-When writing a command which expects a confirmation in the form of a "yes" or "no" answer, you may utilize the `expectsConfirmation` method:
+Під час написання команди, яка очікує підтвердження у формі відповіді "так" чи "ні", ви можете використовувати`expectsConfirmation`метод:
 
     $this->artisan('module:import')
         ->expectsConfirmation('Do you really wish to run this command?', 'no')

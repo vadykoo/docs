@@ -1,19 +1,20 @@
-# Localization
+# Локалізація
 
-- [Introduction](#introduction)
-    - [Configuring The Locale](#configuring-the-locale)
-- [Defining Translation Strings](#defining-translation-strings)
-    - [Using Short Keys](#using-short-keys)
-    - [Using Translation Strings As Keys](#using-translation-strings-as-keys)
-- [Retrieving Translation Strings](#retrieving-translation-strings)
-    - [Replacing Parameters In Translation Strings](#replacing-parameters-in-translation-strings)
-    - [Pluralization](#pluralization)
-- [Overriding Package Language Files](#overriding-package-language-files)
+-   [Вступ](#introduction)
+    -   [Налаштування локалі](#configuring-the-locale)
+-   [Визначення рядків перекладу](#defining-translation-strings)
+    -   [Використання коротких клавіш](#using-short-keys)
+    -   [Використання рядків перекладу як ключів](#using-translation-strings-as-keys)
+-   [Отримання рядків перекладу](#retrieving-translation-strings)
+    -   [Заміна параметрів у рядках перекладу](#replacing-parameters-in-translation-strings)
+    -   [Плюралізація](#pluralization)
+-   [Перевизначення мовних файлів пакета](#overriding-package-language-files)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel's localization features provide a convenient way to retrieve strings in various languages, allowing you to easily support multiple languages within your application. Language strings are stored in files within the `resources/lang` directory. Within this directory there should be a subdirectory for each language supported by the application:
+## Вступ
+
+Функції локалізації Laravel забезпечують зручний спосіб отримання рядків різними мовами, що дозволяє легко підтримувати кілька мов у вашій програмі. Рядки мови зберігаються у файлах у`resources/lang`каталог. У цьому каталозі повинен бути підкаталог для кожної мови, що підтримується додатком:
 
     /resources
         /lang
@@ -22,7 +23,7 @@ Laravel's localization features provide a convenient way to retrieve strings in 
             /es
                 messages.php
 
-All language files return an array of keyed strings. For example:
+Усі мовні файли повертають масив рядків, введених в ключ. Наприклад:
 
     <?php
 
@@ -30,12 +31,13 @@ All language files return an array of keyed strings. For example:
         'welcome' => 'Welcome to our application',
     ];
 
-> {note} For languages that differ by territory, you should name the language directories according to the ISO 15897. For example, "en_GB" should be used for British English rather than "en-gb".
+> {примітка} Для мов, що відрізняються за територією, слід назвати мовні каталоги відповідно до ISO 15897. Наприклад, "en_GB" слід використовувати для британської англійської мови, а не "en-gb".
 
 <a name="configuring-the-locale"></a>
-### Configuring The Locale
 
-The default language for your application is stored in the `config/app.php` configuration file. You may modify this value to suit the needs of your application. You may also change the active language at runtime using the `setLocale` method on the `App` facade:
+### Налаштування локалі
+
+Мова за промовчанням для вашої програми зберігається в`config/app.php`файл конфігурації. Ви можете змінити це значення відповідно до потреб вашої програми. Ви також можете змінити активну мову під час роботи за допомогою`setLocale`метод на`App`фасад:
 
     Route::get('welcome/{locale}', function ($locale) {
         if (! in_array($locale, ['en', 'es', 'fr'])) {
@@ -47,14 +49,15 @@ The default language for your application is stored in the `config/app.php` conf
         //
     });
 
-You may configure a "fallback language", which will be used when the active language does not contain a given translation string. Like the default language, the fallback language is also configured in the `config/app.php` configuration file:
+Ви можете налаштувати "запасну мову", яка використовуватиметься, коли активна мова не містить заданого рядка перекладу. Як і мова за замовчуванням, резервна мова також налаштована в`config/app.php`файл конфігурації:
 
     'fallback_locale' => 'en',
 
 <a name="determining-the-current-locale"></a>
-#### Determining The Current Locale
 
-You may use the `getLocale` and `isLocale` methods on the `App` facade to determine the current locale or check if the locale is a given value:
+#### Визначення поточного місця
+
+Ви можете використовувати`getLocale`і`isLocale` methods on the `App`фасад, щоб визначити поточну локаль або перевірити, чи є мовою задане значення:
 
     $locale = App::getLocale();
 
@@ -63,12 +66,14 @@ You may use the `getLocale` and `isLocale` methods on the `App` facade to determ
     }
 
 <a name="defining-translation-strings"></a>
-## Defining Translation Strings
+
+## Визначення рядків перекладу
 
 <a name="using-short-keys"></a>
-### Using Short Keys
 
-Typically, translation strings are stored in files within the `resources/lang` directory. Within this directory there should be a subdirectory for each language supported by the application:
+### Використання коротких клавіш
+
+Як правило, рядки перекладу зберігаються у файлах у`resources/lang`каталог. У цьому каталозі повинен бути підкаталог для кожної мови, що підтримується додатком:
 
     /resources
         /lang
@@ -77,7 +82,7 @@ Typically, translation strings are stored in files within the `resources/lang` d
             /es
                 messages.php
 
-All language files return an array of keyed strings. For example:
+Всі мовні файли повертають масив введених рядків. Наприклад:
 
     <?php
 
@@ -88,83 +93,88 @@ All language files return an array of keyed strings. For example:
     ];
 
 <a name="using-translation-strings-as-keys"></a>
-### Using Translation Strings As Keys
 
-For applications with heavy translation requirements, defining every string with a "short key" can become confusing when referencing the keys in your views. For this reason, Laravel also provides support for defining translation strings using the "default" translation of the string as the key.
+### Використання рядків перекладу як ключів
 
-Translation files that use translation strings as keys are stored as JSON files in the `resources/lang` directory. For example, if your application has a Spanish translation, you should create a `resources/lang/es.json` file:
+Для додатків із суворими вимогами до перекладу визначення кожного рядка за допомогою "короткого ключа" може стати заплутаним при посиланні на ключі у ваших поданнях. З цієї причини Laravel також надає підтримку для визначення рядків перекладу, використовуючи "типовий" переклад рядка як ключа.
+
+Файли перекладу, які використовують рядки перекладу як ключі, зберігаються як файли JSON у`resources/lang` directory. For example, if your application has a Spanish translation, you should create a `resources/lang/es.json`файл:
 
     {
         "I love programming.": "Me encanta programar."
     }
 
-#### Key / File Conflicts
+#### Ключові / файлові конфлікти
 
-You should not define translation string keys that conflict with other translation file names. For example, translating `__('Action')` for the "NL" locale while a `nl/action.php` file exists but a `nl.json` file does not exist will result in the translator returning the contents of `nl/action.php`.
+Не слід визначати ключі рядка перекладу, що суперечать іншим іменам файлів перекладу. Наприклад, переклад`__('Action')`для мови "NL", поки a`nl/action.php`файл існує, але файл`nl.json`Файл не існує, перекладач поверне вміст`nl/action.php`.
 
 <a name="retrieving-translation-strings"></a>
-## Retrieving Translation Strings
 
-You may retrieve lines from language files using the `__` helper function. The `__` method accepts the file and key of the translation string as its first argument. For example, let's retrieve the `welcome` translation string from the `resources/lang/messages.php` language file:
+## Отримання рядків перекладу
+
+Ви можете отримувати рядки з мовних файлів за допомогою`__`допоміжна функція.`__`метод приймає файл і ключ рядка перекладу як перший аргумент. Наприклад, давайте отримаємо файл`welcome`рядок перекладу з`resources/lang/messages.php` language file:
 
     echo __('messages.welcome');
 
     echo __('I love programming.');
 
-If you are using the [Blade templating engine](/docs/{{version}}/blade), you may use the `{{ }}` syntax to echo the translation string or use the `@lang` directive:
+Якщо ви використовуєте[Двигун шаблону леза](/docs/{{version}}/blade), ви можете використовувати`{{ }}`синтаксис, щоб повторити рядок перекладу або використовувати`@lang`директива:
 
     {{ __('messages.welcome') }}
 
     @lang('messages.welcome')
 
-If the specified translation string does not exist, the `__` function will return the translation string key. So, using the example above, the `__` function would return `messages.welcome` if the translation string does not exist.
+Якщо вказаний рядок перекладу не існує, файл`__`функція поверне ключ перекладу рядка. Отже, використовуючи приклад вище, файл`__`функція повернеться`messages.welcome`якщо рядок перекладу не існує.
 
-> {note} The `@lang` directive does not escape any output. You are **fully responsible** for escaping your own output when using this directive.
+> {примітка}`@lang`директива не уникне жодного результату. Ти є**повністю відповідальний** for escaping your own output when using this directive.
 
 <a name="replacing-parameters-in-translation-strings"></a>
-### Replacing Parameters In Translation Strings
 
-If you wish, you may define placeholders in your translation strings. All placeholders are prefixed with a `:`. For example, you may define a welcome message with a placeholder name:
+### Заміна параметрів у рядках перекладу
+
+За бажанням ви можете визначити заповнювачі у рядках перекладу. Усі заповнювачі мають префікс a`:`. Наприклад, ви можете визначити привітальне повідомлення з ім'ям заповнювача:
 
     'welcome' => 'Welcome, :name',
 
-To replace the placeholders when retrieving a translation string, pass an array of replacements as the second argument to the `__` function:
+Щоб замінити заповнювачі під час отримання рядка перекладу, передайте масив замін як другий аргумент у файл`__`функція:
 
     echo __('messages.welcome', ['name' => 'dayle']);
 
-If your placeholder contains all capital letters, or only has its first letter capitalized, the translated value will be capitalized accordingly:
+Якщо ваш заповнювач містить усі великі літери або лише першу літеру має з великої літери, перекладена вартість буде відповідно записана з великої літери:
 
     'welcome' => 'Welcome, :NAME', // Welcome, DAYLE
     'goodbye' => 'Goodbye, :Name', // Goodbye, Dayle
 
 <a name="pluralization"></a>
-### Pluralization
 
-Pluralization is a complex problem, as different languages have a variety of complex rules for pluralization. By using a "pipe" character, you may distinguish singular and plural forms of a string:
+### Плюралізація
+
+Плюралізація є складною проблемою, оскільки різні мови мають різноманітні складні правила плюралізації. Використовуючи символ "труба", ви можете розрізнити форми однини та множини рядка:
 
     'apples' => 'There is one apple|There are many apples',
 
-You may even create more complex pluralization rules which specify translation strings for multiple number ranges:
+Ви навіть можете створити більш складні правила плюралізації, які визначають рядки перекладу для багатьох діапазонів чисел:
 
     'apples' => '{0} There are none|[1,19] There are some|[20,*] There are many',
 
-After defining a translation string that has pluralization options, you may use the `trans_choice` function to retrieve the line for a given "count". In this example, since the count is greater than one, the plural form of the translation string is returned:
+Після визначення рядка перекладу, який має опції плюралізації, ви можете використовувати`trans_choice`функція для отримання рядка для заданого "рахунку". У цьому прикладі, оскільки кількість більше одного, повертається форма множини рядка перекладу:
 
     echo trans_choice('messages.apples', 10);
 
-You may also define placeholder attributes in pluralization strings. These placeholders may be replaced by passing an array as the third argument to the `trans_choice` function:
+Ви також можете визначити атрибути заповнювачів у рядках плюралізації. Ці заповнювачі можуть бути замінені передачею масиву як третього аргументу в`trans_choice`функція:
 
     'minutes_ago' => '{1} :value minute ago|[2,*] :value minutes ago',
 
     echo trans_choice('time.minutes_ago', 5, ['value' => 5]);
 
-If you would like to display the integer value that was passed to the `trans_choice` function, you may use the `:count` placeholder:
+Якщо ви хочете відобразити ціле число, яке було передано в`trans_choice`Ви можете використовувати`:count`заповнювач:
 
     'apples' => '{0} There are none|{1} There is one|[2,*] There are :count',
 
 <a name="overriding-package-language-files"></a>
-## Overriding Package Language Files
 
-Some packages may ship with their own language files. Instead of changing the package's core files to tweak these lines, you may override them by placing files in the `resources/lang/vendor/{package}/{locale}` directory.
+## Перевизначення мовних файлів пакета
 
-So, for example, if you need to override the English translation strings in `messages.php` for a package named `skyrim/hearthfire`, you should place a language file at: `resources/lang/vendor/hearthfire/en/messages.php`. Within this file, you should only define the translation strings you wish to override. Any translation strings you don't override will still be loaded from the package's original language files.
+Деякі пакунки можуть постачатися з власними мовними файлами. Замість того, щоб змінювати основні файли пакета, щоб налаштувати ці рядки, ви можете замінити їх, розмістивши файли в`resources/lang/vendor/{package}/{locale}`каталог.
+
+Так, наприклад, якщо вам потрібно замінити рядки перекладу англійською мовою в`messages.php`для пакета з іменем`skyrim/hearthfire`, ви повинні розмістити мовний файл за адресою:`resources/lang/vendor/hearthfire/en/messages.php`. У цьому файлі слід лише визначити рядки перекладу, які ви хочете замінити. Усі рядки перекладу, які ви не заміните, все одно будуть завантажені з оригінальних мовних файлів пакета.

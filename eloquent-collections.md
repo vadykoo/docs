@@ -1,15 +1,16 @@
-# Eloquent: Collections
+# Красномовний: Колекції
 
-- [Introduction](#introduction)
-- [Available Methods](#available-methods)
-- [Custom Collections](#custom-collections)
+-   [Вступ](#introduction)
+-   [Доступні методи](#available-methods)
+-   [Спеціальні колекції](#custom-collections)
 
 <a name="introduction"></a>
-## Introduction
 
-All multi-result sets returned by Eloquent are instances of the `Illuminate\Database\Eloquent\Collection` object, including results retrieved via the `get` method or accessed via a relationship. The Eloquent collection object extends the Laravel [base collection](/docs/{{version}}/collections), so it naturally inherits dozens of methods used to fluently work with the underlying array of Eloquent models.
+## Вступ
 
-All collections also serve as iterators, allowing you to loop over them as if they were simple PHP arrays:
+Всі множини результатів, повернені Eloquent, є екземплярами`Illuminate\Database\Eloquent\Collection`об'єкт, включаючи результати, отримані через`get`метод або доступ до яких здійснюється через стосунки. Об'єкт колекції Eloquent розширює Laravel[базова колекція](/docs/{{version}}/collections), тому він, природно, успадковує десятки методів, що використовуються для вільної роботи з базовим масивом красномовних моделей.
+
+Усі колекції також слугують ітераторами, дозволяючи вам циклічно перебирати їх, ніби це прості масиви PHP:
 
     $users = App\Models\User::where('active', 1)->get();
 
@@ -17,7 +18,7 @@ All collections also serve as iterators, allowing you to loop over them as if th
         echo $user->name;
     }
 
-However, collections are much more powerful than arrays and expose a variety of map / reduce operations that may be chained using an intuitive interface. For example, let's remove all inactive models and gather the first name for each remaining user:
+Однак колекції набагато потужніші, ніж масиви, і надають різноманітні операції картографування / зменшення, які можуть бути пов'язані за допомогою інтуїтивно зрозумілого інтерфейсу. Наприклад, видалимо всі неактивні моделі та зберемо ім’я для кожного користувача, що залишився:
 
     $users = App\Models\User::all();
 
@@ -28,14 +29,15 @@ However, collections are much more powerful than arrays and expose a variety of 
         return $user->name;
     });
 
-> {note} While most Eloquent collection methods return a new instance of an Eloquent collection, the `pluck`, `keys`, `zip`, `collapse`, `flatten` and `flip` methods return a [base collection](/docs/{{version}}/collections) instance. Likewise, if a `map` operation returns a collection that does not contain any Eloquent models, it will be automatically cast to a base collection.
+> {note} Хоча більшість красномовних методів збору повертають новий екземпляр красномовної колекції, файл`pluck`,`keys`,`zip`,`collapse`,`flatten`і`flip`повернення методів a[base collection](/docs/{{version}}/collections)інстанції. Так само, якщо a`map`операція повертає колекцію, яка не містить жодної красномовної моделі, вона буде автоматично передана до базової колекції.
 
 <a name="available-methods"></a>
-## Available Methods
 
-All Eloquent collections extend the base [Laravel collection](/docs/{{version}}/collections#available-methods) object; therefore, they inherit all of the powerful methods provided by the base collection class.
+## Доступні методи
 
-In addition, the `Illuminate\Database\Eloquent\Collection` class provides a superset of methods to aid with managing your model collections. Most methods return `Illuminate\Database\Eloquent\Collection` instances; however, some methods return a base `Illuminate\Support\Collection` instance.
+Всі колекції Eloquent розширюють базу[Колекція Laravel](/docs/{{version}}/collections#available-methods)об'єкт; отже, вони успадковують усі потужні методи, що надаються базовим класом колекцій.
+
+Крім того,`Illuminate\Database\Eloquent\Collection`class надає набір методів, що допомагають керувати колекціями моделей. Більшість методів повертаються`Illuminate\Database\Eloquent\Collection`екземпляри; проте деякі методи повертають базу`Illuminate\Support\Collection`інстанції.
 
 <style>
     #collection-method-list > p {
@@ -50,127 +52,127 @@ In addition, the `Illuminate\Database\Eloquent\Collection` class provides a supe
 
 <div id="collection-method-list" markdown="1">
 
-[contains](#method-contains)
-[diff](#method-diff)
-[except](#method-except)
-[find](#method-find)
-[fresh](#method-fresh)
-[intersect](#method-intersect)
-[load](#method-load)
-[loadMissing](#method-loadMissing)
-[modelKeys](#method-modelKeys)
-[makeVisible](#method-makeVisible)
-[makeHidden](#method-makeHidden)
-[only](#method-only)
-[toQuery](#method-toquery)
-[unique](#method-unique)
+[містить](#method-contains)[різниця](#method-diff)[крім](#method-except)[знайти](#method-find)[свіжий](#method-fresh)[перетинаються](#method-intersect)[навантаження](#method-load)[loadMissing](#method-loadMissing)[модель Ключі](#method-modelKeys)[makeVisible](#method-makeVisible)[makeHidden](#method-makeHidden)[тільки](#method-only)[toQuery](#method-toquery)[унікальний](#method-unique)
 
 </div>
 
 <a name="method-contains"></a>
+
 #### `contains($key, $operator = null, $value = null)`
 
-The `contains` method may be used to determine if a given model instance is contained by the collection. This method accepts a primary key or a model instance:
+`contains`метод може бути використаний, щоб визначити, чи міститься даний екземпляр моделі в колекції. Цей метод приймає первинний ключ або екземпляр моделі:
 
     $users->contains(1);
 
     $users->contains(User::find(1));
 
 <a name="method-diff"></a>
+
 #### `diff($items)`
 
-The `diff` method returns all of the models that are not present in the given collection:
+`diff`метод повертає всі моделі, яких немає в даній колекції:
 
     use App\Models\User;
 
     $users = $users->diff(User::whereIn('id', [1, 2, 3])->get());
 
 <a name="method-except"></a>
+
 #### `except($keys)`
 
-The `except` method returns all of the models that do not have the given primary keys:
+`except`метод повертає всі моделі, які не мають вказаних первинних ключів:
 
     $users = $users->except([1, 2, 3]);
 
 <a name="method-find"></a>
-#### `find($key)` {#collection-method .first-collection-method}
 
-The `find` method finds a model that has a given primary key. If `$key` is a model instance, `find` will attempt to return a model matching the primary key. If `$key` is an array of keys, `find` will return all models which match the `$keys` using `whereIn()`:
+#### `find($key)`{# collection-method .first-collection-method}
+
+`find`метод знаходить модель, що має заданий первинний ключ. Якщо`$key`є екземпляром моделі,`find`спробує повернути модель, що відповідає первинному ключу. Якщо`$key`це масив ключів,`find`поверне всі моделі, які відповідають`$keys` using `whereIn()`:
 
     $users = User::all();
 
     $user = $users->find(1);
 
 <a name="method-fresh"></a>
+
 #### `fresh($with = [])`
 
-The `fresh` method retrieves a fresh instance of each model in the collection from the database. In addition, any specified relationships will be eager loaded:
+`fresh`метод отримує з бази даних новий екземпляр кожної моделі в колекції. Крім того, будь-які вказані відносини будуть готові завантажувати:
 
     $users = $users->fresh();
 
     $users = $users->fresh('comments');
 
 <a name="method-intersect"></a>
+
 #### `intersect($items)`
 
-The `intersect` method returns all of the models that are also present in the given collection:
+`intersect`метод повертає всі моделі, які також присутні в даній колекції:
 
     use App\Models\User;
 
     $users = $users->intersect(User::whereIn('id', [1, 2, 3])->get());
 
 <a name="method-load"></a>
+
 #### `load($relations)`
 
-The `load` method eager loads the given relationships for all models in the collection:
+`load`нетерплячий метод завантажує дані співвідношення для всіх моделей колекції:
 
     $users->load('comments', 'posts');
 
     $users->load('comments.author');
 
 <a name="method-loadMissing"></a>
+
 #### `loadMissing($relations)`
 
-The `loadMissing` method eager loads the given relationships for all models in the collection if the relationships are not already loaded:
+`loadMissing`метод прагне завантажувати дані відносини для всіх моделей у колекції, якщо відносини ще не завантажені:
 
     $users->loadMissing('comments', 'posts');
 
     $users->loadMissing('comments.author');
 
 <a name="method-modelKeys"></a>
+
 #### `modelKeys()`
 
-The `modelKeys` method returns the primary keys for all models in the collection:
+`modelKeys`метод повертає первинні ключі для всіх моделей колекції:
 
     $users->modelKeys();
 
     // [1, 2, 3, 4, 5]
 
 <a name="method-makeVisible"></a>
+
 #### `makeVisible($attributes)`
 
-The `makeVisible` method makes attributes visible that are typically "hidden" on each model in the collection:
+`makeVisible`метод робить видимими атрибути, які зазвичай "приховані" для кожної моделі в колекції:
 
     $users = $users->makeVisible(['address', 'phone_number']);
 
 <a name="method-makeHidden"></a>
+
 #### `makeHidden($attributes)`
 
-The `makeHidden` method hides attributes that are typically "visible" on each model in the collection:
+`makeHidden`метод приховує атрибути, які зазвичай "видно" для кожної моделі в колекції:
 
     $users = $users->makeHidden(['address', 'phone_number']);
 
 <a name="method-only"></a>
+
 #### `only($keys)`
 
-The `only` method returns all of the models that have the given primary keys:
+`only`метод повертає всі моделі, що мають задані первинні ключі:
 
     $users = $users->only([1, 2, 3]);
 
 <a name="method-toquery"></a>
+
 #### `toQuery()`
 
-The `toQuery` method returns an Eloquent query builder instance containing a `whereIn` constraint on the collection model's primary keys:
+`toQuery`метод повертає екземпляр Eloquent query builder, що містить`whereIn`обмеження на первинні ключі моделі колекції:
 
     $users = App\Models\User::where('status', 'VIP')->get();
 
@@ -179,16 +181,18 @@ The `toQuery` method returns an Eloquent query builder instance containing a `wh
     ]);
 
 <a name="method-unique"></a>
+
 #### `unique($key = null, $strict = false)`
 
-The `unique` method returns all of the unique models in the collection. Any models of the same type with the same primary key as another model in the collection are removed.
+`unique`метод повертає всі унікальні моделі в колекції. Будь-які моделі того ж типу з тим самим первинним ключем, що й інша модель у колекції, видаляються.
 
     $users = $users->unique();
 
 <a name="custom-collections"></a>
-## Custom Collections
 
-If you need to use a custom `Collection` object with your own extension methods, you may override the `newCollection` method on your model:
+## Спеціальні колекції
+
+Якщо вам потрібно використовувати спеціальний`Collection`об'єкт із власними методами розширення, ви можете замінити`newCollection`метод на вашій моделі:
 
     <?php
 
@@ -211,4 +215,4 @@ If you need to use a custom `Collection` object with your own extension methods,
         }
     }
 
-Once you have defined a `newCollection` method, you will receive an instance of your custom collection anytime Eloquent returns a `Collection` instance of that model. If you would like to use a custom collection for every model in your application, you should override the `newCollection` method on a base model class that is extended by all of your models.
+Після того, як ви визначили a`newCollection`метод, ви отримаєте примірник власної колекції щоразу, коли Eloquent повертає a`Collection`екземпляр цієї моделі. Якщо ви хочете використовувати власну колекцію для кожної моделі у вашій програмі, вам слід замінити`newCollection`метод на базовому класі моделі, який розширений усіма вашими моделями.
