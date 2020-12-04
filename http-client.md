@@ -1,37 +1,39 @@
-# HTTP Client
+# Клієнт HTTP
 
-- [Introduction](#introduction)
-- [Making Requests](#making-requests)
-    - [Request Data](#request-data)
-    - [Headers](#headers)
-    - [Authentication](#authentication)
-    - [Timeout](#timeout)
-    - [Retries](#retries)
-    - [Error Handling](#error-handling)
-    - [Guzzle Options](#guzzle-options)
-- [Testing](#testing)
-    - [Faking Responses](#faking-responses)
-    - [Inspecting Requests](#inspecting-requests)
+-   [Вступ](#introduction)
+-   [View запитів](#making-requests)
+    -   [Запит даних](#request-data)
+    -   [Заголовки](#headers)
+    -   [Аутентифікація](#authentication)
+    -   [Timeout](#timeout)
+    -   [Повторні спроби](#retries)
+    -   [Обробка помилок](#error-handling)
+    -   [Options Guzzle](#guzzle-options)
+-   [Тестування](#testing)
+    -   [Фейкові відповіді](#faking-responses)
+    -   [Перевірка запитів](#inspecting-requests)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel provides an expressive, minimal API around the [Guzzle HTTP client](http://docs.guzzlephp.org/en/stable/), allowing you to quickly make outgoing HTTP requests to communicate with other web applications. Laravel's wrapper around Guzzle is focused on its most common use cases and a wonderful developer experience.
+## Вступ
 
-Before getting started, you should ensure that you have installed the Guzzle package as a dependency of your application. By default, Laravel automatically includes this dependency:
+Laravel забезпечує виразний, мінімальний API навколо[Guzzle HTTP-клієнт](http://docs.guzzlephp.org/en/stable/), що дозволяє швидко робити вихідні HTTP-запити для спілкування з іншими веб-програмами. Обгортка Laravel навколо Guzzle орієнтована на найпоширеніші випадки використання та чудовий досвід розробника.
+
+Перед початком роботи переконайтесь, що ви встановили пакет Guzzle як залежність вашої програми. За замовчуванням Laravel автоматично включає таку залежність:
 
     composer require guzzlehttp/guzzle
 
 <a name="making-requests"></a>
-## Making Requests
 
-To make requests, you may use the `get`, `post`, `put`, `patch`, and `delete` methods. First, let's examine how to make a basic `GET` request:
+## View запитів
+
+Для надсилання запитів ви можете використовувати`get`,`post`,`put`,`patch`, і`delete`методи. Спочатку розглянемо, як скласти базовий`GET`запит:
 
     use Illuminate\Support\Facades\Http;
 
     $response = Http::get('http://example.com');
 
-The `get` method returns an instance of `Illuminate\Http\Client\Response`, which provides a variety of methods that may be used to inspect the response:
+`get`метод повертає екземпляр`Illuminate\Http\Client\Response`, який надає різноманітні методи, які можуть бути використані для перевірки реакції:
 
     $response->body() : string;
     $response->json() : array|mixed;
@@ -44,14 +46,15 @@ The `get` method returns an instance of `Illuminate\Http\Client\Response`, which
     $response->header($header) : string;
     $response->headers() : array;
 
-The `Illuminate\Http\Client\Response` object also implements the PHP `ArrayAccess` interface, allowing you to access JSON response data directly on the response:
+`Illuminate\Http\Client\Response`об'єкт також реалізує PHP`ArrayAccess`інтерфейс, що дозволяє отримати доступ до даних відповідей JSON безпосередньо у відповіді:
 
     return Http::get('http://example.com/users/1')['name'];
 
 <a name="request-data"></a>
-### Request Data
 
-Of course, it is common when using `POST`, `PUT`, and `PATCH` to send additional data with your request. So, these methods accept an array of data as their second argument. By default, data will be sent using the `application/json` content type:
+### Запит даних
+
+Звичайно, це часто при використанні`POST`,`PUT`, і`PATCH`щоб надіслати додаткові дані разом із вашим запитом. Отже, ці методи приймають масив даних як другий аргумент. За замовчуванням дані надсилатимуться за допомогою`application/json`тип вмісту:
 
     $response = Http::post('http://example.com/users', [
         'name' => 'Steve',
@@ -59,9 +62,10 @@ Of course, it is common when using `POST`, `PUT`, and `PATCH` to send additional
     ]);
 
 <a name="get-request-query-parameters"></a>
-#### GET Request Query Parameters
 
-When making `GET` requests, you may either append a query string to the URL directly or pass an array of key / value pairs as the second argument to the `get` method:
+#### ОТРИМАТИ параметри запиту запиту
+
+При виготовленні`GET`запити, ви можете або додати рядок запиту до URL-адреси, або передати масив пар ключ / значення як другий аргумент до`get`метод:
 
     $response = Http::get('http://example.com/users', [
         'name' => 'Taylor',
@@ -69,9 +73,10 @@ When making `GET` requests, you may either append a query string to the URL dire
     ]);
 
 <a name="sending-form-url-encoded-requests"></a>
-#### Sending Form URL Encoded Requests
 
-If you would like to send data using the `application/x-www-form-urlencoded` content type, you should call the `asForm` method before making your request:
+#### Надсилання зашифрованих запитів URL-адреси форми
+
+Якщо ви хочете надіслати дані за допомогою`application/x-www-form-urlencoded`типу вмісту, вам слід зателефонувати до`asForm`метод перед Viewм запиту:
 
     $response = Http::asForm()->post('http://example.com/users', [
         'name' => 'Sara',
@@ -79,24 +84,26 @@ If you would like to send data using the `application/x-www-form-urlencoded` con
     ]);
 
 <a name="sending-a-raw-request-body"></a>
-#### Sending A Raw Request Body
 
-You may use the `withBody` method if you would like to provide a raw request body when making a request:
+#### Надсилання основного запиту
+
+Ви можете використовувати`withBody`метод, якщо ви хочете надати необроблений текст запиту під час надсилання запиту:
 
     $response = Http::withBody(
         base64_encode($photo), 'image/jpeg'
     )->post('http://example.com/photo');
 
 <a name="multi-part-requests"></a>
-#### Multi-Part Requests
 
-If you would like to send files as multi-part requests, you should call the `attach` method before making your request. This method accepts the name of the file and its contents. Optionally, you may provide a third argument which will be considered the file's filename:
+#### Багатокомпонентні запити
+
+Якщо ви хочете надіслати файли як багатокомпонентні запити, вам слід зателефонувати до`attach`метод перед Viewм запиту. Цей метод приймає ім'я файлу та його вміст. За бажанням ви можете надати третій аргумент, який буде вважатись ім’ям файлу:
 
     $response = Http::attach(
         'attachment', file_get_contents('photo.jpg'), 'photo.jpg'
     )->post('http://example.com/attachments');
 
-Instead of passing the raw contents of a file, you may also pass a stream resource:
+Замість передачі необробленого вмісту файлу ви також можете передати потоковий ресурс:
 
     $photo = fopen('photo.jpg', 'r');
 
@@ -105,9 +112,10 @@ Instead of passing the raw contents of a file, you may also pass a stream resour
     )->post('http://example.com/attachments');
 
 <a name="headers"></a>
-### Headers
 
-Headers may be added to requests using the `withHeaders` method. This `withHeaders` method accepts an array of key / value pairs:
+### Заголовки
+
+Заголовки можна додавати до запитів за допомогою`withHeaders`метод. Це`withHeaders`метод приймає масив пар ключ / значення:
 
     $response = Http::withHeaders([
         'X-First' => 'foo',
@@ -117,9 +125,10 @@ Headers may be added to requests using the `withHeaders` method. This `withHeade
     ]);
 
 <a name="authentication"></a>
-### Authentication
 
-You may specify basic and digest authentication credentials using the `withBasicAuth` and `withDigestAuth` methods, respectively:
+### Аутентифікація
+
+Ви можете вказати основні та дайджест-ідентифікаційні дані, використовуючи`withBasicAuth`і`withDigestAuth`методів, відповідно:
 
     // Basic authentication...
     $response = Http::withBasicAuth('taylor@laravel.com', 'secret')->post(...);
@@ -128,34 +137,38 @@ You may specify basic and digest authentication credentials using the `withBasic
     $response = Http::withDigestAuth('taylor@laravel.com', 'secret')->post(...);
 
 <a name="bearer-tokens"></a>
-#### Bearer Tokens
 
-If you would like to quickly add an `Authorization` bearer token header to the request, you may use the `withToken` method:
+#### Жетони на пред'явника
+
+Якщо ви хочете швидко додати`Authorization`Заголовок токена на пред'явника до запиту, ви можете використовувати`withToken`метод:
 
     $response = Http::withToken('token')->post(...);
 
 <a name="timeout"></a>
+
 ### Timeout
 
-The `timeout` method may be used to specify the maximum number of seconds to wait for a response:
+`timeout`метод може бути використаний для вказівки максимальної кількості секунд очікування відповіді:
 
     $response = Http::timeout(3)->get(...);
 
-If the given timeout is exceeded, an instance of `Illuminate\Http\Client\ConnectionException` will  be thrown.
+Якщо вказаний тайм-аут перевищено, екземпляр`Illuminate\Http\Client\ConnectionException`буде кинуто.
 
 <a name="retries"></a>
-### Retries
 
-If you would like HTTP client to automatically retry the request if a client or server error occurs, you may use the `retry` method. The `retry` method accepts two arguments: the number of times the request should be attempted and the number of milliseconds that Laravel should wait in between attempts:
+### Повторні спроби
+
+Якщо ви хочете, щоб клієнт HTTP автоматично повторив запит, якщо сталася помилка клієнта або сервера, ви можете використовувати`retry`метод.`retry`метод приймає два аргументи: кількість спроб запиту та кількість мілісекунд, протягом яких Laravel повинен чекати між спробами:
 
     $response = Http::retry(3, 100)->post(...);
 
-If all of the requests fail, an instance of `Illuminate\Http\Client\RequestException` will be thrown.
+Якщо всі запити не вдаються, екземпляр`Illuminate\Http\Client\RequestException`буде кинуто.
 
 <a name="error-handling"></a>
-### Error Handling
 
-Unlike Guzzle's default behavior, Laravel's HTTP client wrapper does not throw exceptions on client or server errors (`400` and `500` level responses from servers). You may determine if one of these errors was returned using the `successful`, `clientError`, or `serverError` methods:
+### Обробка помилок
+
+На відміну від поведінки Guzzle за замовчуванням, клієнтська обгортка Laravel не створює винятків щодо помилок клієнта або сервера (`400`і`500`відповіді рівня від серверів). Ви можете визначити, чи була повернута одна з цих помилок за допомогою`successful`,`clientError`, або`serverError`методи:
 
     // Determine if the status code was >= 200 and < 300...
     $response->successful();
@@ -170,9 +183,10 @@ Unlike Guzzle's default behavior, Laravel's HTTP client wrapper does not throw e
     $response->serverError();
 
 <a name="throwing-exceptions"></a>
-#### Throwing Exceptions
 
-If you have a response instance and would like to throw an instance of `Illuminate\Http\Client\RequestException` if the response is a client or server error, you may use the `throw` method:
+#### Кидання винятків
+
+Якщо у вас є екземпляр відповіді і ви хочете викинути екземпляр`Illuminate\Http\Client\RequestException`якщо відповідь - помилка клієнта або сервера, ви можете використовувати`throw`метод:
 
     $response = Http::post(...);
 
@@ -181,49 +195,53 @@ If you have a response instance and would like to throw an instance of `Illumina
 
     return $response['user']['id'];
 
-The `Illuminate\Http\Client\RequestException` instance has a public `$response` property which will allow you to inspect the returned response.
+`Illuminate\Http\Client\RequestException`інстанція має паблік`$response`властивість, що дозволить перевірити повернуту відповідь.
 
-The `throw` method returns the response instance if no error occurred, allowing you to chain other operations onto the `throw` method:
+`throw`метод повертає екземпляр відповіді, якщо помилки не сталося, дозволяючи зв'язати інші операції з`throw`метод:
 
     return Http::post(...)->throw()->json();
 
-If you would like to perform some additional logic before the exception is thrown, you may pass a Closure to the `throw` method. The exception will be thrown automatically after the Closure is invoked, so you do not need to re-throw the exception from within the Closure:
+Якщо ви хочете виконати деяку додаткову логіку до того, як буде вилучено виняток, ви можете передати Закриття в`throw`метод. Виняток буде автоматично видано після виклику Закриття, тому Вам не потрібно повторно викидати виняток із Закриття:
 
     return Http::post(...)->throw(function ($response, $e) {
         //
     })->json();
 
 <a name="guzzle-options"></a>
-### Guzzle Options
 
-You may specify additional [Guzzle request options](http://docs.guzzlephp.org/en/stable/request-options.html) using the `withOptions` method. The `withOptions` method accepts an array of key / value pairs:
+### Options Guzzle
+
+Ви можете вказати додаткові[Параметри запиту Guzzle](http://docs.guzzlephp.org/en/stable/request-options.html)за допомогою`withOptions`метод.`withOptions`метод приймає масив пар ключ / значення:
 
     $response = Http::withOptions([
         'debug' => true,
     ])->get('http://example.com/users');
 
 <a name="testing"></a>
-## Testing
 
-Many Laravel services provide functionality to help you easily and expressively write tests, and Laravel's HTTP wrapper is no exception. The `Http` facade's `fake` method allows you to instruct the HTTP client to return stubbed / dummy responses when requests are made.
+## Тестування
+
+Багато служб Laravel забезпечують функціональність, яка допоможе вам легко та виразно писати тести, і обгортка HTTP від ​​Laravel не є винятком.`Http`фасадні`fake`Метод дозволяє вказувати клієнтові HTTP повертати тактові / фіктивні відповіді під час надсилання запитів.
 
 <a name="faking-responses"></a>
-### Faking Responses
 
-For example, to instruct the HTTP client to return empty, `200` status code responses for every request, you may call the `fake` method with no arguments:
+### Фейкові відповіді
+
+Наприклад, щоб доручити клієнту HTTP повертати порожнє,`200`відповіді коду стану на кожен запит, ви можете зателефонувати до`fake`метод без аргументів:
 
     use Illuminate\Support\Facades\Http;
 
     Http::fake();
 
     $response = Http::post(...);
-    
-> {note} When faking requests, HTTP client middleware are not executed. You should define expectations for faked responses as if these middleware have run correctly.
+
+> {note} При підробці запитів клієнтське програмне забезпечення HTTP не виконується. Ви повинні визначити очікування щодо фальшивих відповідей, ніби це проміжне програмне забезпечення працювало правильно.
 
 <a name="faking-specific-urls"></a>
-#### Faking Specific URLs
 
-Alternatively, you may pass an array to the `fake` method. The array's keys should represent URL patterns that you wish to fake and their associated responses. The `*` character may be used as a wildcard character. Any requests made to URLs that have not been faked will actually be executed. You may use the `response` method to construct stub / fake responses for these endpoints:
+#### Підробка конкретних URL-адрес
+
+Крім того, ви можете передати масив до`fake`метод. Ключі масиву повинні представляти шаблони URL-адрес, які ви хочете підробити, та відповідні відповіді.`*`символ може використовуватися як символ підстановки. Будь-які запити на URL-адреси, які не були сфальсифікованими, насправді будуть виконані. Ви можете використовувати`response`метод побудови заглушених / підроблених відповідей для цих кінцевих точок:
 
     Http::fake([
         // Stub a JSON response for GitHub endpoints...
@@ -233,7 +251,7 @@ Alternatively, you may pass an array to the `fake` method. The array's keys shou
         'google.com/*' => Http::response('Hello World', 200, ['Headers']),
     ]);
 
-If you would like to specify a fallback URL pattern that will stub all unmatched URLs, you may use a single `*` character:
+Якщо ви хочете вказати резервний шаблон URL-адреси, який буде заглушати всі нерівні URL-адреси, ви можете використовувати один`*`характер:
 
     Http::fake([
         // Stub a JSON response for GitHub endpoints...
@@ -244,9 +262,10 @@ If you would like to specify a fallback URL pattern that will stub all unmatched
     ]);
 
 <a name="faking-response-sequences"></a>
-#### Faking Response Sequences
 
-Sometimes you may need to specify that a single URL should return a series of fake responses in a specific order. You may accomplish this using the `Http::sequence` method to build the responses:
+#### Підроблені послідовності відповідей
+
+Іноді може знадобитися вказати, що одна URL-адреса повинна повертати ряд фальшивих відповідей у ​​певному порядку. Ви можете досягти цього за допомогою`Http::sequence`метод побудови відповідей:
 
     Http::fake([
         // Stub a series of responses for GitHub endpoints...
@@ -256,7 +275,7 @@ Sometimes you may need to specify that a single URL should return a series of fa
                                 ->pushStatus(404),
     ]);
 
-When all of the responses in a response sequence have been consumed, any further requests will cause the response sequence to throw an exception. If you would like to specify a default response that should be returned when a sequence is empty, you may use the `whenEmpty` method:
+Коли всі відповіді в послідовності відповідей будуть використані, будь-які подальші запити змусять послідовність відповідей викликати виняток. Якщо ви хочете вказати відповідь за замовчуванням, яку слід повертати, коли послідовність порожня, ви можете використовувати`whenEmpty`метод:
 
     Http::fake([
         // Stub a series of responses for GitHub endpoints...
@@ -266,27 +285,29 @@ When all of the responses in a response sequence have been consumed, any further
                                 ->whenEmpty(Http::response()),
     ]);
 
-If you would like to fake a sequence of responses but do not need to specify a specific URL pattern that should be faked, you may use the `Http::fakeSequence` method:
+Якщо ви хочете сфальсифікувати послідовність відповідей, але вам не потрібно вказувати конкретний шаблон URL-адреси, який слід сфальсифікувати, ви можете використовувати`Http::fakeSequence`метод:
 
     Http::fakeSequence()
             ->push('Hello World', 200)
             ->whenEmpty(Http::response());
 
 <a name="fake-callback"></a>
-#### Fake Callback
 
-If you require more complicated logic to determine what responses to return for certain endpoints, you may pass a callback to the `fake` method. This callback will receive an instance of `Illuminate\Http\Client\Request` and should return a response instance:
+#### Підроблений зворотний дзвінок
+
+Якщо вам потрібна більш складна логіка для визначення того, які відповіді повертати для певних кінцевих точок, ви можете передати зворотний дзвінок до`fake`метод. Цей зворотний дзвінок отримає екземпляр`Illuminate\Http\Client\Request`і повинен повернути екземпляр відповіді:
 
     Http::fake(function ($request) {
         return Http::response('Hello World', 200);
     });
 
 <a name="inspecting-requests"></a>
-### Inspecting Requests
 
-When faking responses, you may occasionally wish to inspect the requests the client receives in order to make sure your application is sending the correct data or headers. You may accomplish this by calling the `Http::assertSent` method after calling `Http::fake`.
+### Перевірка запитів
 
-The `assertSent` method accepts a callback which will be given an `Illuminate\Http\Client\Request` instance and should return a boolean value indicating if the request matches your expectations. In order for the test to pass, at least one request must have been issued matching the given expectations:
+Підробляючи відповіді, ви можете іноді побажати перевірити запити, які отримує клієнт, щоб переконатися, що ваша програма надсилає правильні дані або заголовки. Ви можете досягти цього, зателефонувавши до`Http::assertSent`метод після виклику`Http::fake`.
+
+The `assertSent`метод приймає зворотний виклик, який отримає`Illuminate\Http\Client\Request`екземпляр і повинен повернути логічне значення, яке вказує, чи відповідає запит вашим очікуванням. Щоб тест міг пройти, повинен бути виданий принаймні один запит, що відповідає заданим очікуванням:
 
     Http::fake();
 
@@ -304,7 +325,7 @@ The `assertSent` method accepts a callback which will be given an `Illuminate\Ht
                $request['role'] == 'Developer';
     });
 
-If needed, you may assert that a specific request was not sent using the `assertNotSent` method:
+Якщо потрібно, ви можете стверджувати, що конкретний запит не було надіслано за допомогою`assertNotSent`метод:
 
     Http::fake();
 
@@ -317,7 +338,7 @@ If needed, you may assert that a specific request was not sent using the `assert
         return $request->url() === 'http://example.com/posts';
     });
 
-Or, if you would like to assert that no requests were sent, you may use the `assertNothingSent` method:
+Або, якщо ви хочете стверджувати, що жодних запитів не надсилали, ви можете використовувати`assertNothingSent`метод:
 
     Http::fake();
 

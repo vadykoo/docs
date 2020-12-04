@@ -1,29 +1,31 @@
 # Mocking
 
-- [Introduction](#introduction)
-- [Mocking Objects](#mocking-objects)
-- [Bus Fake](#bus-fake)
-- [Event Fake](#event-fake)
-    - [Scoped Event Fakes](#scoped-event-fakes)
-- [HTTP Fake](#http-fake)
-- [Mail Fake](#mail-fake)
-- [Notification Fake](#notification-fake)
-- [Queue Fake](#queue-fake)
-- [Storage Fake](#storage-fake)
-- [Interacting With Time](#interacting-with-time)
-- [Facades](#mocking-facades)
+-   [Вступ](#introduction)
+-   [Mocking Objects](#mocking-objects)
+-   [Автобус Підробка](#bus-fake)
+-   [Подія Фейк](#event-fake)
+    -   [Підроблені фальшиві події](#scoped-event-fakes)
+-   [Підробка HTTP](#http-fake)
+-   [Mail підробка](#mail-fake)
+-   [Повідомлення Фейк](#notification-fake)
+-   [Черга Fake](#queue-fake)
+-   [Зберігання Підробка](#storage-fake)
+-   [Взаємодія з часом](#interacting-with-time)
+-   [Фасади](#mocking-facades)
 
 <a name="introduction"></a>
-## Introduction
 
-When testing Laravel applications, you may wish to "mock" certain aspects of your application so they are not actually executed during a given test. For example, when testing a controller that dispatches an event, you may wish to mock the event listeners so they are not actually executed during the test. This allows you to only test the controller's HTTP response without worrying about the execution of the event listeners, since the event listeners can be tested in their own test case.
+## Вступ
 
-Laravel provides helpers for mocking events, jobs, and facades out of the box. These helpers primarily provide a convenience layer over Mockery so you do not have to manually make complicated Mockery method calls. You can also use [Mockery](http://docs.mockery.io/en/latest/) or PHPUnit to create your own mocks or spies.
+Під час тестування додатків Laravel, можливо, ви захочете "знущатись" над деякими аспектами вашого додатка, щоб вони фактично не виконувались під час даного тесту. Наприклад, під час тестування контролера, який відправляє подію, можливо, ви захочете знущатись над Listenerами подій, щоб вони насправді не виконувались під час тесту. Це дозволяє протестувати лише HTTP-відповідь контролера, не турбуючись про виконання прослуховувачів подій, оскільки прослуховувачі подій можна перевірити у власному тестовому випадку.
+
+Laravel пропонує помічників для знущань над подіями, робочими місцями та фасадами. Ці помічники в основному забезпечують зручний шар над Mockery, тому вам не доведеться вручну робити складні виклики методу Mockery. Ви також можете використовувати[Mocking](http://docs.mockery.io/en/latest/)або PHPUnit для створення власних макетів або шпигунів.
 
 <a name="mocking-objects"></a>
+
 ## Mocking Objects
 
-When mocking an object that is going to be injected into your application via Laravel's service container, you will need to bind your mocked instance into the container as an `instance` binding. This will instruct the container to use your mocked instance of the object instead of constructing the object itself:
+При знущанні над об’єктом, який буде введено у вашу програму через службовий контейнер Laravel, вам потрібно буде прив’язати свій знущаний екземпляр до контейнера як`instance`прив'язка. Це дозволить контейнеру використовувати ваш знущаний екземпляр об’єкта замість того, щоб будувати сам об’єкт:
 
     use App\Service;
     use Mockery;
@@ -32,7 +34,7 @@ When mocking an object that is going to be injected into your application via La
         $mock->shouldReceive('process')->once();
     }));
 
-In order to make this more convenient, you may use the `mock` method, which is provided by Laravel's base test case class:
+Для того, щоб зробити це більш зручним, ви можете використовувати`mock`метод, який забезпечується базовим класом тестового випадку Laravel:
 
     use App\Service;
 
@@ -40,7 +42,7 @@ In order to make this more convenient, you may use the `mock` method, which is p
         $mock->shouldReceive('process')->once();
     });
 
-You may use the `partialMock` method when you only need to mock a few methods of an object. The methods that are not mocked will be executed normally when called:
+Ви можете використовувати`partialMock`метод, коли потрібно знущатись лише над кількома методами об’єкта. Методи, які не знущаються, будуть виконуватися нормально при виклику:
 
     use App\Service;
 
@@ -48,7 +50,7 @@ You may use the `partialMock` method when you only need to mock a few methods of
         $mock->shouldReceive('process')->once();
     });
 
-Similarly, if you want to spy on an object, Laravel's base test case class offers a `spy` method as a convenient wrapper around the `Mockery::spy` method:
+Подібним чином, якщо ви хочете шпигувати за об’єктом, базовий клас тестового випадку Laravel пропонує a`spy`метод як зручна обгортка навколо`Mockery::spy`метод:
 
     use App\Service;
 
@@ -57,9 +59,10 @@ Similarly, if you want to spy on an object, Laravel's base test case class offer
     });
 
 <a name="bus-fake"></a>
-## Bus Fake
 
-As an alternative to mocking, you may use the `Bus` facade's `fake` method to prevent jobs from being dispatched. When using fakes, assertions are made after the code under test is executed:
+## Автобус Підробка
+
+Як альтернативу знущанню ви можете використовувати`Bus`фасадні`fake`метод запобігання відправленню Jobs. При використанні підробок Assertions робляться після виконання тестованого коду:
 
     <?php
 
@@ -90,9 +93,10 @@ As an alternative to mocking, you may use the `Bus` facade's `fake` method to pr
     }
 
 <a name="event-fake"></a>
-## Event Fake
 
-As an alternative to mocking, you may use the `Event` facade's `fake` method to prevent all event listeners from executing. You may then assert that events were dispatched and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+## Подія Фейк
+
+Як альтернативу знущанню ви можете використовувати`Event`фасадні`fake`метод, щоб запобігти виконанню всіх прослуховувачів подій. Потім ви можете стверджувати, що події були відправлені, і навіть перевіряти отримані дані. При використанні підробок Assertions робляться після виконання тестованого коду:
 
     <?php
 
@@ -129,12 +133,13 @@ As an alternative to mocking, you may use the `Event` facade's `fake` method to 
         }
     }
 
-> {note} After calling `Event::fake()`, no event listeners will be executed. So, if your tests use model factories that rely on events, such as creating a UUID during a model's `creating` event, you should call `Event::fake()` **after** using your factories.
+> {note} Після дзвінка`Event::fake()`, жоден Listener подій не буде виконаний. Отже, якщо у ваших тестах використовуються фабрики моделей, які покладаються на події, наприклад, створення UUID під час моделі`creating`події, вам слід зателефонувати`Event::fake()`**після**використовуючи ваші Factory.
 
 <a name="faking-a-subset-of-events"></a>
-#### Faking A Subset Of Events
 
-If you only want to fake event listeners for a specific set of events, you may pass them to the `fake` or `fakeFor` method:
+#### Підробка підмножини подій
+
+Якщо ви хочете підробити Listeners подій лише для певного набору подій, ви можете передати їх до`fake`або`fakeFor`метод:
 
     /**
      * Test order process.
@@ -154,9 +159,10 @@ If you only want to fake event listeners for a specific set of events, you may p
     }
 
 <a name="scoped-event-fakes"></a>
-### Scoped Event Fakes
 
-If you only want to fake event listeners for a portion of your test, you may use the `fakeFor` method:
+### Підроблені фальшиві події
+
+Якщо ви хочете підробити Listeners подій лише для частини вашого тесту, ви можете використовувати файл`fakeFor`метод:
 
     <?php
 
@@ -190,14 +196,16 @@ If you only want to fake event listeners for a portion of your test, you may use
     }
 
 <a name="http-fake"></a>
-## HTTP Fake
 
-The `Http` facade's `fake` method allows you to instruct the HTTP client to return stubbed / dummy responses when requests are made. For more information on faking outgoing HTTP requests, please consult the [HTTP Client testing documentation](/docs/{{version}}/http-client#testing).
+## Підробка HTTP
+
+`Http`фасадні`fake`Метод дозволяє вказувати клієнтові HTTP повертати тактові / фіктивні відповіді під час надсилання запитів. Для отримання додаткової інформації про підробку вихідних HTTP-запитів, будь ласка, зверніться до[Документація щодо тестування клієнта HTTP](/docs/{{version}}/http-client#testing).
 
 <a name="mail-fake"></a>
-## Mail Fake
 
-You may use the `Mail` facade's `fake` method to prevent mail from being sent. You may then assert that [mailables](/docs/{{version}}/mail) were sent to users and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+## Пошта підробка
+
+Ви можете використовувати`Mail`фасадні`fake`спосіб запобігти надсиланню пошти. Тоді ви можете стверджувати це[доступні](/docs/{{version}}/mail)були надіслані користувачам і навіть перевіряли отримані ними дані. При використанні підробок Assertions робляться після виконання тестованого коду:
 
     <?php
 
@@ -240,15 +248,16 @@ You may use the `Mail` facade's `fake` method to prevent mail from being sent. Y
         }
     }
 
-If you are queueing mailables for delivery in the background, you should use the `assertQueued` method instead of `assertSent`:
+Якщо ви ставите в чергу доступні для доставки у фоновому режимі, вам слід скористатися`assertQueued`метод замість`assertSent`:
 
     Mail::assertQueued(...);
     Mail::assertNotQueued(...);
 
 <a name="notification-fake"></a>
-## Notification Fake
 
-You may use the `Notification` facade's `fake` method to prevent notifications from being sent. You may then assert that [notifications](/docs/{{version}}/notifications) were sent to users and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+## Повідомлення Фейк
+
+Ви можете використовувати`Notification`фасадні`fake`метод запобігання надсиланню сповіщень. Тоді ви можете стверджувати це[повідомлення](/docs/{{version}}/notifications)були надіслані користувачам і навіть перевіряли отримані ними дані. При використанні підробок Assertions робляться після виконання тестованого коду:
 
     <?php
 
@@ -307,9 +316,10 @@ You may use the `Notification` facade's `fake` method to prevent notifications f
     }
 
 <a name="queue-fake"></a>
-## Queue Fake
 
-As an alternative to mocking, you may use the `Queue` facade's `fake` method to prevent jobs from being queued. You may then assert that jobs were pushed to the queue and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+## Черга Fake
+
+Як альтернативу знущанню ви можете використовувати`Queue`фасадні`fake`метод, щоб запобігти черзі Jobs. Потім ви можете стверджувати, що завдання були перенесені в чергу і навіть перевіряти отримані дані. При використанні підробок Assertions робляться після виконання тестованого коду:
 
     <?php
 
@@ -366,9 +376,10 @@ As an alternative to mocking, you may use the `Queue` facade's `fake` method to 
     }
 
 <a name="storage-fake"></a>
-## Storage Fake
 
-The `Storage` facade's `fake` method allows you to easily generate a fake disk that, combined with the file generation utilities of the `UploadedFile` class, greatly simplifies the testing of file uploads. For example:
+## Зберігання Підробка
+
+`Storage`фасадні`fake`Метод дозволяє легко створити підроблений диск, який у поєднанні з утилітами генерації файлів`UploadedFile`клас, значно спрощує перевірку завантаження файлів. Наприклад:
 
     <?php
 
@@ -401,12 +412,13 @@ The `Storage` facade's `fake` method allows you to easily generate a fake disk t
         }
     }
 
-> {tip} By default, the `fake` method will delete all files in its temporary directory. If you would like to keep these files, you may use the "persistentFake" method instead.
+> {tip} За замовчуванням`fake`метод видалить усі файли з тимчасового каталогу. Якщо ви хочете зберегти ці файли, ви можете замість цього застосувати метод "persistentFake".
 
 <a name="interacting-with-time"></a>
-## Interacting With Time
 
-When testing, you may occasionally need to modify the time returned by helpers such as `now` or `Illuminate\Support\Carbon::now()`. Thankfully, Laravel's base feature test class includes helpers that allow you to manipulate the current time:
+## Взаємодія з часом
+
+Під час тестування вам іноді може знадобитися змінити час, повернутий помічниками, такими як`now`або`Illuminate\Support\Carbon::now()`. На щастя, базовий клас тестування функцій Laravel включає помічники, які дозволяють вам керувати поточним часом:
 
     public function testTimeCanBeManipulated()
     {
@@ -430,9 +442,10 @@ When testing, you may occasionally need to modify the time returned by helpers s
     }
 
 <a name="mocking-facades"></a>
-## Facades
 
-Unlike traditional static method calls, [facades](/docs/{{version}}/facades) may be mocked. This provides a great advantage over traditional static methods and grants you the same testability you would have if you were using dependency injection. When testing, you may often want to mock a call to a Laravel facade in one of your controllers. For example, consider the following controller action:
+## Фасади
+
+На відміну від традиційних викликів статичних методів,[фасади](/docs/{{version}}/facades)може знущатися. Це забезпечує велику перевагу перед традиційними статичними методами і надає вам ту саму перевірочність, яку ви мали б, якби використовували ін’єкцію залежностей. Під час тестування ви можете часто хотіти глузувати над дзвінком на FacadeLaravel в одному з ваших контролерів. Наприклад, розглянемо таку дію контролера:
 
     <?php
 
@@ -455,7 +468,7 @@ Unlike traditional static method calls, [facades](/docs/{{version}}/facades) may
         }
     }
 
-We can mock the call to the `Cache` facade by using the `shouldReceive` method, which will return an instance of a [Mockery](https://github.com/padraic/mockery) mock. Since facades are actually resolved and managed by the Laravel [service container](/docs/{{version}}/container), they have much more testability than a typical static class. For example, let's mock our call to the `Cache` facade's `get` method:
+Ми можемо знущатися із дзвінка до`Cache`фасаду за допомогою`shouldReceive`метод, який поверне екземпляр[Mocking](https://github.com/padraic/mockery)глузувати. Оскільки фасади фактично вирішуються та управляються Laravel[службовий контейнер](/docs/{{version}}/container), вони мають набагато більшу перевірочність, ніж типовий статичний клас. Наприклад, давайте глузуватимемо над нашим дзвінком до`Cache`фасадні`get`метод:
 
     <?php
 
@@ -481,4 +494,4 @@ We can mock the call to the `Cache` facade by using the `shouldReceive` method, 
         }
     }
 
-> {note} You should not mock the `Request` facade. Instead, pass the input you desire into the HTTP helper methods such as `get` and `post` when running your test. Likewise, instead of mocking the `Config` facade, call the `Config::set` method in your tests.
+> {note} Ви не повинні глузувати з`Request`фасад. Натомість передайте потрібні дані в допоміжні методи HTTP, такі як`get`і`post`під час запуску тесту. Так само, замість глузування над`Config`фасад, зателефонуйте на`Config::set`метод у ваших тестах.
