@@ -1,38 +1,42 @@
 # Laravel Socialite
 
-- [Introduction](#introduction)
-- [Upgrading Socialite](#upgrading-socialite)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Routing](#routing)
-- [Optional Parameters](#optional-parameters)
-- [Access Scopes](#access-scopes)
-- [Stateless Authentication](#stateless-authentication)
-- [Retrieving User Details](#retrieving-user-details)
+-   [Вступ](#introduction)
+-   [Оновлення Socialite](#upgrading-socialite)
+-   [Встановлення](#installation)
+-   [Конфігурація](#configuration)
+-   [Маршрутизація](#routing)
+-   [Необов’язкові параметри](#optional-parameters)
+-   [Області доступу](#access-scopes)
+-   [Аутентифікація без Stateless](#stateless-authentication)
+-   [Отримання даних користувача](#retrieving-user-details)
 
 <a name="introduction"></a>
+
 ## Introduction
 
-In addition to typical, form based authentication, Laravel also provides a simple, convenient way to authenticate with OAuth providers using [Laravel Socialite](https://github.com/laravel/socialite). Socialite currently supports authentication with Facebook, Twitter, LinkedIn, Google, GitHub, GitLab and Bitbucket.
+In addition to typical, form based authentication, Laravel also provides a simple, convenient way to authenticate with OAuth providers using [Laravel Socialite](https://github.com/laravel/socialite). На даний момент Socialite підтримує автентифікацію за допомогою Facebook, Twitter, LinkedIn, Google, GitHub, GitLab та Bitbucket.
 
-> {tip} Adapters for other platforms are listed at the community driven [Socialite Providers](https://socialiteproviders.com/) website.
+> {tip} Адаптери для інших платформ перераховані спільнотою[Постачальники соціальних мереж](https://socialiteproviders.com/)веб-сайт.
 
 <a name="upgrading-socialite"></a>
-## Upgrading Socialite
 
-When upgrading to a new major version of Socialite, it's important that you carefully review [the upgrade guide](https://github.com/laravel/socialite/blob/master/UPGRADE.md).
+## Оновлення Socialite
+
+Під час оновлення до нової основної версії Socialite важливо уважно переглянути[посібник з оновлення](https://github.com/laravel/socialite/blob/master/UPGRADE.md).
 
 <a name="installation"></a>
-## Installation
 
-To get started with Socialite, use Composer to add the package to your project's dependencies:
+## Встановлення
+
+Щоб розпочати роботу з Socialite, використовуйте Composer, щоб додати пакет до залежностей вашого проекту:
 
     composer require laravel/socialite
 
 <a name="configuration"></a>
-## Configuration
 
-Before using Socialite, you will also need to add credentials for the OAuth services your application utilizes. These credentials should be placed in your `config/services.php` configuration file, and should use the key `facebook`, `twitter`, `linkedin`, `google`, `github`, `gitlab` or `bitbucket`, depending on the providers your application requires. For example:
+## Конфігурація
+
+Перш ніж використовувати Socialite, вам також потрібно буде додати облікові дані служб OAuth, якими користується ваша програма. Ці облікові дані слід розмістити у вашому`config/services.php`файл конфігурації, і повинен використовувати ключ`facebook`,`twitter`,`linkedin`,`google`,`github`,`gitlab`або`bitbucket`залежно від постачальників, яких вимагає ваша програма. Наприклад:
 
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
@@ -40,12 +44,13 @@ Before using Socialite, you will also need to add credentials for the OAuth serv
         'redirect' => 'http://your-callback-url',
     ],
 
-> {tip} If the `redirect` option contains a relative path, it will automatically be resolved to a fully qualified URL.
+> {tip} Якщо`redirect`Параметр містить відносний шлях, він буде автоматично перетворений на повністю кваліфіковану URL-адресу.
 
 <a name="routing"></a>
-## Routing
 
-Next, you are ready to authenticate users! You will need two routes: one for redirecting the user to the OAuth provider, and another for receiving the callback from the provider after authentication. We will access Socialite using the `Socialite` facade:
+## Маршрутизація
+
+Далі ви готові до автентифікації користувачів! Вам знадобляться два маршрути: один для перенаправлення користувача до постачальника OAuth, а інший для отримання зворотного дзвінка від постачальника після автентифікації. Ми отримаємо доступ до Socialite за допомогою`Socialite`фасад:
 
     <?php
 
@@ -79,9 +84,9 @@ Next, you are ready to authenticate users! You will need two routes: one for red
         }
     }
 
-The `redirect` method takes care of sending the user to the OAuth provider, while the `user` method will read the incoming request and retrieve the user's information from the provider.
+`redirect`метод дбає про відправлення користувача до постачальника OAuth, тоді як`user`метод прочитає вхідний запит і отримає інформацію про користувача від постачальника.
 
-You will need to define routes to your controller methods:
+Вам потрібно буде визначити маршрути до методів вашого контролера:
 
     use App\Http\Controllers\Auth\LoginController;
 
@@ -89,44 +94,48 @@ You will need to define routes to your controller methods:
     Route::get('login/github/callback', [LoginController::class, 'handleProviderCallback']);
 
 <a name="optional-parameters"></a>
-## Optional Parameters
 
-A number of OAuth providers support optional parameters in the redirect request. To include any optional parameters in the request, call the `with` method with an associative array:
+## Необов’язкові параметри
+
+Ряд постачальників OAuth підтримують необов’язкові параметри у запиті на перенаправлення. Щоб включити будь-які необов’язкові параметри у запит, зателефонуйте на`with`метод з асоціативним масивом:
 
     return Socialite::driver('google')
         ->with(['hd' => 'example.com'])
         ->redirect();
 
-> {note} When using the `with` method, be careful not to pass any reserved keywords such as `state` or `response_type`.
+> {note} При використанні`with`, будьте обережні, щоб не передавати зарезервовані ключові слова, такі як`state`або`response_type`.
 
 <a name="access-scopes"></a>
-## Access Scopes
 
-Before redirecting the user, you may also add additional "scopes" on the request using the `scopes` method. This method will merge all existing scopes with the ones you supply:
+## Області доступу
+
+Перш ніж перенаправляти користувача, ви можете також додати додаткові "області" на запит, використовуючи`scopes`метод. Цей метод об’єднає всі існуючі області з тими, які ви надаєте:
 
     return Socialite::driver('github')
         ->scopes(['read:user', 'public_repo'])
         ->redirect();
 
-You can overwrite all existing scopes using the `setScopes` method:
+Ви можете переписати всі існуючі області, використовуючи`setScopes`метод:
 
     return Socialite::driver('github')
         ->setScopes(['read:user', 'public_repo'])
         ->redirect();
 
 <a name="stateless-authentication"></a>
-## Stateless Authentication
 
-The `stateless` method may be used to disable session state verification. This is useful when adding social authentication to an API:
+## Аутентифікація без Stateless
+
+`stateless`метод може бути використаний для вимкнення перевірки стану сеансу. Це корисно при додаванні соціальної автентифікації до API:
 
     return Socialite::driver('google')->stateless()->user();
 
-> {note} Stateless authentication is not available for the Twitter driver, which uses OAuth 1.0 for authentication.
+> {note} Аутентифікація без Stateless недоступна для драйвера Twitter, який використовує OAuth 1.0 для автентифікації.
 
 <a name="retrieving-user-details"></a>
-## Retrieving User Details
 
-Once you have a user instance, you can grab a few more details about the user:
+## Отримання даних користувача
+
+Отримавши примірник користувача, ви можете отримати ще кілька деталей про користувача:
 
     $user = Socialite::driver('github')->user();
 
@@ -147,15 +156,17 @@ Once you have a user instance, you can grab a few more details about the user:
     $user->getAvatar();
 
 <a name="retrieving-user-details-from-a-token-oauth2"></a>
-#### Retrieving User Details From A Token (OAuth2)
 
-If you already have a valid access token for a user, you can retrieve their details using the `userFromToken` method:
+#### Отримання даних користувача з маркера (OAuth2)
+
+Якщо у вас вже є дійсний маркер доступу для користувача, ви можете отримати його дані за допомогою`userFromToken`метод:
 
     $user = Socialite::driver('github')->userFromToken($token);
 
 <a name="retrieving-user-details-from-a-token-and-secret-oauth1"></a>
-#### Retrieving User Details From A Token And Secret (OAuth1)
 
-If you already have a valid pair of token / secret for a user, you can retrieve their details using the `userFromTokenAndSecret` method:
+#### Отримання даних користувача з маркера та секрету (OAuth1)
+
+Якщо ви вже маєте дійсну пару маркера / секрету для користувача, ви можете отримати його дані за допомогою`userFromTokenAndSecret`метод:
 
     $user = Socialite::driver('twitter')->userFromTokenAndSecret($token, $secret);
