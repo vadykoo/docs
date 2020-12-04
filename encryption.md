@@ -1,26 +1,30 @@
-# Encryption
+# Шифрування
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-- [Using The Encrypter](#using-the-encrypter)
+-   [Вступ](#introduction)
+-   [Конфігурація](#configuration)
+-   [Використання шифрувача](#using-the-encrypter)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel's encrypter uses OpenSSL to provide AES-256 and AES-128 encryption. You are strongly encouraged to use Laravel's built-in encryption facilities and not attempt to roll your own "home grown" encryption algorithms. All of Laravel's encrypted values are signed using a message authentication code (MAC) so that their underlying value can not be modified once encrypted.
+## Вступ
+
+Шифрувач Laravel використовує OpenSSL для забезпечення шифрування AES-256 та AES-128. Вам настійно рекомендується використовувати вбудовані засоби шифрування Laravel і не намагатися застосовувати власні "доморощені" алгоритми шифрування. Всі зашифровані значення Laravel підписані за допомогою коду автентифікації повідомлень (MAC), так що їх базове значення не може бути змінено після шифрування.
 
 <a name="configuration"></a>
-## Configuration
 
-Before using Laravel's encrypter, you must set a `key` option in your `config/app.php` configuration file. You should use the `php artisan key:generate` command to generate this key since this Artisan command will use PHP's secure random bytes generator to build your key. If this value is not properly set, all values encrypted by Laravel will be insecure.
+## Конфігурація
+
+Перш ніж використовувати шифрувач Laravel, ви повинні встановити a`key`варіант у вашому`config/app.php`файл конфігурації. Ви повинні використовувати`php artisan key:generate`команда для генерації цього ключа, оскільки ця команда Artisan використовуватиме захищений генератор випадкових байтів PHP для створення вашого ключа. Якщо це значення встановлено неправильно, усі значення, зашифровані Laravel, будуть небезпечними.
 
 <a name="using-the-encrypter"></a>
-## Using The Encrypter
+
+## Використання шифрувача
 
 <a name="encrypting-a-value"></a>
-#### Encrypting A Value
 
-You may encrypt a value using the `encryptString` method of the `Crypt` facade. All encrypted values are encrypted using OpenSSL and the `AES-256-CBC` cipher. Furthermore, all encrypted values are signed with a message authentication code (MAC) to detect any modifications to the encrypted string:
+#### Шифрування значення
+
+Ви можете зашифрувати значення за допомогою`encryptString`метод`Crypt`фасад. Всі зашифровані значення шифруються за допомогою OpenSSL та`AES-256-CBC`шифр. Крім того, всі зашифровані значення підписуються кодом автентифікації повідомлень (MAC) для виявлення будь-яких змін у зашифрованому рядку:
 
     <?php
 
@@ -51,9 +55,10 @@ You may encrypt a value using the `encryptString` method of the `Crypt` facade. 
     }
 
 <a name="decrypting-a-value"></a>
-#### Decrypting A Value
 
-You may decrypt values using the `decryptString` method of the `Crypt` facade. If the value can not be properly decrypted, such as when the MAC is invalid, an `Illuminate\Contracts\Encryption\DecryptException` will be thrown:
+#### Розшифровка значення
+
+Ви можете розшифрувати значення за допомогою`decryptString`метод`Crypt`фасад. Якщо значення неможливо належним чином розшифрувати, наприклад, коли MAC недійсний, з'явиться`Illuminate\Contracts\Encryption\DecryptException`буде кинуто:
 
     use Illuminate\Contracts\Encryption\DecryptException;
     use Illuminate\Support\Facades\Crypt;

@@ -1,32 +1,34 @@
 # Middleware
 
-- [Introduction](#introduction)
-- [Defining Middleware](#defining-middleware)
-- [Registering Middleware](#registering-middleware)
-    - [Global Middleware](#global-middleware)
-    - [Assigning Middleware To Routes](#assigning-middleware-to-routes)
-    - [Middleware Groups](#middleware-groups)
-    - [Sorting Middleware](#sorting-middleware)
-- [Middleware Parameters](#middleware-parameters)
-- [Terminable Middleware](#terminable-middleware)
+-   [Вступ](#introduction)
+-   [Визначення проміжного програмного забезпечення](#defining-middleware)
+-   [Реєстрація проміжного програмного забезпечення](#registering-middleware)
+    -   [Глобальне ПЗ](#global-middleware)
+    -   [Призначення проміжного програмного забезпечення маршрутам](#assigning-middleware-to-routes)
+    -   [Групи проміжного програмного забезпечення](#middleware-groups)
+    -   [Сортування проміжного програмного забезпечення](#sorting-middleware)
+-   [Параметри проміжного програмного забезпечення](#middleware-parameters)
+-   [Можливе проміжне програмне забезпечення](#terminable-middleware)
 
 <a name="introduction"></a>
-## Introduction
 
-Middleware provide a convenient mechanism for filtering HTTP requests entering your application. For example, Laravel includes a middleware that verifies the user of your application is authenticated. If the user is not authenticated, the middleware will redirect the user to the login screen. However, if the user is authenticated, the middleware will allow the request to proceed further into the application.
+## Вступ
 
-Additional middleware can be written to perform a variety of tasks besides authentication. A CORS middleware might be responsible for adding the proper headers to all responses leaving your application. A logging middleware might log all incoming requests to your application.
+Middleware забезпечує зручний механізм фільтрації HTTP-запитів, що надходять у вашу програму. Наприклад, Laravel включає проміжне програмне забезпечення, яке підтверджує автентичність користувача вашого додатка. Якщо користувач не аутентифікований, проміжне програмне забезпечення перенаправить користувача на екран входу. Однак, якщо користувача аутентифіковано, проміжне програмне забезпечення дозволить запиту перейти далі до програми.
 
-There are several middleware included in the Laravel framework, including middleware for authentication and CSRF protection. All of these middleware are located in the `app/Http/Middleware` directory.
+Можна створити додаткове проміжне програмне забезпечення для виконання різноманітних завдань, крім автентифікації. Middleware CORS може бути відповідальним за додавання відповідних заголовків до всіх відповідей, що залишають вашу програму. Middleware для реєстрації може реєструвати всі вхідні запити до вашої програми.
+
+У фреймворк Laravel входить кілька проміжних програм, включаючи проміжне програмне забезпечення для автентифікації та захисту CSRF. Всі ці проміжні програми знаходяться в`app/Http/Middleware`каталог.
 
 <a name="defining-middleware"></a>
-## Defining Middleware
 
-To create a new middleware, use the `make:middleware` Artisan command:
+## Визначення проміжного програмного забезпечення
+
+Щоб створити нове проміжне програмне забезпечення, використовуйте`make:middleware`Команда ремісників:
 
     php artisan make:middleware CheckAge
 
-This command will place a new `CheckAge` class within your `app/Http/Middleware` directory. In this middleware, we will only allow access to the route if the supplied `age` is greater than 200. Otherwise, we will redirect the users back to the `home` URI:
+Ця команда розмістить нову`CheckAge`клас у вашому`app/Http/Middleware`каталог. У цьому проміжному програмному забезпеченні ми дозволимо доступ до маршруту лише за умови, що надано`age`більше 200. В іншому випадку ми перенаправляємо користувачів назад на`home`Ненависть:
 
     <?php
 
@@ -53,16 +55,17 @@ This command will place a new `CheckAge` class within your `app/Http/Middleware`
         }
     }
 
-As you can see, if the given `age` is less than or equal to `200`, the middleware will return an HTTP redirect to the client; otherwise, the request will be passed further into the application. To pass the request deeper into the application (allowing the middleware to "pass"), call the `$next` callback with the `$request`.
+Як бачите, якщо дане`age`менше або дорівнює`200`, проміжне програмне забезпечення поверне клієнту перенаправлення HTTP; в іншому випадку запит буде передано далі в заявку. Щоб передати запит глибше в програму (дозволивши проміжне програмне забезпечення "пройти"), зателефонуйте на`$next`зворотний дзвінок за допомогою`$request`.
 
-It's best to envision middleware as a series of "layers" HTTP requests must pass through before they hit your application. Each layer can examine the request and even reject it entirely.
+Краще уявити проміжне програмне забезпечення, оскільки низка "шарів" HTTP-запитів повинна пройти, перш ніж вони потраплять у вашу програму. Кожен шар може розглянути запит і навіть повністю відхилити його.
 
-> {tip} All middleware are resolved via the [service container](/docs/{{version}}/container), so you may type-hint any dependencies you need within a middleware's constructor.
+> {tip} Усі проміжні програми вирішуються через[службовий контейнер](/docs/{{version}}/container), тож ви можете навести натяк на будь-які залежності, які вам потрібні в конструкторі проміжного програмного забезпечення.
 
 <a name="before-after-middleware"></a>
-#### Before & After Middleware
 
-Whether a middleware runs before or after a request depends on the middleware itself. For example, the following middleware would perform some task **before** the request is handled by the application:
+#### До та після проміжного програмного забезпечення
+
+Запуск проміжного програмного забезпечення до або після запиту залежить від самого проміжного програмного забезпечення. Наприклад, наступне проміжне програмне забезпечення виконує певне завдання**раніше**запит обробляється додатком:
 
     <?php
 
@@ -80,7 +83,7 @@ Whether a middleware runs before or after a request depends on the middleware it
         }
     }
 
-However, this middleware would perform its task **after** the request is handled by the application:
+Однак це проміжне програмне забезпечення виконало б своє завдання**після**запит обробляється додатком:
 
     <?php
 
@@ -101,17 +104,20 @@ However, this middleware would perform its task **after** the request is handled
     }
 
 <a name="registering-middleware"></a>
-## Registering Middleware
+
+## Реєстрація проміжного програмного забезпечення
 
 <a name="global-middleware"></a>
-### Global Middleware
 
-If you want a middleware to run during every HTTP request to your application, list the middleware class in the `$middleware` property of your `app/Http/Kernel.php` class.
+### Глобальне ПЗ
+
+Якщо ви хочете, щоб проміжне програмне забезпечення працювало під час кожного запиту HTTP до вашої програми, перелічіть клас проміжного програмного забезпечення в`$middleware`власність вашого`app/Http/Kernel.php`клас.
 
 <a name="assigning-middleware-to-routes"></a>
-### Assigning Middleware To Routes
 
-If you would like to assign middleware to specific routes, you should first assign the middleware a key in your `app/Http/Kernel.php` file. By default, the `$routeMiddleware` property of this class contains entries for the middleware included with Laravel. To add your own, append it to this list and assign it a key of your choosing:
+### Призначення проміжного програмного забезпечення маршрутам
+
+Якщо ви хочете призначити проміжне програмне забезпечення для певних маршрутів, спочатку слід призначити проміжне програмне забезпечення ключем у вашому`app/Http/Kernel.php`файл. За замовчуванням`$routeMiddleware`властивість цього класу містить записи проміжного програмного забезпечення, що входить до складу Laravel. Щоб додати свій власний, додайте його до цього списку та призначте йому вибраний вами ключ:
 
     // Within App\Http\Kernel Class...
 
@@ -127,19 +133,19 @@ If you would like to assign middleware to specific routes, you should first assi
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
 
-Once the middleware has been defined in the HTTP kernel, you may use the `middleware` method to assign middleware to a route:
+Після того, як проміжне програмне забезпечення буде визначено в ядрі HTTP, ви можете використовувати`middleware`метод призначення маршрутного проміжного програмного забезпечення:
 
     Route::get('admin/profile', function () {
         //
     })->middleware('auth');
 
-You may also assign multiple middleware to the route:
+Ви також можете призначити маршруту кілька проміжних програм:
 
     Route::get('/', function () {
         //
     })->middleware('first', 'second');
 
-When assigning middleware, you may also pass the fully qualified class name:
+Призначаючи проміжне програмне забезпечення, ви також можете передати повну назву класу:
 
     use App\Http\Middleware\CheckAge;
 
@@ -147,7 +153,7 @@ When assigning middleware, you may also pass the fully qualified class name:
         //
     })->middleware(CheckAge::class);
 
-When assigning middleware to a group of routes, you may occasionally need to prevent the middleware from being applied to an individual route within the group. You may accomplish this using the `withoutMiddleware` method:
+Призначаючи проміжне програмне забезпечення групі маршрутів, іноді може знадобитися запобігти застосуванню проміжного програмного забезпечення до окремого маршруту в групі. Ви можете досягти цього за допомогою`withoutMiddleware`метод:
 
     use App\Http\Middleware\CheckAge;
 
@@ -161,14 +167,15 @@ When assigning middleware to a group of routes, you may occasionally need to pre
         })->withoutMiddleware([CheckAge::class]);
     });
 
-The `withoutMiddleware` method can only remove route middleware and does not apply to [global middleware](#global-middleware).
+`withoutMiddleware`метод може видалити лише проміжне програмне забезпечення маршруту і не застосовується до[глобальне проміжне програмне забезпечення](#global-middleware).
 
 <a name="middleware-groups"></a>
-### Middleware Groups
 
-Sometimes you may want to group several middleware under a single key to make them easier to assign to routes. You may do this using the `$middlewareGroups` property of your HTTP kernel.
+### Групи проміжного програмного забезпечення
 
-Out of the box, Laravel comes with `web` and `api` middleware groups that contain common middleware you may want to apply to your web UI and API routes:
+Іноді вам може знадобитися згрупувати кілька проміжних програм за допомогою однієї клавіші, щоб полегшити їх призначення для маршрутів. Ви можете зробити це за допомогою`$middlewareGroups`властивість вашого ядра HTTP.
+
+Нестандартно приходить Laravel`web`і`api`групи проміжного програмного забезпечення, що містять загальне проміжне програмне забезпечення, яке ви можете застосувати до свого веб-інтерфейсу та маршрутів API:
 
     /**
      * The application's route middleware groups.
@@ -192,7 +199,7 @@ Out of the box, Laravel comes with `web` and `api` middleware groups that contai
         ],
     ];
 
-Middleware groups may be assigned to routes and controller actions using the same syntax as individual middleware. Again, middleware groups make it more convenient to assign many middleware to a route at once:
+Групи проміжного програмного забезпечення можуть бути призначені для маршрутів та дій контролера, використовуючи той самий синтаксис, що і окремі проміжні програми. Знову ж таки, проміжні групи роблять зручнішим призначати багато проміжних програм до маршруту одночасно:
 
     Route::get('/', function () {
         //
@@ -206,12 +213,13 @@ Middleware groups may be assigned to routes and controller actions using the sam
         //
     });
 
-> {tip} Out of the box, the `web` middleware group is automatically applied to your `routes/web.php` file by the `RouteServiceProvider`.
+> {tip} Нестандартно,`web`група проміжного програмного забезпечення автоматично застосовується до вашого`routes/web.php`файл`RouteServiceProvider`.
 
 <a name="sorting-middleware"></a>
-### Sorting Middleware
 
-Rarely, you may need your middleware to execute in a specific order but not have control over their order when they are assigned to the route. In this case, you may specify your middleware priority using the `$middlewarePriority` property of your `app/Http/Kernel.php` file:
+### Сортування проміжного програмного забезпечення
+
+Рідко вам може знадобитися проміжне програмне забезпечення для виконання в певному порядку, але не мати контролю над своїм замовленням, коли вони призначені маршруту. У цьому випадку ви можете вказати пріоритет проміжного програмного забезпечення за допомогою`$middlewarePriority`власність вашого`app/Http/Kernel.php`файл:
 
     /**
      * The priority-sorted list of middleware.
@@ -231,11 +239,12 @@ Rarely, you may need your middleware to execute in a specific order but not have
     ];
 
 <a name="middleware-parameters"></a>
-## Middleware Parameters
 
-Middleware can also receive additional parameters. For example, if your application needs to verify that the authenticated user has a given "role" before performing a given action, you could create a `CheckRole` middleware that receives a role name as an additional argument.
+## Параметри проміжного програмного забезпечення
 
-Additional middleware parameters will be passed to the middleware after the `$next` argument:
+Middleware також може отримувати додаткові параметри. Наприклад, якщо вашій програмі потрібно виконати перевірку, що автентифікований користувач має задану "роль" перед виконанням певної дії, ви можете створити`CheckRole`проміжне програмне забезпечення, яке отримує ім'я ролі як додатковий аргумент.
+
+Додаткові параметри проміжного програмного забезпечення будуть передані проміжному програмному забезпеченню після`$next`аргумент:
 
     <?php
 
@@ -264,16 +273,17 @@ Additional middleware parameters will be passed to the middleware after the `$ne
 
     }
 
-Middleware parameters may be specified when defining the route by separating the middleware name and parameters with a `:`. Multiple parameters should be delimited by commas:
+Параметри проміжного програмного забезпечення можуть бути вказані при визначенні маршруту, відокремлюючи ім'я та параметри проміжного програмного забезпечення за допомогою a`:`. Кілька параметрів слід розділяти комами:
 
     Route::put('post/{id}', function ($id) {
         //
     })->middleware('role:editor');
 
 <a name="terminable-middleware"></a>
-## Terminable Middleware
 
-Sometimes a middleware may need to do some work after the HTTP response has been sent to the browser. If you define a `terminate` method on your middleware and your web server is using FastCGI, the `terminate` method will automatically be called after the response is sent to the browser:
+## Можливе проміжне програмне забезпечення
+
+Іноді проміжне програмне забезпечення, можливо, доведеться виконати якусь роботу після того, як відповідь HTTP надіслано браузеру. Якщо ви визначите`terminate`на проміжному програмному забезпеченні, а веб-сервер використовує FastCGI,`terminate`метод буде автоматично викликаний після того, як відповідь буде надіслана браузеру:
 
     <?php
 
@@ -294,9 +304,9 @@ Sometimes a middleware may need to do some work after the HTTP response has been
         }
     }
 
-The `terminate` method should receive both the request and the response. Once you have defined a terminable middleware, you should add it to the list of route or global middleware in the `app/Http/Kernel.php` file.
+`terminate`метод повинен отримувати як запит, так і відповідь. Після того, як ви визначили проміжне програмне забезпечення, яке можна термінувати, вам слід додати його до списку маршрутних або глобальних проміжних програм у`app/Http/Kernel.php`файл.
 
-When calling the `terminate` method on your middleware, Laravel will resolve a fresh instance of the middleware from the [service container](/docs/{{version}}/container). If you would like to use the same middleware instance when the `handle` and `terminate` methods are called, register the middleware with the container using the container's `singleton` method. Typically this should be done in the `register` method of your `AppServiceProvider.php`:
+При дзвінку в`terminate`для вашого проміжного програмного забезпечення, Laravel вирішить новий екземпляр проміжного програмного забезпечення з[службовий контейнер](/docs/{{version}}/container). Якщо ви хочете використовувати той самий екземпляр проміжного програмного забезпечення, коли файл`handle`і`terminate`викликаються методи, зареєструйте проміжне програмне забезпечення з контейнером, використовуючи контейнери`singleton`метод. Зазвичай це слід робити в`register`метод вашого`AppServiceProvider.php`:
 
     use App\Http\Middleware\TerminableMiddleware;
 
