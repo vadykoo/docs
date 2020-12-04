@@ -7,7 +7,7 @@
     -   [Використання прикладу програми](#using-example-application)
 -   [Визначення Broadcast подій](#defining-broadcast-events)
     -   [Назва Broadcast](#broadcast-name)
-    -   [B Roa d або st](#broadcast-data)
+    -   [Broadcast](#broadcast-data)
     -   [Черга Broadcast](#broadcast-queue)
     -   [Умови мовлення](#broadcast-conditions)
 -   [Авторизація каналів](#authorizing-channels)
