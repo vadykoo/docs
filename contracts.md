@@ -22,7 +22,7 @@
 
 ### Контракти проти Фасади
 
-Laravel[фасади](/docs/{{version}}/facades)і допоміжні функції забезпечують простий спосіб використання послуг Laravel без необхідності вводити підказки та вирішувати контракти поза контейнером служби. У більшості випадків кожен фасад має еквівалентний контракт.
+Laravel[фасади](/docs/{{version}}/facades)і допоміжні функції забезпечують простий спосіб використання послуг Laravel без необхідності вводити підказки та вирішувати контракти поза контейнером служби. У більшості випадків кожен Facadeмає еквівалентний контракт.
 
 На відміну від фасадів, які не вимагають, щоб ви вимагали їх у конструкторі вашого класу, контракти дозволяють вам визначати явні залежності для ваших класів. Деякі розробники вважають за краще чітко визначати свої залежності таким чином і тому воліють використовувати контракти, тоді як інші розробники користуються зручністю фасадів.
 
@@ -237,7 +237,7 @@ Laravel[фасади](/docs/{{version}}/facades)і допоміжні функц
 | [Illuminate \\ Contracts \\ Routing \\ Registrar](https://github.com/illuminate/contracts/blob/{{version}}/Routing/Registrar.php)                               | `Route`                   |
 | [Висвітлити \\ Contracts \\ Routing \\ ResponseFactory](https://github.com/illuminate/contracts/blob/{{version}}/Routing/ResponseFactory.php)                   | `Response`                |
 | [Висвітлити \\ Contracts \\ Routing \\ UrlGenerator](https://github.com/illuminate/contracts/blob/{{version}}/Routing/UrlGenerator.php)                         | `URL`                     |
-| [Висвітлити \\ Контракти \\ Маршрутизація \\ UrlRoutable](https://github.com/illuminate/contracts/blob/{{version}}/Routing/UrlRoutable.php)                     |                           |
+| [Висвітлити \\ Контракти \\ Routing \\ UrlRoutable](https://github.com/illuminate/contracts/blob/{{version}}/Routing/UrlRoutable.php)                     |                           |
 | [Висвітлити \\ Контракти \\ Сесія \\ Сесія](https://github.com/illuminate/contracts/blob/{{version}}/Session/Session.php)                                       | `Session::driver()`       |
 | [Illuminate \\ Contracts \\ Support \\ Arrayable](https://github.com/illuminate/contracts/blob/{{version}}/Support/Arrayable.php)                               |                           |
 | [Висвітлити \\ Contracts \\ Support \\ Htmlable](https://github.com/illuminate/contracts/blob/{{version}}/Support/Htmlable.php)                                 |                           |

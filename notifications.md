@@ -1,73 +1,77 @@
-# Notifications
+# Повідомлення
 
-- [Introduction](#introduction)
-- [Creating Notifications](#creating-notifications)
-- [Sending Notifications](#sending-notifications)
-    - [Using The Notifiable Trait](#using-the-notifiable-trait)
-    - [Using The Notification Facade](#using-the-notification-facade)
-    - [Specifying Delivery Channels](#specifying-delivery-channels)
-    - [Queueing Notifications](#queueing-notifications)
-    - [On-Demand Notifications](#on-demand-notifications)
-- [Mail Notifications](#mail-notifications)
-    - [Formatting Mail Messages](#formatting-mail-messages)
-    - [Customizing The Sender](#customizing-the-sender)
-    - [Customizing The Recipient](#customizing-the-recipient)
-    - [Customizing The Subject](#customizing-the-subject)
-    - [Customizing The Mailer](#customizing-the-mailer)
-    - [Customizing The Templates](#customizing-the-templates)
-    - [Attachments](#mail-attachments)
-    - [Previewing Mail Notifications](#previewing-mail-notifications)
-- [Markdown Mail Notifications](#markdown-mail-notifications)
-    - [Generating The Message](#generating-the-message)
-    - [Writing The Message](#writing-the-message)
-    - [Customizing The Components](#customizing-the-components)
-- [Database Notifications](#database-notifications)
-    - [Prerequisites](#database-prerequisites)
-    - [Formatting Database Notifications](#formatting-database-notifications)
-    - [Accessing The Notifications](#accessing-the-notifications)
-    - [Marking Notifications As Read](#marking-notifications-as-read)
-- [Broadcast Notifications](#broadcast-notifications)
-    - [Prerequisites](#broadcast-prerequisites)
-    - [Formatting Broadcast Notifications](#formatting-broadcast-notifications)
-    - [Listening For Notifications](#listening-for-notifications)
-- [SMS Notifications](#sms-notifications)
-    - [Prerequisites](#sms-prerequisites)
-    - [Formatting SMS Notifications](#formatting-sms-notifications)
-    - [Formatting Shortcode Notifications](#formatting-shortcode-notifications)
-    - [Customizing The "From" Number](#customizing-the-from-number)
-    - [Routing SMS Notifications](#routing-sms-notifications)
-- [Slack Notifications](#slack-notifications)
-    - [Prerequisites](#slack-prerequisites)
-    - [Formatting Slack Notifications](#formatting-slack-notifications)
-    - [Slack Attachments](#slack-attachments)
-    - [Routing Slack Notifications](#routing-slack-notifications)
-- [Localizing Notifications](#localizing-notifications)
-- [Notification Events](#notification-events)
-- [Custom Channels](#custom-channels)
+-   [Вступ](#introduction)
+-   [Створення сповіщень](#creating-notifications)
+-   [Надсилання сповіщень](#sending-notifications)
+    -   [Using The Notifiable Trait](#using-the-notifiable-trait)
+    -   [Використання фасаду повідомлень](#using-the-notification-facade)
+    -   [Визначення каналів доставки](#specifying-delivery-channels)
+    -   [Черга сповіщень](#queueing-notifications)
+    -   [Повідомлення на вимогу](#on-demand-notifications)
+-   [Повідомлення поштою](#mail-notifications)
+    -   [Форматування поштових повідомлень](#formatting-mail-messages)
+    -   [Налаштування відправника](#customizing-the-sender)
+    -   [Налаштування одержувача](#customizing-the-recipient)
+    -   [Налаштування теми](#customizing-the-subject)
+    -   [Налаштування пошти](#customizing-the-mailer)
+    -   [Налаштування шаблонів](#customizing-the-templates)
+    -   [Вкладення](#mail-attachments)
+    -   [Попередній перегляд створених сповіщень](#previewing-mail-notifications)
+-   [Повідомлення поштової розсилки](#markdown-mail-notifications)
+    -   [Створення повідомлення](#generating-the-message)
+    -   [Написання повідомлення](#writing-the-message)
+    -   [Налаштування компонентів](#customizing-the-components)
+-   [Notification бази даних](#database-notifications)
+    -   [Передумови](#database-prerequisites)
+    -   [Форматування сповіщень баз даних](#formatting-database-notifications)
+    -   [Доступ до сповіщень](#accessing-the-notifications)
+    -   [Позначення повідомлень як прочитаних](#marking-notifications-as-read)
+-   [Broadcast Notifications](#broadcast-notifications)
+    -   [Передумови](#broadcast-prerequisites)
+    -   [Форматування сповіщень про Broadcast](#formatting-broadcast-notifications)
+    -   [Прослуховування сповіщень](#listening-for-notifications)
+-   [SMS-Notification](#sms-notifications)
+    -   [Передумови](#sms-prerequisites)
+    -   [Форматування сповіщень SMS](#formatting-sms-notifications)
+    -   [Форматування сповіщень із шорткодом](#formatting-shortcode-notifications)
+    -   [Налаштування номера "Від"](#customizing-the-from-number)
+    -   [Routing SMS-сповіщень](#routing-sms-notifications)
+-   [Slack Notification](#slack-notifications)
+    -   [Передумови](#slack-prerequisites)
+    -   [Форматування слабких сповіщень](#formatting-slack-notifications)
+    -   [Slack вкладення](#slack-attachments)
+    -   [Routing Slack сповіщень](#routing-slack-notifications)
+-   [Локалізація сповіщень](#localizing-notifications)
+-   [Події Notification](#notification-events)
+-   [Спеціальні канали](#custom-channels)
 
 <a name="introduction"></a>
-## Introduction
 
-In addition to support for [sending email](/docs/{{version}}/mail), Laravel provides support for sending notifications across a variety of delivery channels, including mail, SMS (via [Vonage](https://www.vonage.com/communications-apis/), formerly known as Nexmo), and [Slack](https://slack.com). Notifications may also be stored in a database so they may be displayed in your web interface.
+## Вступ
 
-Typically, notifications should be short, informational messages that notify users of something that occurred in your application. For example, if you are writing a billing application, you might send an "Invoice Paid" notification to your users via the email and SMS channels.
+На додаток до підтримки для[відправка електронної пошти](/docs/{{version}}/mail), Laravel надає підтримку надсилання повідомлень за різними каналами доставки, включаючи пошту, SMS (через[Вонаж](https://www.vonage.com/communications-apis/), раніше відомий як Nexmo), і[Ослаблення](https://slack.com). Повідомлення також можуть зберігатися у базі даних, щоб вони могли відображатися у вашому веб-інтерфейсі.
+
+Як правило, Notification повинні бути короткими, інформаційними повідомленнями, які сповіщають користувачів про щось, що сталося у вашій програмі. Наприклад, якщо ви пишете заявку на виставлення рахунку, ви можете надіслати Notification "Оплачений рахунок-фактура" своїм користувачам за допомогою електронної пошти та SMS-каналів.
 
 <a name="creating-notifications"></a>
-## Creating Notifications
 
-In Laravel, each notification is represented by a single class (typically stored in the `app/Notifications` directory). Don't worry if you don't see this directory in your application, it will be created for you when you run the `make:notification` Artisan command:
+## Створення сповіщень
+
+У Laravel кожне повідомлення представлене одним класом (зазвичай зберігається в`app/Notifications`каталог). Не хвилюйтеся, якщо ви не бачите цей каталог у своїй програмі, він буде створений для вас під час запуску`make:notification`Команда ремісників:
 
     php artisan make:notification InvoicePaid
 
-This command will place a fresh notification class in your `app/Notifications` directory. Each notification class contains a `via` method and a variable number of message building methods (such as `toMail` or `toDatabase`) that convert the notification to a message optimized for that particular channel.
+Ця команда помістить новий клас сповіщень у ваш`app/Notifications`каталог. Кожен клас повідомлень містить a`via`і змінну кількість методів побудови повідомлень (таких як`toMail`або`toDatabase`), які перетворюють повідомлення на повідомлення, оптимізоване для цього конкретного каналу.
 
 <a name="sending-notifications"></a>
-## Sending Notifications
+
+## Надсилання сповіщень
 
 <a name="using-the-notifiable-trait"></a>
+
 ### Using The Notifiable Trait
 
-Notifications may be sent in two ways: using the `notify` method of the `Notifiable` trait or using the `Notification` [facade](/docs/{{version}}/facades). First, let's explore using the trait:
+Повідомлення можуть надсилатися двома способами: за допомогою`notify`метод`Notifiable`ознака або використання`Notification`[фасад](/docs/{{version}}/facades). Спочатку давайте дослідимо, використовуючи ознаку:
 
     <?php
 
@@ -81,29 +85,31 @@ Notifications may be sent in two ways: using the `notify` method of the `Notifia
         use Notifiable;
     }
 
-This trait is utilized by the default `App\Models\User` model and contains one method that may be used to send notifications: `notify`. The `notify` method expects to receive a notification instance:
+Ця ознака використовується за замовчуванням`App\Models\User`модель і містить один метод, який можна використовувати для надсилання сповіщень:`notify`.`notify`метод очікує отримати екземпляр Notification:
 
     use App\Notifications\InvoicePaid;
 
     $user->notify(new InvoicePaid($invoice));
 
-> {tip} Remember, you may use the `Illuminate\Notifications\Notifiable` trait on any of your models. You are not limited to only including it on your `User` model.
+> {tip} Пам'ятайте, ви можете використовувати`Illuminate\Notifications\Notifiable`властивість будь-якої з ваших моделей. Ви не обмежуєтесь лише включенням цього на свій`User`модель.
 
 <a name="using-the-notification-facade"></a>
-### Using The Notification Facade
 
-Alternatively, you may send notifications via the `Notification` [facade](/docs/{{version}}/facades). This is useful primarily when you need to send a notification to multiple notifiable entities such as a collection of users. To send notifications using the facade, pass all of the notifiable entities and the notification instance to the `send` method:
+### Використання фасаду повідомлень
+
+Крім того, ви можете надсилати Notification через`Notification`[фасад](/docs/{{version}}/facades). Це корисно в першу чергу, коли вам потрібно надіслати Notification до кількох об’єктів, про які потрібно повідомити, наприклад до колекції користувачів. Щоб надіслати Notification за допомогою фасаду, передайте всі об'єкти, що підлягають повідомленню, та екземпляр Notification в`send`метод:
 
     Notification::send($users, new InvoicePaid($invoice));
 
 <a name="specifying-delivery-channels"></a>
-### Specifying Delivery Channels
 
-Every notification class has a `via` method that determines on which channels the notification will be delivered. Notifications may be sent on the `mail`, `database`, `broadcast`, `nexmo`, and `slack` channels.
+### Визначення каналів доставки
 
-> {tip} If you would like to use other delivery channels such as Telegram or Pusher, check out the community driven [Laravel Notification Channels website](http://laravel-notification-channels.com).
+Кожен клас повідомлень має`via`метод, який визначає, за якими каналами буде надходити повідомлення. Повідомлення можуть надсилатися на`mail`,`database`,`broadcast`,`nexmo`, і`slack`каналів.
 
-The `via` method receives a `$notifiable` instance, which will be an instance of the class to which the notification is being sent. You may use `$notifiable` to determine which channels the notification should be delivered on:
+> {tip} Якщо ви хочете скористатися іншими каналами доставки, такими як Telegram або Pusher, перегляньте спільноту[Веб-сайт Laravel Notification Channels](http://laravel-notification-channels.com).
+
+`via`метод отримує a`$notifiable`екземпляр, який буде екземпляром класу, до якого надсилається Notification. Ви можете використовувати`$notifiable`щоб визначити, за якими каналами слід надсилати повідомлення:
 
     /**
      * Get the notification's delivery channels.
@@ -117,11 +123,12 @@ The `via` method receives a `$notifiable` instance, which will be an instance of
     }
 
 <a name="queueing-notifications"></a>
-### Queueing Notifications
 
-> {note} Before queueing notifications you should configure your queue and [start a worker](/docs/{{version}}/queues).
+### Черга сповіщень
 
-Sending notifications can take time, especially if the channel needs an external API call to deliver the notification. To speed up your application's response time, let your notification be queued by adding the `ShouldQueue` interface and `Queueable` trait to your class. The interface and trait are already imported for all notifications generated using `make:notification`, so you may immediately add them to your notification class:
+> {note} Перед тим, як сповіщати про чергу, вам слід налаштувати свою чергу та[почати робітника](/docs/{{version}}/queues).
+
+Надсилання сповіщень може зайняти час, особливо якщо каналу потрібен зовнішній виклик API для доставки Notification. Щоб пришвидшити час відповіді вашої програми, нехай ваше повідомлення буде в черзі, додавши`ShouldQueue`інтерфейс і`Queueable`риса до вашого класу. Інтерфейс та ознака вже імпортовані для всіх повідомлень, створених за допомогою`make:notification`, тому ви можете негайно додати їх до свого класу сповіщень:
 
     <?php
 
@@ -138,29 +145,30 @@ Sending notifications can take time, especially if the channel needs an external
         // ...
     }
 
-Once the `ShouldQueue` interface has been added to your notification, you may send the notification like normal. Laravel will detect the `ShouldQueue` interface on the class and automatically queue the delivery of the notification:
+Одного разу`ShouldQueue`Інтерфейс додано до вашого Notification, ви можете надіслати Notification як зазвичай. Laravel виявить`ShouldQueue`інтерфейс класу і автоматично поставити в чергу доставку повідомлення:
 
     $user->notify(new InvoicePaid($invoice));
 
-If you would like to delay the delivery of the notification, you may chain the `delay` method onto your notification instantiation:
+Якщо ви хочете затримати доставку повідомлення, ви можете встановити ланцюжок`delay`методу до вашої інстанції Notification:
 
     $delay = now()->addMinutes(10);
 
     $user->notify((new InvoicePaid($invoice))->delay($delay));
 
-You may pass an array to the `delay` method to specify the delay amount for specific channels:
+Ви можете передати масив до`delay`спосіб вказати величину затримки для певних каналів:
 
     $user->notify((new InvoicePaid($invoice))->delay([
         'mail' => now()->addMinutes(5),
         'sms' => now()->addMinutes(10),
     ]));
 
-When queueing notifications, a queued job will be created for each recipient and channel combination. For example, six jobs will be dispatched to the queue if your notification has three recipients and two channels.
+Під час отримання повідомлень у черзі буде створено завдання в черзі для кожного поєднання одержувача та каналу. Наприклад, шість завдань буде відправлено до черги, якщо ваше Notification має трьох одержувачів і два канали.
 
 <a name="customizing-notification-channel-queues"></a>
-#### Customizing Notification Channel Queues
 
-If you would like to specify a specific queue that should be used for each notification channel supported by the notification, you may define a `viaQueues` method on your notification. This method should return an array of channel name / queue name pairs:
+#### Налаштування черг каналів сповіщень
+
+Якщо ви хочете вказати конкретну чергу, яку слід використовувати для кожного каналу сповіщень, що підтримується Notificationм, ви можете визначити a`viaQueues`у вашому повідомленні. Цей метод повинен повернути масив пар назв каналів / назв черги:
 
     /**
      * Determine which queues should be used for each notification channel.
@@ -176,9 +184,10 @@ If you would like to specify a specific queue that should be used for each notif
     }
 
 <a name="on-demand-notifications"></a>
-### On-Demand Notifications
 
-Sometimes you may need to send a notification to someone who is not stored as a "user" of your application. Using the `Notification::route` facade method, you may specify ad-hoc notification routing information before sending the notification:
+### Повідомлення на вимогу
+
+Іноді вам може знадобитися надіслати повідомлення комусь, хто не зберігається як "користувач" вашої програми. Використання`Notification::route`методом фасаду, ви можете вказати спеціальну інформацію про маршрутизацію сповіщень перед надсиланням повідомлення:
 
     Notification::route('mail', 'taylor@example.com')
                 ->route('nexmo', '5555555555')
@@ -186,12 +195,14 @@ Sometimes you may need to send a notification to someone who is not stored as a 
                 ->notify(new InvoicePaid($invoice));
 
 <a name="mail-notifications"></a>
-## Mail Notifications
+
+## Повідомлення поштою
 
 <a name="formatting-mail-messages"></a>
-### Formatting Mail Messages
 
-If a notification supports being sent as an email, you should define a `toMail` method on the notification class. This method will receive a `$notifiable` entity and should return an `Illuminate\Notifications\Messages\MailMessage` instance. Mail messages may contain lines of text as well as a "call to action". Let's take a look at an example `toMail` method:
+### Форматування поштових повідомлень
+
+Якщо повідомлення підтримує надсилання у вигляді електронного листа, слід визначити`toMail`в класі сповіщень. Цей метод отримає a`$notifiable`і повинен повернути файл`Illuminate\Notifications\Messages\MailMessage`екземпляр. Поштові повідомлення можуть містити рядки тексту, а також "заклик до дії". Давайте розглянемо приклад`toMail`метод:
 
     /**
      * Get the mail representation of the notification.
@@ -210,18 +221,19 @@ If a notification supports being sent as an email, you should define a `toMail` 
                     ->line('Thank you for using our application!');
     }
 
-> {tip} Note we are using `$this->invoice->id` in our `toMail` method. You may pass any data your notification needs to generate its message into the notification's constructor.
+> {tip} Примітка, яку ми використовуємо`$this->invoice->id`в нашому`toMail`метод. Ви можете передавати будь-які дані, необхідні для створення повідомлення, у конструктор Notification.
 
-In this example, we register a greeting, a line of text, a call to action, and then another line of text. These methods provided by the `MailMessage` object make it simple and fast to format small transactional emails. The mail channel will then translate the message components into a nice, responsive HTML email template with a plain-text counterpart. Here is an example of an email generated by the `mail` channel:
+У цьому прикладі ми реєструємо привітання, рядок тексту, заклик до дії, а потім ще один рядок тексту. Ці методи передбачені`MailMessage`object дозволяє спростити та швидко форматувати невеликі транзакційні електронні листи. Потім поштовий канал переведе компоненти повідомлень у приємний, чуйний HTML-шаблон електронної пошти зі звичайним текстом. Ось приклад електронного листа, створеного`mail`канал:
 
 <img src="https://laravel.com/img/docs/notification-example-2.png">
 
-> {tip} When sending mail notifications, be sure to set the `name` value in your `config/app.php` configuration file. This value will be used in the header and footer of your mail notification messages.
+> {tip} Під час надсилання сповіщень поштою обов’язково встановіть`name` value in your `config/app.php`файл конфігурації. Це значення буде використано у верхньому та нижньому колонтитулі ваших повідомлень про поштові Notification.
 
 <a name="other-notification-formatting-options"></a>
-#### Other Notification Formatting Options
 
-Instead of defining the "lines" of text in the notification class, you may use the `view` method to specify a custom template that should be used to render the notification email:
+#### Інші параметри форматування сповіщень
+
+Замість того, щоб визначати "рядки" тексту в класі сповіщень, ви можете використовувати`view`метод, щоб вказати власний шаблон, який слід використовувати для відображення повідомлення електронної пошти:
 
     /**
      * Get the mail representation of the notification.
@@ -236,7 +248,7 @@ Instead of defining the "lines" of text in the notification class, you may use t
         );
     }
 
-You may specify a plain-text view for the mail message by passing the view name as the second element of an array that is given to the `view` method of the `MailMessage`:
+Ви можете вказати текстовий вигляд для поштового повідомлення, передавши ім'я View як другий елемент масиву, який надається`view`метод`MailMessage`:
 
     /**
      * Get the mail representation of the notification.
@@ -252,7 +264,7 @@ You may specify a plain-text view for the mail message by passing the view name 
         );
     }
 
-In addition, you may return a full [mailable object](/docs/{{version}}/mail) from the `toMail` method:
+Крім того, ви можете повернути повну[доступний об'єкт](/docs/{{version}}/mail)від`toMail`метод:
 
     use App\Mail\InvoicePaid as Mailable;
 
@@ -268,9 +280,10 @@ In addition, you may return a full [mailable object](/docs/{{version}}/mail) fro
     }
 
 <a name="error-messages"></a>
-#### Error Messages
 
-Some notifications inform users of errors, such as a failed invoice payment. You may indicate that a mail message is regarding an error by calling the `error` method when building your message. When using the `error` method on a mail message, the call to action button will be red instead of blue:
+#### Повідомлення про помилки
+
+Деякі Notification інформують користувачів про помилки, наприклад, про невдалу оплату рахунка-фактури. Ви можете вказати, що поштове повідомлення стосується помилки, зателефонувавши на`error`метод при побудові вашого повідомлення. При використанні`error`у поштовому повідомленні кнопка із закликом до дії буде червоною, а не синьою:
 
     /**
      * Get the mail representation of the notification.
@@ -287,9 +300,10 @@ Some notifications inform users of errors, such as a failed invoice payment. You
     }
 
 <a name="customizing-the-sender"></a>
-### Customizing The Sender
 
-By default, the email's sender / from address is defined in the `config/mail.php` configuration file. However, you may specify the from address for a specific notification using the `from` method:
+### Налаштування відправника
+
+За замовчуванням адреса відправника / адреса електронної пошти визначена в`config/mail.php`файл конфігурації. Однак ви можете вказати адресу from для конкретного Notification за допомогою`from`метод:
 
     /**
      * Get the mail representation of the notification.
@@ -305,9 +319,10 @@ By default, the email's sender / from address is defined in the `config/mail.php
     }
 
 <a name="customizing-the-recipient"></a>
-### Customizing The Recipient
 
-When sending notifications via the `mail` channel, the notification system will automatically look for an `email` property on your notifiable entity. You may customize which email address is used to deliver the notification by defining a `routeNotificationForMail` method on the entity:
+### Налаштування одержувача
+
+При надсиланні повідомлень через`mail`канал, система Notification автоматично шукатиме`email`власність на вашу юридичну особу. Ви можете налаштувати, яка електронна адреса використовується для надсилання Notification, визначивши a`routeNotificationForMail`метод на сутність:
 
     <?php
 
@@ -337,9 +352,10 @@ When sending notifications via the `mail` channel, the notification system will 
     }
 
 <a name="customizing-the-subject"></a>
-### Customizing The Subject
 
-By default, the email's subject is the class name of the notification formatted to "title case". So, if your notification class is named `InvoicePaid`, the email's subject will be `Invoice Paid`. If you would like to specify an explicit subject for the message, you may call the `subject` method when building your message:
+### Налаштування теми
+
+За замовчуванням темою повідомлення електронної пошти є назва класу Notification, відформатоване як "заголовок". Отже, якщо названо ваш клас сповіщень`InvoicePaid`, темою повідомлення буде`Invoice Paid`. Якщо ви хочете вказати явну тему для повідомлення, ви можете зателефонувати за номером`subject`метод при побудові вашого повідомлення:
 
     /**
      * Get the mail representation of the notification.
@@ -355,9 +371,10 @@ By default, the email's subject is the class name of the notification formatted 
     }
 
 <a name="customizing-the-mailer"></a>
-### Customizing The Mailer
 
-By default, the email notification will be sent using the default driver defined in the `config/mail.php` configuration file. However, you may specify a different mailer at runtime by calling the `mailer` method when building your message:
+### Налаштування пошти
+
+За замовчуванням Notification електронною поштою надсилатиметься із драйвером за замовчуванням, визначеним у`config/mail.php`файл конфігурації. Однак ви можете вказати іншу поштову скриньку під час виконання, зателефонувавши до`mailer`метод при побудові вашого повідомлення:
 
     /**
      * Get the mail representation of the notification.
@@ -373,16 +390,18 @@ By default, the email notification will be sent using the default driver defined
     }
 
 <a name="customizing-the-templates"></a>
-### Customizing The Templates
 
-You can modify the HTML and plain-text template used by mail notifications by publishing the notification package's resources. After running this command, the mail notification templates will be located in the `resources/views/vendor/notifications` directory:
+### Налаштування шаблонів
+
+Ви можете змінити HTML і шаблон простого тексту, що використовуються у Notificationх електронною поштою, опублікувавши ресурси пакета сповіщень. Після запуску цієї команди шаблони повідомлень про пошту будуть розміщені в`resources/views/vendor/notifications`каталог:
 
     php artisan vendor:publish --tag=laravel-notifications
 
 <a name="mail-attachments"></a>
-### Attachments
 
-To add attachments to an email notification, use the `attach` method while building your message. The `attach` method accepts the full (absolute) path to the file as its first argument:
+### Вкладення
+
+Щоб додати вкладення до Notification електронною поштою, використовуйте`attach`метод під час створення вашого повідомлення.`attach`метод приймає повний (абсолютний) шлях до файлу як перший аргумент:
 
     /**
      * Get the mail representation of the notification.
@@ -397,7 +416,7 @@ To add attachments to an email notification, use the `attach` method while build
                     ->attach('/path/to/file');
     }
 
-When attaching files to a message, you may also specify the display name and / or MIME type by passing an `array` as the second argument to the `attach` method:
+Прикріплюючи файли до повідомлення, ви також можете вказати відображуване ім'я та / або тип MIME, передавши файл`array`як другий аргумент`attach`метод:
 
     /**
      * Get the mail representation of the notification.
@@ -415,12 +434,13 @@ When attaching files to a message, you may also specify the display name and / o
                     ]);
     }
 
-> {tip} Unlike attaching files in mailable objects, you may not attach a file directly from the storage disk using `attachFromStorage`. You should rather use the `attach` method with an absolute path to the file on the storage disk. Alternatively, you could return a [mailable](/docs/{{version}}/mail#generating-mailables) from the `toMail` method.
+> {tip} На відміну від вкладання файлів у доступні об’єкти, ви не можете вкладати файл безпосередньо з диска зберігання за допомогою`attachFromStorage`. Вам краще скористатися`attach`метод з абсолютним шляхом до файлу на диску зберігання. Як варіант, ви можете повернути a[доступний](/docs/{{version}}/mail#generating-mailables)від`toMail`метод.
 
 <a name="raw-data-attachments"></a>
-#### Raw Data Attachments
 
-The `attachData` method may be used to attach a raw string of bytes as an attachment:
+#### Вкладені файли необроблених даних
+
+`attachData`метод може бути використаний для приєднання необробленого рядка байтів як вкладення:
 
     /**
      * Get the mail representation of the notification.
@@ -438,9 +458,10 @@ The `attachData` method may be used to attach a raw string of bytes as an attach
     }
 
 <a name="previewing-mail-notifications"></a>
-### Previewing Mail Notifications
 
-When designing a mail notification template, it is convenient to quickly preview the rendered mail message in your browser like a typical Blade template. For this reason, Laravel allows you to return any mail message generated by a mail notification directly from a route Closure or controller. When a `MailMessage` is returned, it will be rendered and displayed in the browser, allowing you to quickly preview its design without needing to send it to an actual email address:
+### Попередній перегляд створених сповіщень
+
+При розробці шаблону Notification про пошту зручно швидко переглядати відтворене поштове повідомлення у вашому браузері, як типовий шаблон Blade. З цієї причини Laravel дозволяє повертати будь-яке поштове повідомлення, генероване поштовим повідомленням, безпосередньо із Закриття маршруту або контролера. Коли a`MailMessage`повернеться, він буде відтворений і відображений у браузері, що дозволить вам швидко переглянути його дизайн без необхідності надсилати його на фактичну електронну адресу:
 
     Route::get('mail', function () {
         $invoice = App\Invoice::find(1);
@@ -450,18 +471,20 @@ When designing a mail notification template, it is convenient to quickly preview
     });
 
 <a name="markdown-mail-notifications"></a>
-## Markdown Mail Notifications
 
-Markdown mail notifications allow you to take advantage of the pre-built templates of mail notifications, while giving you more freedom to write longer, customized messages. Since the messages are written in Markdown, Laravel is able to render beautiful, responsive HTML templates for the messages while also automatically generating a plain-text counterpart.
+## Повідомлення поштової розсилки
+
+Notification про поштову розсилку дозволяють скористатися заздалегідь побудованими шаблонами сповіщень про пошту, надаючи вам більше свободи для написання довших, налаштованих повідомлень. Оскільки повідомлення написані в Markdown, Laravel може рендерити чудові, чуйні HTML-шаблони для повідомлень, а також автоматично генерувати аналог простого тексту.
 
 <a name="generating-the-message"></a>
-### Generating The Message
 
-To generate a notification with a corresponding Markdown template, you may use the `--markdown` option of the `make:notification` Artisan command:
+### Створення повідомлення
+
+Щоб створити Notification з відповідним шаблоном Markdown, ви можете використовувати`--markdown`варіант`make:notification`Команда ремісників:
 
     php artisan make:notification InvoicePaid --markdown=mail.invoice.paid
 
-Like all other mail notifications, notifications that use Markdown templates should define a `toMail` method on their notification class. However, instead of using the `line` and `action` methods to construct the notification, use the `markdown` method to specify the name of the Markdown template that should be used:
+Як і всі інші Notification поштою, Notification, які використовують шаблони Markdown, повинні визначати a`toMail`метод їх класу сповіщень. Однак замість використання`line`і`action`методи побудови повідомлення, використовуйте`markdown`метод, щоб вказати назву шаблону Markdown, який слід використовувати:
 
     /**
      * Get the mail representation of the notification.
@@ -479,9 +502,10 @@ Like all other mail notifications, notifications that use Markdown templates sho
     }
 
 <a name="writing-the-message"></a>
-### Writing The Message
 
-Markdown mail notifications use a combination of Blade components and Markdown syntax which allow you to easily construct notifications while leveraging Laravel's pre-crafted notification components:
+### Написання повідомлення
+
+Повідомлення Markdown в пошті використовують комбінацію компонентів Blade та синтаксису Markdown, які дозволяють легко створювати повідомлення, використовуючи заздалегідь створені компоненти сповіщень Laravel:
 
     @component('mail::message')
     # Invoice Paid
@@ -497,27 +521,30 @@ Markdown mail notifications use a combination of Blade components and Markdown s
     @endcomponent
 
 <a name="button-component"></a>
-#### Button Component
 
-The button component renders a centered button link. The component accepts two arguments, a `url` and an optional `color`. Supported colors are `blue`, `green`, and `red`. You may add as many button components to a notification as you wish:
+#### Кнопка Компонент
+
+Компонент кнопки відображає відцентрове посилання кнопки. Компонент приймає два аргументи, a`url`та необов’язково`color`. Підтримувані кольори`blue`,`green`, і`red`. Ви можете додати до Notification скільки завгодно компонентів кнопок:
 
     @component('mail::button', ['url' => $url, 'color' => 'green'])
     View Invoice
     @endcomponent
 
 <a name="panel-component"></a>
-#### Panel Component
 
-The panel component renders the given block of text in a panel that has a slightly different background color than the rest of the notification. This allows you to draw attention to a given block of text:
+#### Компонент панелі
+
+Компонент панелі відображає даний блок тексту на панелі, яка має дещо інший колір фону, ніж решта Notification. Це дозволяє звернути увагу на певний блок тексту:
 
     @component('mail::panel')
     This is the panel content.
     @endcomponent
 
 <a name="table-component"></a>
-#### Table Component
 
-The table component allows you to transform a Markdown table into an HTML table. The component accepts the Markdown table as its content. Table column alignment is supported using the default Markdown table alignment syntax:
+#### Компонент таблиці
+
+Компонент таблиці дозволяє перетворити таблицю Markdown в таблицю HTML. Компонент приймає таблицю Markdown як свій вміст. Вирівнювання стовпців таблиці підтримується за допомогою синтаксису вирівнювання таблиці Markdown за замовчуванням:
 
     @component('mail::table')
     | Laravel       | Table         | Example  |
@@ -527,22 +554,24 @@ The table component allows you to transform a Markdown table into an HTML table.
     @endcomponent
 
 <a name="customizing-the-components"></a>
-### Customizing The Components
 
-You may export all of the Markdown notification components to your own application for customization. To export the components, use the `vendor:publish` Artisan command to publish the `laravel-mail` asset tag:
+### Налаштування компонентів
+
+Ви можете експортувати всі компоненти Notification Markdown у власну програму для налаштування. Щоб експортувати компоненти, використовуйте`vendor:publish`Реміснича команда видавати`laravel-mail`тег активу:
 
     php artisan vendor:publish --tag=laravel-mail
 
-This command will publish the Markdown mail components to the `resources/views/vendor/mail` directory. The `mail` directory will contain an `html` and a `text` directory, each containing their respective representations of every available component. You are free to customize these components however you like.
+Ця команда опублікує компоненти пошти Markdown у`resources/views/vendor/mail`каталог.`mail`каталог міститиме`html`і a`text`каталог, кожен із відповідних Views кожного доступного компонента. Ви можете налаштувати ці компоненти як завгодно.
 
 <a name="customizing-the-css"></a>
-#### Customizing The CSS
 
-After exporting the components, the `resources/views/vendor/mail/html/themes` directory will contain a `default.css` file. You may customize the CSS in this file and your styles will automatically be in-lined within the HTML representations of your Markdown notifications.
+#### Налаштування CSS
 
-If you would like to build an entirely new theme for Laravel's Markdown components, you may place a CSS file within the `html/themes` directory. After naming and saving your CSS file, update the `theme` option of the `mail` configuration file to match the name of your new theme.
+Після експорту компонентів файл`resources/views/vendor/mail/html/themes`каталог міститиме файл`default.css`файл. Ви можете налаштувати CSS у цьому файлі, і ваші стилі будуть автоматично вставлені в HTML-зображення ваших сповіщень Markdown.
 
-To customize the theme for an individual notification, you may call the `theme` method while building the notification's mail message. The `theme` method accepts the name of the theme that should be used when sending the notification:
+Якщо ви хочете створити абсолютно нову тему для компонентів Laravel Markdown, ви можете розмістити файл CSS у`html/themes`каталог. Після іменування та збереження файлу CSS оновіть файл`theme`варіант`mail`конфігураційний файл відповідно до назви вашої нової теми.
+
+Щоб налаштувати тему для окремого Notification, ви можете зателефонувати до`theme`метод під час створення поштового повідомлення Notification.`theme`метод приймає назву теми, яку слід використовувати під час надсилання Notification:
 
     /**
      * Get the mail representation of the notification.
@@ -559,23 +588,26 @@ To customize the theme for an individual notification, you may call the `theme` 
     }
 
 <a name="database-notifications"></a>
-## Database Notifications
+
+## Notification бази даних
 
 <a name="database-prerequisites"></a>
-### Prerequisites
 
-The `database` notification channel stores the notification information in a database table. This table will contain information such as the notification type as well as custom JSON data that describes the notification.
+### Передумови
 
-You can query the table to display the notifications in your application's user interface. But, before you can do that, you will need to create a database table to hold your notifications. You may use the `notifications:table` command to generate a migration with the proper table schema:
+`database`канал сповіщень зберігає інформацію Notification в таблиці бази даних. Ця таблиця міститиме таку інформацію, як тип Notification, а також користувацькі дані JSON, що описують Notification.
+
+Ви можете запитати таблицю, щоб відобразити Notification в інтерфейсі користувача вашої програми. Але перед тим, як це зробити, вам потрібно буде створити таблицю бази даних для зберігання ваших сповіщень. Ви можете використовувати`notifications:table`команда для генерації міграції за допомогою відповідної схеми таблиці:
 
     php artisan notifications:table
 
     php artisan migrate
 
 <a name="formatting-database-notifications"></a>
-### Formatting Database Notifications
 
-If a notification supports being stored in a database table, you should define a `toDatabase` or `toArray` method on the notification class. This method will receive a `$notifiable` entity and should return a plain PHP array. The returned array will be encoded as JSON and stored in the `data` column of your `notifications` table. Let's take a look at an example `toArray` method:
+### Форматування сповіщень баз даних
+
+Якщо Notification підтримує збереження в таблиці бази даних, слід визначити a`toDatabase`або`toArray`в класі сповіщень. Цей метод отримає a`$notifiable`сутність і повинен повертати звичайний масив PHP. Повернутий масив буде закодований як JSON і збережений у`data`стовпець вашого`notifications`таблиця. Давайте розглянемо приклад`toArray`метод:
 
     /**
      * Get the array representation of the notification.
@@ -592,14 +624,16 @@ If a notification supports being stored in a database table, you should define a
     }
 
 <a name="todatabase-vs-toarray"></a>
-#### `toDatabase` Vs. `toArray`
 
-The `toArray` method is also used by the `broadcast` channel to determine which data to broadcast to your JavaScript client. If you would like to have two different array representations for the `database` and `broadcast` channels, you should define a `toDatabase` method instead of a `toArray` method.
+#### `toDatabase`Проти`toArray`
+
+`toArray`метод також використовується методом`broadcast`канал, щоб визначити, які дані транслювати на ваш клієнт JavaScript. Якщо ви хочете мати два різних View масиву для`database`і`broadcast`канали, вам слід визначити a`toDatabase`метод замість a`toArray`метод.
 
 <a name="accessing-the-notifications"></a>
-### Accessing The Notifications
 
-Once notifications are stored in the database, you need a convenient way to access them from your notifiable entities. The `Illuminate\Notifications\Notifiable` trait, which is included on Laravel's default `App\Models\User` model, includes a `notifications` Eloquent relationship that returns the notifications for the entity. To fetch notifications, you may access this method like any other Eloquent relationship. By default, notifications will be sorted by the `created_at` timestamp:
+### Доступ до сповіщень
+
+Після того, як Notification зберігаються в базі даних, вам потрібен зручний спосіб отримати доступ до них із ваших об’єктів, про які потрібно повідомити.`Illuminate\Notifications\Notifiable`ознака, яка включена за замовчуванням Laravel`App\Models\User`модель, включає a`notifications`Красномовний зв’язок, який повертає повідомлення для сутності. Щоб отримати Notification, ви можете отримати доступ до цього методу, як і до будь-якого іншого красномовного зв'язку. За замовчуванням Notification сортуються за`created_at`позначка часу:
 
     $user = App\Models\User::find(1);
 
@@ -607,7 +641,7 @@ Once notifications are stored in the database, you need a convenient way to acce
         echo $notification->type;
     }
 
-If you want to retrieve only the "unread" notifications, you may use the `unreadNotifications` relationship. Again, these notifications will be sorted by the `created_at` timestamp:
+Якщо ви хочете отримати лише "непрочитані" повідомлення, ви можете використовувати`unreadNotifications`відносини. Знову ж таки, ці Notification буде відсортовано за`created_at`позначка часу:
 
     $user = App\Models\User::find(1);
 
@@ -615,12 +649,13 @@ If you want to retrieve only the "unread" notifications, you may use the `unread
         echo $notification->type;
     }
 
-> {tip} To access your notifications from your JavaScript client, you should define a notification controller for your application which returns the notifications for a notifiable entity, such as the current user. You may then make an HTTP request to that controller's URI from your JavaScript client.
+> {tip} Щоб отримати доступ до сповіщень із вашого клієнта JavaScript, слід визначити контролер сповіщень для своєї програми, який повертає Notification для об’єкта, що підлягає повідомленню, наприклад поточного користувача. Потім ви можете зробити запит HTTP на URI цього контролера від свого клієнта JavaScript.
 
 <a name="marking-notifications-as-read"></a>
-### Marking Notifications As Read
 
-Typically, you will want to mark a notification as "read" when a user views it. The `Illuminate\Notifications\Notifiable` trait provides a `markAsRead` method, which updates the `read_at` column on the notification's database record:
+### Позначення повідомлень як прочитаних
+
+Як правило, ви хочете позначити повідомлення як "прочитане", коли користувач його переглядає.`Illuminate\Notifications\Notifiable`ознака забезпечує a`markAsRead`метод, який оновлює`read_at`стовпець у записі бази даних Notification:
 
     $user = App\Models\User::find(1);
 
@@ -628,32 +663,35 @@ Typically, you will want to mark a notification as "read" when a user views it. 
         $notification->markAsRead();
     }
 
-However, instead of looping through each notification, you may use the `markAsRead` method directly on a collection of notifications:
+Однак, замість перегляду кожного повідомлення, ви можете використовувати`markAsRead`метод безпосередньо на колекції сповіщень:
 
     $user->unreadNotifications->markAsRead();
 
-You may also use a mass-update query to mark all of the notifications as read without retrieving them from the database:
+Ви також можете використовувати запит масового оновлення, щоб позначити всі Notification як прочитані, не отримуючи їх із бази даних:
 
     $user = App\Models\User::find(1);
 
     $user->unreadNotifications()->update(['read_at' => now()]);
 
-You may `delete` the notifications to remove them from the table entirely:
+Ви можете`delete`Notification, щоб повністю видалити їх із таблиці:
 
     $user->notifications()->delete();
 
 <a name="broadcast-notifications"></a>
+
 ## Broadcast Notifications
 
 <a name="broadcast-prerequisites"></a>
-### Prerequisites
 
-Before broadcasting notifications, you should configure and be familiar with Laravel's [event broadcasting](/docs/{{version}}/broadcasting) services. Event broadcasting provides a way to react to server-side fired Laravel events from your JavaScript client.
+### Передумови
+
+Перш ніж транслювати Notification, слід налаштувати та ознайомитись із повідомленнями Laravel[трансляція подій](/docs/{{version}}/broadcasting)послуги. Трансляція подій забезпечує спосіб реагування на серверні події Laravel із вашого клієнта JavaScript.
 
 <a name="formatting-broadcast-notifications"></a>
-### Formatting Broadcast Notifications
 
-The `broadcast` channel broadcasts notifications using Laravel's [event broadcasting](/docs/{{version}}/broadcasting) services, allowing your JavaScript client to catch notifications in realtime. If a notification supports broadcasting, you can define a `toBroadcast` method on the notification class. This method will receive a `$notifiable` entity and should return a `BroadcastMessage` instance. If the `toBroadcast` method does not exist, the `toArray` method will be used to gather the data that should be broadcast. The returned data will be encoded as JSON and broadcast to your JavaScript client. Let's take a look at an example `toBroadcast` method:
+### Форматування сповіщень про Broadcast
+
+`broadcast`канал транслює повідомлення за допомогою Laravel[трансляція подій](/docs/{{version}}/broadcasting)служби, що дозволяє вашому клієнту JavaScript отримувати Notification в режимі реального часу. Якщо повідомлення підтримує Broadcast, ви можете визначити a`toBroadcast`в класі сповіщень. Цей метод отримає a`$notifiable`сутність і повинна повернути a`BroadcastMessage`екземпляр. Якщо`toBroadcast`метод не існує,`toArray`метод буде використаний для збору даних, які слід транслювати. Повернуті дані будуть закодовані як JSON і передаватимуться на ваш клієнт JavaScript. Давайте розглянемо приклад`toBroadcast`метод:
 
     use Illuminate\Notifications\Messages\BroadcastMessage;
 
@@ -672,18 +710,20 @@ The `broadcast` channel broadcasts notifications using Laravel's [event broadcas
     }
 
 <a name="broadcast-queue-configuration"></a>
-#### Broadcast Queue Configuration
 
-All broadcast notifications are queued for broadcasting. If you would like to configure the queue connection or queue name that is used to queue the broadcast operation, you may use the `onConnection` and `onQueue` methods of the `BroadcastMessage`:
+#### Конфігурація черги мовлення
+
+Усі Notification про Broadcast в черзі на Broadcast. Якщо ви хочете налаштувати підключення черги або ім'я черги, що використовується для черги операції трансляції, ви можете використовувати`onConnection`і`onQueue`методи`BroadcastMessage`:
 
     return (new BroadcastMessage($data))
                     ->onConnection('sqs')
                     ->onQueue('broadcasts');
 
 <a name="customizing-the-notification-type"></a>
-#### Customizing The Notification Type
 
-In addition to the data you specify, all broadcast notifications also have a `type` field containing the full class name of the notification. If you would like to customize the notification `type` that is provided to your JavaScript client, you may define a `broadcastType` method on the notification class:
+#### Налаштування типу повідомлення
+
+Окрім зазначених вами даних, усі Broadcast Notifications також мають символ`type`поле, що містить повну назву класу Notification. Якщо ви хочете налаштувати повідомлення`type`що надається вашому клієнту JavaScript, ви можете визначити`broadcastType`метод у класі сповіщень:
 
     use Illuminate\Notifications\Messages\BroadcastMessage;
 
@@ -698,9 +738,10 @@ In addition to the data you specify, all broadcast notifications also have a `ty
     }
 
 <a name="listening-for-notifications"></a>
-### Listening For Notifications
 
-Notifications will broadcast on a private channel formatted using a `{notifiable}.{id}` convention. So, if you are sending a notification to an `App\Models\User` instance with an ID of `1`, the notification will be broadcast on the `App.Models.User.1` private channel. When using [Laravel Echo](/docs/{{version}}/broadcasting), you may easily listen for notifications on a channel using the `notification` helper method:
+### Прослуховування сповіщень
+
+Notification транслюватимуться на приватному каналі, відформатованому за допомогою`{notifiable}.{id}`конвенції. Отже, якщо ви надсилаєте повідомлення на`App\Models\User`екземпляр з ідентифікатором`1`, повідомлення буде транслюватися на`App.Models.User.1`приватний канал. При використанні[Laravel Echo](/docs/{{version}}/broadcasting), Ви можете легко прослуховувати Notification на каналі за допомогою`notification`допоміжний метод:
 
     Echo.private('App.Models.User.' + userId)
         .notification((notification) => {
@@ -708,9 +749,10 @@ Notifications will broadcast on a private channel formatted using a `{notifiable
         });
 
 <a name="customizing-the-notification-channel"></a>
-#### Customizing The Notification Channel
 
-If you would like to customize which channels a notifiable entity receives its broadcast notifications on, you may define a `receivesBroadcastNotificationsOn` method on the notifiable entity:
+#### Налаштування каналу сповіщень
+
+Якщо ви хочете налаштувати, на яких каналах суб’єкт, що підлягає повідомленню, отримує Notification про Broadcast, ви можете визначити a`receivesBroadcastNotificationsOn`метод на об'єкт, що підлягає повідомленню:
 
     <?php
 
@@ -736,29 +778,32 @@ If you would like to customize which channels a notifiable entity receives its b
     }
 
 <a name="sms-notifications"></a>
-## SMS Notifications
+
+## SMS-Notification
 
 <a name="sms-prerequisites"></a>
-### Prerequisites
 
-Sending SMS notifications in Laravel is powered by [Nexmo](https://www.nexmo.com/). Before you can send notifications via Nexmo, you need to install the `laravel/nexmo-notification-channel` Composer package:
+### Передумови
+
+Надсилання SMS-сповіщень у Laravel забезпечується[Nexmo](https://www.nexmo.com/). Перш ніж ви зможете надсилати Notification через Nexmo, вам потрібно встановити`laravel/nexmo-notification-channel`Пакет композитора:
 
     composer require laravel/nexmo-notification-channel
 
-This will also install the [`nexmo/laravel`](https://github.com/Nexmo/nexmo-laravel) package. This package includes [its own configuration file](https://github.com/Nexmo/nexmo-laravel/blob/master/config/nexmo.php). You can use the `NEXMO_KEY` and `NEXMO_SECRET` environment variables to set your Nexmo public and secret key.
+Це також встановить[`nexmo/laravel`](https://github.com/Nexmo/nexmo-laravel)пакет. Цей пакет включає[власний файл конфігурації](https://github.com/Nexmo/nexmo-laravel/blob/master/config/nexmo.php). Ви можете використовувати`NEXMO_KEY`і`NEXMO_SECRET`змінні середовища для встановлення вашого відкритого та секретного ключа Nexmo.
 
-Next, you will need to add a configuration option to your `config/services.php` configuration file. You may copy the example configuration below to get started:
+Далі вам потрібно буде додати параметр конфігурації до вашого`config/services.php`файл конфігурації. Для початку можна скопіювати приклад конфігурації нижче:
 
     'nexmo' => [
         'sms_from' => '15556666666',
     ],
 
-The `sms_from` option is the phone number that your SMS messages will be sent from. You should generate a phone number for your application in the Nexmo control panel.
+`sms_from`Опція - це номер телефону, з якого будуть надсилатися ваші SMS-повідомлення. Ви повинні створити номер телефону для своєї програми на панелі керування Nexmo.
 
 <a name="formatting-sms-notifications"></a>
-### Formatting SMS Notifications
 
-If a notification supports being sent as an SMS, you should define a `toNexmo` method on the notification class. This method will receive a `$notifiable` entity and should return an `Illuminate\Notifications\Messages\NexmoMessage` instance:
+### Форматування сповіщень SMS
+
+Якщо Notification підтримує надсилання у вигляді SMS, слід визначити a`toNexmo`в класі сповіщень. Цей метод отримає a`$notifiable`і повинен повернути файл`Illuminate\Notifications\Messages\NexmoMessage`примірник:
 
     /**
      * Get the Nexmo / SMS representation of the notification.
@@ -773,9 +818,10 @@ If a notification supports being sent as an SMS, you should define a `toNexmo` m
     }
 
 <a name="formatting-shortcode-notifications"></a>
-### Formatting Shortcode Notifications
 
-Laravel also supports sending shortcode notifications, which are pre-defined message templates in your Nexmo account. You may specify the type of notification (`alert`, `2fa`, or `marketing`), as well as the custom values that will populate the template:
+### Форматування сповіщень із шорткодом
+
+Laravel також підтримує надсилання сповіщень із шорткодом, які є заздалегідь визначеними шаблонами повідомлень у вашому обліковому записі Nexmo. Ви можете вказати тип повідомлення (`alert`,`2fa`, або`marketing`), а також користувацькі значення, які заповнюватимуть шаблон:
 
     /**
      * Get the Nexmo / Shortcode representation of the notification.
@@ -793,12 +839,13 @@ Laravel also supports sending shortcode notifications, which are pre-defined mes
         ];
     }
 
-> {tip} Like [routing SMS Notifications](#routing-sms-notifications), you should implement the `routeNotificationForShortcode` method on your notifiable model.
+> {tip} Подобається[Routing SMS-сповіщень](#routing-sms-notifications), вам слід реалізувати`routeNotificationForShortcode`метод на вашій моделі, що підлягає повідомленню.
 
 <a name="unicode-content"></a>
-#### Unicode Content
 
-If your SMS message will contain unicode characters, you should call the `unicode` method when constructing the `NexmoMessage` instance:
+#### Вміст Unicode
+
+Якщо ваше SMS-повідомлення буде містити символи Unicode, вам слід зателефонувати до`unicode`метод при побудові`NexmoMessage`примірник:
 
     /**
      * Get the Nexmo / SMS representation of the notification.
@@ -814,9 +861,10 @@ If your SMS message will contain unicode characters, you should call the `unicod
     }
 
 <a name="customizing-the-from-number"></a>
-### Customizing The "From" Number
 
-If you would like to send some notifications from a phone number that is different from the phone number specified in your `config/services.php` file, you may use the `from` method on a `NexmoMessage` instance:
+### Налаштування номера "Від"
+
+Якщо ви хочете надіслати деякі Notification з номера телефону, який відрізняється від номера телефону, вказаного у вашому`config/services.php`файл, ви можете використовувати файл`from`метод на a`NexmoMessage`примірник:
 
     /**
      * Get the Nexmo / SMS representation of the notification.
@@ -832,9 +880,10 @@ If you would like to send some notifications from a phone number that is differe
     }
 
 <a name="routing-sms-notifications"></a>
-### Routing SMS Notifications
 
-To route Nexmo notifications to the proper phone number, define a `routeNotificationForNexmo` method on your notifiable entity:
+### Routing SMS-сповіщень
+
+Щоб направити Notification Nexmo на відповідний номер телефону, визначте a`routeNotificationForNexmo`метод на вашому об’єкті, про який потрібно повідомити:
 
     <?php
 
@@ -860,21 +909,24 @@ To route Nexmo notifications to the proper phone number, define a `routeNotifica
     }
 
 <a name="slack-notifications"></a>
-## Slack Notifications
+
+## Slack Notification
 
 <a name="slack-prerequisites"></a>
-### Prerequisites
 
-Before you can send notifications via Slack, you must install the notification channel via Composer:
+### Передумови
+
+Перш ніж ви зможете надсилати Notification через Slack, ви повинні встановити канал сповіщень через Composer:
 
     composer require laravel/slack-notification-channel
 
-You will also need to configure an ["Incoming Webhook"](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) integration for your Slack team. This integration will provide you with a URL you may use when [routing Slack notifications](#routing-slack-notifications).
+Вам також потрібно буде налаштувати файл["Вхідний веб-хук"](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks)інтеграція для вашої команди Slack. Ця інтеграція надасть вам URL-адресу, яку ви можете використовувати, коли[Routing повідомлень Slack](#routing-slack-notifications).
 
 <a name="formatting-slack-notifications"></a>
-### Formatting Slack Notifications
 
-If a notification supports being sent as a Slack message, you should define a `toSlack` method on the notification class. This method will receive a `$notifiable` entity and should return an `Illuminate\Notifications\Messages\SlackMessage` instance. Slack messages may contain text content as well as an "attachment" that formats additional text or an array of fields. Let's take a look at a basic `toSlack` example:
+### Форматування слабких сповіщень
+
+Якщо Notification підтримує надсилання як повідомлення Slack, слід визначити a`toSlack`в класі сповіщень. Цей метод отримає a`$notifiable`і повинен повернути файл`Illuminate\Notifications\Messages\SlackMessage`екземпляр. Slack повідомлення можуть містити текстовий вміст, а також "вкладення", що форматує додатковий текст або масив полів. Давайте поглянемо на основне`toSlack`приклад:
 
     /**
      * Get the Slack representation of the notification.
@@ -889,9 +941,10 @@ If a notification supports being sent as a Slack message, you should define a `t
     }
 
 <a name="customizing-the-sender-recipient"></a>
-#### Customizing The Sender & Recipient
 
-You may use the `from` and `to` methods to customize the sender and recipient. The `from` method accepts a username and emoji identifier, while the `to` method accepts a channel or username:
+#### Налаштування відправника та одержувача
+
+Ви можете використовувати`from`і`to`методи налаштування відправника та одержувача.`from`метод приймає ім'я користувача та ідентифікатор смайликів, тоді як`to`метод приймає канал або ім'я користувача:
 
     /**
      * Get the Slack representation of the notification.
@@ -907,7 +960,7 @@ You may use the `from` and `to` methods to customize the sender and recipient. T
                     ->content('This will be sent to #other');
     }
 
-You may also use an image as your logo instead of an emoji:
+Ви також можете використовувати зображення як свій логотип замість емодзі:
 
     /**
      * Get the Slack representation of the notification.
@@ -924,9 +977,10 @@ You may also use an image as your logo instead of an emoji:
     }
 
 <a name="slack-attachments"></a>
-### Slack Attachments
 
-You may also add "attachments" to Slack messages. Attachments provide richer formatting options than simple text messages. In this example, we will send an error notification about an exception that occurred in an application, including a link to view more details about the exception:
+### Slack вкладення
+
+Ви також можете додати "вкладення" до повідомлень Slack. Вкладені файли мають більше можливостей форматування, ніж прості текстові повідомлення. У цьому прикладі ми надішлемо Notification про помилку про виняток, який стався в програмі, включаючи посилання для перегляду детальної інформації про виняток:
 
     /**
      * Get the Slack representation of the notification.
@@ -947,7 +1001,7 @@ You may also add "attachments" to Slack messages. Attachments provide richer for
                     });
     }
 
-Attachments also allow you to specify an array of data that should be presented to the user. The given data will be presented in a table-style format for easy reading:
+Вкладені файли також дозволяють вказати масив даних, який повинен бути представлений користувачеві. Наведені дані будуть представлені у форматі таблиці для зручності читання:
 
     /**
      * Get the Slack representation of the notification.
@@ -974,9 +1028,10 @@ Attachments also allow you to specify an array of data that should be presented 
     }
 
 <a name="markdown-attachment-content"></a>
-#### Markdown Attachment Content
 
-If some of your attachment fields contain Markdown, you may use the `markdown` method to instruct Slack to parse and display the given attachment fields as Markdown formatted text. The values accepted by this method are: `pretext`, `text`, and / or `fields`. For more information about Slack attachment formatting, check out the [Slack API documentation](https://api.slack.com/docs/message-formatting#message_formatting):
+#### Зміст вкладення розмітки
+
+Якщо деякі поля вкладених файлів містять Markdown, ви можете використовувати`markdown`метод, щоб доручити Slack проаналізувати та відобразити дані поля вкладень як текст у форматі Markdown. Значення, прийняті цим методом:`pretext`,`text`, та / або`fields`. Для отримання додаткової інформації про форматування вкладених файлів Slack перегляньте[Документація API Slack](https://api.slack.com/docs/message-formatting#message_formatting):
 
     /**
      * Get the Slack representation of the notification.
@@ -999,9 +1054,10 @@ If some of your attachment fields contain Markdown, you may use the `markdown` m
     }
 
 <a name="routing-slack-notifications"></a>
-### Routing Slack Notifications
 
-To route Slack notifications to the proper location, define a `routeNotificationForSlack` method on your notifiable entity. This should return the webhook URL to which the notification should be delivered. Webhook URLs may be generated by adding an "Incoming Webhook" service to your Slack team:
+### Routing Slack сповіщень
+
+Щоб направити Notification Slack у належне місце, визначте a`routeNotificationForSlack`метод на вашому об’єкті, про який потрібно повідомити. Це повинно повернути URL-адресу веб-хука, на яку має надходити повідомлення. URL-адреси Webhook можуть бути сформовані додаванням служби "Вхідний Webhook" до вашої команди Slack:
 
     <?php
 
@@ -1027,22 +1083,24 @@ To route Slack notifications to the proper location, define a `routeNotification
     }
 
 <a name="localizing-notifications"></a>
-## Localizing Notifications
 
-Laravel allows you to send notifications in a locale other than the current language, and will even remember this locale if the notification is queued.
+## Локалізація сповіщень
 
-To accomplish this, the `Illuminate\Notifications\Notification` class offers a `locale` method to set the desired language. The application will change into this locale when the notification is being formatted and then revert back to the previous locale when formatting is complete:
+Laravel дозволяє надсилати Notification мовою, відмінною від поточної мови, і навіть запам'ятовуватиме цю локаль, якщо Notification буде поставлено в чергу.
+
+Для цього,`Illuminate\Notifications\Notification`клас пропонує a`locale`спосіб встановити потрібну мову. Програма зміниться на цю локаль під час форматування Notification, а потім повернеться до попередньої мови після завершення форматування:
 
     $user->notify((new InvoicePaid($invoice))->locale('es'));
 
-Localization of multiple notifiable entries may also be achieved via the `Notification` facade:
+Локалізація декількох повідомлюваних записів також може бути досягнута за допомогою`Notification`фасад:
 
     Notification::locale('es')->send($users, new InvoicePaid($invoice));
 
 <a name="user-preferred-locales"></a>
-### User Preferred Locales
 
-Sometimes, applications store each user's preferred locale. By implementing the `HasLocalePreference` contract on your notifiable model, you may instruct Laravel to use this stored locale when sending a notification:
+### Локалі, що надаються користувачем
+
+Іноді програми зберігають улюблений регіон кожного користувача. Впроваджуючи`HasLocalePreference`контракт на вашу модель, що підлягає повідомленню, ви можете доручити Laravel використовувати цю збережену локаль під час надсилання повідомлення:
 
     use Illuminate\Contracts\Translation\HasLocalePreference;
 
@@ -1059,14 +1117,15 @@ Sometimes, applications store each user's preferred locale. By implementing the 
         }
     }
 
-Once you have implemented the interface, Laravel will automatically use the preferred locale when sending notifications and mailables to the model. Therefore, there is no need to call the `locale` method when using this interface:
+Після того, як ви впровадите інтерфейс, Laravel автоматично використовуватиме бажану локаль під час надсилання сповіщень та доступних моделей до моделі. Тому немає необхідності телефонувати до`locale`метод при використанні цього інтерфейсу:
 
     $user->notify(new InvoicePaid($invoice));
 
 <a name="notification-events"></a>
-## Notification Events
 
-When a notification is sent, the `Illuminate\Notifications\Events\NotificationSent` event is fired by the notification system. This contains the "notifiable" entity and the notification instance itself. You may register listeners for this event in your `EventServiceProvider`:
+## Події Notification
+
+Коли повідомлення надіслано,`Illuminate\Notifications\Events\NotificationSent`подія запускається системою Notification. Він містить сутність, про яку потрібно повідомити, та сам екземпляр Notification. Ви можете зареєструвати слухачів для цієї події у своєму`EventServiceProvider`:
 
     /**
      * The event listener mappings for the application.
@@ -1079,9 +1138,9 @@ When a notification is sent, the `Illuminate\Notifications\Events\NotificationSe
         ],
     ];
 
-> {tip} After registering listeners in your `EventServiceProvider`, use the `event:generate` Artisan command to quickly generate listener classes.
+> {tip} Після реєстрації слухачів у вашому`EventServiceProvider`, використовувати`event:generate`Команда Artisan для швидкого створення класів слухачів.
 
-Within an event listener, you may access the `notifiable`, `notification`, and `channel` properties on the event to learn more about the notification recipient or the notification itself:
+У програмі прослуховування подій ви можете отримати доступ до`notifiable`,`notification`, і`channel`властивості події, щоб дізнатись більше про одержувача Notification або саме Notification:
 
     /**
      * Handle the event.
@@ -1098,9 +1157,10 @@ Within an event listener, you may access the `notifiable`, `notification`, and `
     }
 
 <a name="custom-channels"></a>
-## Custom Channels
 
-Laravel ships with a handful of notification channels, but you may want to write your own drivers to deliver notifications via other channels. Laravel makes it simple. To get started, define a class that contains a `send` method. The method should receive two arguments: a `$notifiable` and a `$notification`:
+## Спеціальні канали
+
+Laravel постачається з декількома каналами сповіщень, але ви можете написати власні драйвери для доставки повідомлень за іншими каналами. Laravel робить це просто. Для початку визначте клас, який містить`send`метод. Метод повинен отримувати два аргументи: a`$notifiable`і a`$notification`:
 
     <?php
 
@@ -1125,7 +1185,7 @@ Laravel ships with a handful of notification channels, but you may want to write
         }
     }
 
-Once your notification channel class has been defined, you may return the class name from the `via` method of any of your notifications:
+Після визначення класу вашого каналу сповіщень ви можете повернути назву класу з`via`спосіб будь-якого з ваших сповіщень:
 
     <?php
 

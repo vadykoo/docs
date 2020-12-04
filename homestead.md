@@ -1,4 +1,4 @@
-# Садиба Laravel
+#  Homestead  Laravel
 
 -   [Вступ](#introduction)
 -   [Встановлення та налаштування](#installation-and-setup)
@@ -242,7 +242,7 @@ Homestead працює на будь-якій системі Windows, Mac або
         - map: homestead.test
           to: /home/vagrant/project1/public
 
-Якщо змінити`sites`майна після надання коробки "Садиба", вам слід повторно запустити`vagrant reload --provision`оновити конфігурацію Nginx на віртуальній машині.
+Якщо змінити`sites`майна після надання коробки " Homestead ", вам слід повторно запустити`vagrant reload --provision`оновити конфігурацію Nginx на віртуальній машині.
 
 > {примітка} Сценарії Homestead побудовані так, щоб вони були якомога ідемпотентнішими. Однак якщо у вас виникають проблеми під час резервування, вам слід знищити та відновити машину через`vagrant destroy && vagrant up`.
 

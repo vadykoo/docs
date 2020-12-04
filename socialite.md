@@ -4,7 +4,7 @@
 -   [Оновлення Socialite](#upgrading-socialite)
 -   [Встановлення](#installation)
 -   [Конфігурація](#configuration)
--   [Маршрутизація](#routing)
+-   [Routing](#routing)
 -   [Необов’язкові параметри](#optional-parameters)
 -   [Області доступу](#access-scopes)
 -   [Аутентифікація без Stateless](#stateless-authentication)
@@ -48,7 +48,7 @@ In addition to typical, form based authentication, Laravel also provides a simpl
 
 <a name="routing"></a>
 
-## Маршрутизація
+## Routing
 
 Далі ви готові до автентифікації користувачів! Вам знадобляться два маршрути: один для перенаправлення користувача до постачальника OAuth, а інший для отримання зворотного дзвінка від постачальника після автентифікації. Ми отримаємо доступ до Socialite за допомогою`Socialite`фасад:
 

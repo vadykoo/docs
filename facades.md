@@ -108,7 +108,7 @@
 
 ## Як працюють фасади
 
-У програмі Laravel фасад - це клас, який забезпечує доступ до об’єкта з контейнера. Машина, яка робить цю роботу, знаходиться в`Facade`клас. Фасади Laravel та будь-які спеціальні фасади, які ви створюєте, розширять основу`Illuminate\Support\Facades\Facade`клас.
+У програмі Laravel Facade- це клас, який забезпечує доступ до об’єкта з контейнера. Машина, яка робить цю роботу, знаходиться в`Facade`клас. Фасади Laravel та будь-які спеціальні фасади, які ви створюєте, розширять основу`Illuminate\Support\Facades\Facade`клас.
 
 `Facade`базовий клас використовує`__callStatic()`magic-метод для відкладання викликів з вашого фасаду до об'єкта, вирішеного з контейнера. У наведеному нижче прикладі здійснюється виклик кеш-системи Laravel. Поглянувши на цей код, можна припустити, що статичний метод`get`викликається на`Cache`клас:
 
@@ -135,7 +135,7 @@
         }
     }
 
-Зверніть увагу, що вгорі файлу ми "імпортуємо" файл`Cache`фасад. Цей фасад служить проксі для доступу до базової реалізації`Illuminate\Contracts\Cache\Factory`інтерфейс. Будь-які дзвінки, які ми робимо за допомогою фасаду, будуть передані базовому екземпляру кеш-служби Laravel.
+Зверніть увагу, що вгорі файлу ми "імпортуємо" файл`Cache`фасад. Цей Facadeслужить проксі для доступу до базової реалізації`Illuminate\Contracts\Cache\Factory`інтерфейс. Будь-які дзвінки, які ми робимо за допомогою фасаду, будуть передані базовому екземпляру кеш-служби Laravel.
 
 Якщо ми подивимось на це`Illuminate\Support\Facades\Cache`клас, ви побачите, що не існує статичного методу`get`:
 
@@ -149,7 +149,7 @@
         protected static function getFacadeAccessor() { return 'cache'; }
     }
 
-Натомість,`Cache`фасад продовжує основу`Facade`клас і визначає метод`getFacadeAccessor()`. Завдання цього методу - повернути ім’я Binding контейнера служби. Коли користувач посилається на будь-який статичний метод на`Cache`фасаду, Laravel вирішує`cache`прив'язка з[службовий контейнер](/docs/{{version}}/container)і запускає запитаний метод (у цьому випадку`get`) проти цього об’єкта.
+Натомість,`Cache`Facadeпродовжує основу`Facade`клас і визначає метод`getFacadeAccessor()`. Завдання цього методу - повернути ім’я Binding контейнера служби. Коли користувач посилається на будь-який статичний метод на`Cache`фасаду, Laravel вирішує`cache`прив'язка з[службовий контейнер](/docs/{{version}}/container)і запускає запитаний метод (у цьому випадку`get`) проти цього об’єкта.
 
 <a name="real-time-facades"></a>
 
@@ -180,7 +180,7 @@
         }
     }
 
-Введення реалізації видавця в метод дозволяє нам легко протестувати метод ізольовано, оскільки ми можемо знущатись над введеним видавцем. Однак це вимагає від нас, щоб ми завжди передавали екземпляр видавця кожного разу, коли ми телефонуємо до`publish`метод. Використовуючи фасади в режимі реального часу, ми можемо підтримувати однакову перевірочність, не вимагаючи явного проходження а`Publisher`екземпляр. Щоб сформувати фасад у реальному часі, додайте до простору імен імпортованого класу префікс`Facades`:
+Введення реалізації видавця в метод дозволяє нам легко протестувати метод ізольовано, оскільки ми можемо знущатись над введеним видавцем. Однак це вимагає від нас, щоб ми завжди передавали екземпляр видавця кожного разу, коли ми телефонуємо до`publish`метод. Використовуючи фасади в режимі реального часу, ми можемо підтримувати однакову перевірочність, не вимагаючи явного проходження а`Publisher`екземпляр. Щоб сформувати Facadeу реальному часі, додайте до простору імен імпортованого класу префікс`Facades`:
 
     <?php
 
@@ -204,7 +204,7 @@
         }
     }
 
-Коли використовується фасад у реальному часі, реалізація видавця буде вирішена з контейнера служби за допомогою частини інтерфейсу або імені класу, що з'являється після`Facades`префікс. Під час тестування ми можемо використовувати вбудовані помічники фасадного тестування Laravel для глузування над цим викликом методу:
+Коли використовується Facadeу реальному часі, реалізація видавця буде вирішена з контейнера служби за допомогою частини інтерфейсу або імені класу, що з'являється після`Facades`префікс. Під час тестування ми можемо використовувати вбудовані помічники фасадного тестування Laravel для глузування над цим викликом методу:
 
     <?php
 
@@ -238,7 +238,7 @@
 
 ## Class Reference фасадів
 
-Нижче ви знайдете кожен фасад та його основний клас. Це корисний інструмент для швидкого вивчення документації API для даного кореня фасаду.[прив'язка службового контейнера](/docs/{{version}}/container)ключ також включений, де це можливо.
+Нижче ви знайдете кожен Facadeта його основний клас. Це корисний інструмент для швидкого вивчення документації API для даного кореня фасаду.[прив'язка службового контейнера](/docs/{{version}}/container)ключ також включений, де це можливо.
 
 | Фасад                   | Клас                                                                                                                                                 | Прив'язка контейнера послуг |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
@@ -265,25 +265,25 @@
 | Язик                    | [Висвітлити \\ Переклад \\ Перекладач](https://laravel.com/api/{{version}}/Illuminate/Translation/Translator.html)                                   | `translator`                |
 | Журнал                  | [Висвітлити \\ Log \\ LogManager](https://laravel.com/api/{{version}}/Illuminate/Log/LogManager.html)                                                | `log`                       |
 | Пошта                   | [Висвітлити \\ Mail \\ Mailer](https://laravel.com/api/{{version}}/Illuminate/Mail/Mailer.html)                                                      | `mailer`                    |
-| Повідомлення            | [Висвітлити \\ Сповіщення \\ ChannelManager](https://laravel.com/api/{{version}}/Illuminate/Notifications/ChannelManager.html)                       |                             |
+| Повідомлення            | [Висвітлити \\ Notification \\ ChannelManager](https://laravel.com/api/{{version}}/Illuminate/Notifications/ChannelManager.html)                       |                             |
 | Пароль                  | [Висвітлити \\ Auth \\ Passwords \\ PasswordBrokerManager](https://laravel.com/api/{{version}}/Illuminate/Auth/Passwords/PasswordBrokerManager.html) | `auth.password`             |
 | Пароль (екземпляр)      | [Висвітлити \\ Auth \\ Passwords \\ PasswordBroker](https://laravel.com/api/{{version}}/Illuminate/Auth/Passwords/PasswordBroker.html)               | `auth.password.broker`      |
 | Черга                   | [Висвітлити \\ Queue \\ QueueManager](https://laravel.com/api/{{version}}/Illuminate/Queue/QueueManager.html)                                        | `queue`                     |
 | Черга (екземпляр)       | [Висвітлити \\ Contracts \\ Queue \\ Queue](https://laravel.com/api/{{version}}/Illuminate/Contracts/Queue/Queue.html)                               | `queue.connection`          |
 | Черга (базовий клас)    | [Висвітлити \\ Черга \\ Черга](https://laravel.com/api/{{version}}/Illuminate/Queue/Queue.html)                                                      |                             |
-| Переспрямування         | [Висвітлити \\ Маршрутизація \\ Перенаправлення](https://laravel.com/api/{{version}}/Illuminate/Routing/Redirector.html)                             | `redirect`                  |
+| Переспрямування         | [Висвітлити \\ Routing \\ Перенаправлення](https://laravel.com/api/{{version}}/Illuminate/Routing/Redirector.html)                             | `redirect`                  |
 | Редіс                   | [Висвітлити \\ Redis \\ RedisManager](https://laravel.com/api/{{version}}/Illuminate/Redis/RedisManager.html)                                        | `redis`                     |
 | Redis (екземпляр)       | [Підсвічує \\ Redis \\ Connections \\ Connection](https://laravel.com/api/{{version}}/Illuminate/Redis/Connections/Connection.html)                  | `redis.connection`          |
 | Запит                   | [Висвітлити \\ Http \\ Запит](https://laravel.com/api/{{version}}/Illuminate/Http/Request.html)                                                      | `request`                   |
 | Відповідь               | [Висвітлити \\ Contracts \\ Routing \\ ResponseFactory](https://laravel.com/api/{{version}}/Illuminate/Contracts/Routing/ResponseFactory.html)       |                             |
 | Відповідь (екземпляр)   | [Висвітлити \\ Http \\ Response](https://laravel.com/api/{{version}}/Illuminate/Http/Response.html)                                                  |                             |
-| Маршрут                 | [Підсвічує \\ Маршрутизація \\ Маршрутизатор](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html)                                    | `router`                    |
+| Маршрут                 | [Підсвічує \\ Routing \\ Маршрутизатор](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html)                                    | `router`                    |
 | Схема                   | [Висвітлити \\ База даних \\ Схема \\ Конструктор](https://laravel.com/api/{{version}}/Illuminate/Database/Schema/Builder.html)                      |                             |
 | Сесія                   | [Висвітлити \\ Session \\ SessionManager](https://laravel.com/api/{{version}}/Illuminate/Session/SessionManager.html)                                | `session`                   |
 | Session (Instance)      | [Освітлити \\ Session \\ Store](https://laravel.com/api/{{version}}/Illuminate/Session/Store.html)                                                   | `session.store`             |
 | Зберігання              | [Висвітлити \\ Filesystem \\ FilesystemManager](https://laravel.com/api/{{version}}/Illuminate/Filesystem/FilesystemManager.html)                    | `filesystem`                |
 | Зберігання (екземпляр)  | [Висвітлити \\ Contracts \\ Filesystem \\ Filesystem](https://laravel.com/api/{{version}}/Illuminate/Contracts/Filesystem/Filesystem.html)           | `filesystem.disk`           |
-| URL                     | [Висвітлити \\ Маршрутизація \\ UrlGenerator](https://laravel.com/api/{{version}}/Illuminate/Routing/UrlGenerator.html)                              | `url`                       |
+| URL                     | [Висвітлити \\ Routing \\ UrlGenerator](https://laravel.com/api/{{version}}/Illuminate/Routing/UrlGenerator.html)                              | `url`                       |
 | Валідатор               | [Висвітлити \\ Перевірка \\ Factory](https://laravel.com/api/{{version}}/Illuminate/Validation/Factory.html)                                           | `validator`                 |
 | Валідатор (екземпляр)   | [Висвітлити \\ перевірку \\ перевірку](https://laravel.com/api/{{version}}/Illuminate/Validation/Validator.html)                                     |                             |
 | Переглянути             | [Висвітлити \\ Переглянути \\ Factory](https://laravel.com/api/{{version}}/Illuminate/View/Factory.html)                                               | `view`                      |

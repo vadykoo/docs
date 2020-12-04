@@ -1,52 +1,58 @@
-# Release Notes
+# Примітки до випуску
 
-- [Versioning Scheme](#versioning-scheme)
-- [Support Policy](#support-policy)
-- [Laravel 8](#laravel-8)
+-   [Схема версій](#versioning-scheme)
+-   [Політика підтримки](#support-policy)
+-   [Laravel 8](#laravel-8)
 
 <a name="versioning-scheme"></a>
-## Versioning Scheme
 
-Laravel and its other first-party packages follow [Semantic Versioning](https://semver.org). Major framework releases are released every six months (~March and ~September), while minor and patch releases may be released as often as every week. Minor and patch releases should **never** contain breaking changes.
+## Схема версій
 
-When referencing the Laravel framework or its components from your application or package, you should always use a version constraint such as `^8.0`, since major releases of Laravel do include breaking changes. However, we strive to always ensure you may update to a new major release in one day or less.
+Далі йде Laravel та інші власні пакети[Семантична версія](https://semver.org). Основні фреймворкові випуски випускаються кожні шість місяців (~ березень та ~ вересень), тоді як незначні та виправлені випуски можуть виходити так часто, як щотижня. Незначні випуски та випуски патчів повинні**ніколи**містять зміни, що порушують.
+
+Посилаючись на фреймворк Laravel або його компоненти із вашої програми чи пакету, ви завжди повинні використовувати обмеження версії, такі як`^8.0`, оскільки основні випуски Laravel дійсно включають важкі зміни. Однак ми прагнемо завжди забезпечувати можливість оновлення до нового основного випуску за один день або менше.
 
 <a name="support-policy"></a>
+
 ## Support Policy
 
-For LTS releases, such as Laravel 6, bug fixes are provided for 2 years and security fixes are provided for 3 years. These releases provide the longest window of support and maintenance. For general releases, bug fixes are provided for 7 months and security fixes are provided for 1 year. For all additional libraries, including Lumen, only the latest release receives bug fixes. In addition, please review the database versions [supported by Laravel](/docs/{{version}}/database#introduction).
+Для випусків LTS, таких як Laravel 6, виправлення помилок надається на 2 роки, а виправлення безпеки - на 3 роки. Ці випуски забезпечують найдовше вікно підтримки та обслуговування. У загальних версіях виправлення помилок надаються протягом 7 місяців, а виправлення безпеки - протягом 1 року. Для всіх додаткових бібліотек, включаючи Lumen, лише останній випуск отримує виправлення помилок. Крім того, перегляньте версії бази даних[підтримується Laravel](/docs/{{version}}/database#introduction).
 
-| Version | Release | Bug Fixes Until | Security Fixes Until |
-| --- | --- | --- | --- |
-| 6 (LTS) | September 3rd, 2019 | October 5th, 2021 | September 3rd, 2022 |
-| 7 | March 3rd, 2020 | October 6th, 2020 | March 3rd, 2021 |
-| 8 | September 8th, 2020 | April 6th, 2021 | September 8th, 2021 |
+| Версія  | Звільнення                    | Виправлено помилки до | Виправлення безпеки до        |
+| ------- | ----------------------------- | --------------------- | ----------------------------- |
+| 6 (LTS) | Вересневе шоу, 2019           | 5 жовтня 2021 року    | September 3rd, 2022           |
+| 7       | Відображення бренду, 2020 рік | 6 жовтня 2020 р       | Відображення бренду, 2021 рік |
+| 8       | 8 вересня 2020 р              | 6 квітня 2021 року    | 8 вересня 2021 року           |
 
 <a name="laravel-8"></a>
+
 ## Laravel 8
 
-Laravel 8 continues the improvements made in Laravel 7.x by introducing Laravel Jetstream, model factory classes, migration squashing, job batching, improved rate limiting, queue improvements, dynamic Blade components, Tailwind pagination views, time testing helpers, improvements to `artisan serve`, event listener improvements, and a variety of other bug fixes and usability improvements.
+Laravel 8 продовжує вдосконалення, внесені в Laravel 7.x, представляючи Laravel Jetstream, класи заводських моделей, складання міграцій, пакетну роботу, вдосконалене обмеження швидкості, вдосконалення черги, динамічні компоненти Blade, пагінаційні View Tailwind, допоміжні засоби тестування часу, вдосконалення`artisan serve`, вдосконалення прослуховувача подій та безліч інших виправлень помилок та покращення зручності використання.
 
 <a name="laravel-jetstream"></a>
+
 ### Laravel Jetstream
 
-_Laravel Jetstream was written by [Taylor Otwell](https://github.com/taylorotwell)_.
+_Laravel Jetstream був написаний[Тейлор Отуелл](https://github.com/taylorotwell)_.
 
-[Laravel Jetstream](https://jetstream.laravel.com) is a beautifully designed application scaffolding for Laravel. Jetstream provides the perfect starting point for your next project and includes login, registration, email verification, two-factor authentication, session management, API support via Laravel Sanctum, and optional team management. Laravel Jetstream replaces and improves upon the legacy authentication UI scaffolding available for previous versions of Laravel.
+[Laravel Jetstream](https://jetstream.laravel.com)- це красиво розроблені будівельні риштування для Laravel. Jetstream забезпечує ідеальну початкову точку для вашого наступного проекту і включає вхід, реєстрацію, перевірку електронної пошти, двофакторну автентифікацію, управління сеансами, підтримку API через Laravel Sanctum та необов’язкове управління командою. Laravel Jetstream замінює та вдосконалює застарілі інтерфейси автентифікації, доступні для попередніх версій Laravel.
 
-Jetstream is designed using [Tailwind CSS](https://tailwindcss.com) and offers your choice of [Livewire](https://laravel-livewire.com) or [Inertia](https://inertiajs.com) scaffolding.
+Jetstream розроблений з використанням[CSS вітру хвоста](https://tailwindcss.com)і пропонує на ваш вибір[Дріт під напругою](https://laravel-livewire.com)або[Інерція](https://inertiajs.com)риштування.
 
 <a name="models-directory"></a>
-### Models Directory
 
-By overwhelming community demand, the default Laravel application skeleton now contains an `app/Models` directory. We hope you enjoy this new home for your Eloquent models! All relevant generator commands have been updated to assume models exist within the `app/Models` directory if it exists. If the directory does not exist, the framework will assume your models should be placed within the `app` directory.
+### Каталог моделей
+
+Завдяки переважному попиту громади, за замовчуванням скелет програми Laravel тепер містить файл`app/Models`каталог. Ми сподіваємось, вам сподобається цей новий будинок для ваших Eloquent моделей! Всі відповідні команди генератора були оновлені, щоб припустити, що моделі існують у`app/Models`каталог, якщо він існує. Якщо каталог не існує, фреймворк вважатиме, що ваші моделі слід розміщувати в`app`каталог.
 
 <a name="model-factory-classes"></a>
-### Model Factory Classes
 
-_Model factory classes were contributed by [Taylor Otwell](https://github.com/taylorotwell)_.
+### Заводські класи моделей
 
-Eloquent [model factories](/docs/{{version}}/database-testing#creating-factories) have been entirely re-written as class based factories and improved to have first-class relationship support. For example, the `UserFactory` included with Laravel is written like so:
+_Зразкові фабричні класи сприяли[Тейлор Отуелл](https://github.com/taylorotwell)_.
+
+Красномовний[модельні заводи](/docs/{{version}}/database-testing#creating-factories) have been entirely re-written as class based factories and improved to have first-class relationship support. For example, the `UserFactory`включений до Laravel пишеться так:
 
     <?php
 
@@ -82,7 +88,7 @@ Eloquent [model factories](/docs/{{version}}/database-testing#creating-factories
         }
     }
 
-Thanks to the new `HasFactory` trait available on generated models, the model factory may be used like so:
+Завдяки новому`HasFactory`ознака, доступна на згенерованих моделях, фабрика моделей може використовуватися так:
 
     use App\Models\User;
 
@@ -90,7 +96,7 @@ Thanks to the new `HasFactory` trait available on generated models, the model fa
 
 Since model factories are now simple PHP classes, state transformations may be written as class methods. In addition, you may add any other helper classes to your Eloquent model factory as needed.
 
-For example, your `User` model might have a `suspended` state that modifies one of its default attribute values. You may define your state transformations using the base factory's `state` method. You may name your state method anything you like. After all, it's just a typical PHP method:
+Наприклад, ваш`User`модель може мати`suspended`стан, який змінює одне зі значень атрибута за замовчуванням. Ви можете визначити свої перетворення стану, використовуючи базові заводи`state`метод. Ви можете назвати свій метод стану як завгодно. Зрештою, це лише типовий метод PHP:
 
     /**
      * Indicate that the user is suspended.
@@ -104,13 +110,13 @@ For example, your `User` model might have a `suspended` state that modifies one 
         ]);
     }
 
-After defining the state transformation method, we may use it like so:
+Після визначення методу перетворення стану ми можемо використовувати його так:
 
     use App\Models\User;
 
     User::factory()->count(5)->suspended()->create();
 
-As mentioned, Laravel 8's model factories contain first class support for relationships. So, assuming our `User` model has a `posts` relationship method, we may simply run the following code to generate a user with three posts:
+Як уже згадувалося, фабрики моделей Laravel 8 містять першокласну підтримку стосунків. Отже, припускаючи наш`User`модель має`posts`Метод відносин, ми можемо просто запустити такий код, щоб створити користувача з трьома повідомленнями:
 
     $users = User::factory()
                 ->hasPosts(3, [
@@ -118,32 +124,34 @@ As mentioned, Laravel 8's model factories contain first class support for relati
                 ])
                 ->create();
 
-To ease the upgrade process, the [laravel/legacy-factories](https://github.com/laravel/legacy-factories) package has been released to provide support for the previous iteration of model factories within Laravel 8.x.
+Для полегшення процесу оновлення,[laravel/legacy-factory](https://github.com/laravel/legacy-factories)пакет був випущений для забезпечення підтримки попередньої ітерації модельних фабрик в Laravel 8.x.
 
-Laravel's re-written factories contain many more features that we think you will love. To learn more about model factories, please consult the [database testing documentation](/docs/{{version}}/database-testing#creating-factories).
+Переписані фабрики Laravel містять набагато більше можливостей, які, на нашу думку, вам сподобаються. Щоб дізнатись більше про фабричні моделі, будь ласка, проконсультуйтесь із[документація щодо тестування баз даних](/docs/{{version}}/database-testing#creating-factories).
 
 <a name="migration-squashing"></a>
-### Migration Squashing
 
-_Migration squashing was contributed by [Taylor Otwell](https://github.com/taylorotwell)_.
+### Зменшення міграції
 
-As you build your application, you may accumulate more and more migrations over time. This can lead to your migration directory becoming bloated with potentially hundreds of migrations. If you're using MySQL or PostgreSQL, you may now "squash" your migrations into a single SQL file. To get started, execute the `schema:dump` command:
+_Міграційне стиснення сприяло[Тейлор Отуелл](https://github.com/taylorotwell)_.
+
+Створюючи додаток, з часом ви можете накопичувати все більше і більше міграцій. Це може призвести до того, що ваш каталог міграції роздується потенційно сотнями міграцій. Якщо ви використовуєте MySQL або PostgreSQL, тепер ви можете "перекласти" свої міграції в один файл SQL. Для початку виконайте`schema:dump`команда:
 
     php artisan schema:dump
 
     // Dump the current database schema and prune all existing migrations...
     php artisan schema:dump --prune
 
-When you execute this command, Laravel will write a "schema" file to your `database/schema` directory. Now, when you attempt to migrate your database and no other migrations have been executed, Laravel will execute the schema file's SQL first. After executing the schema file's commands, Laravel will execute any remaining migrations that were not part of the schema dump.
+Коли ви виконуєте цю команду, Laravel напише файл "schema" на ваш`database/schema`каталог. Тепер, коли ви намагаєтесь перенести вашу базу даних і жодної іншої міграції не було виконано, Laravel спочатку виконає SQL-файл файлу схеми. Після виконання команд файлу схеми Laravel виконає всі залишені міграції, які не були частиною дампа схеми.
 
 <a name="job-batching"></a>
-### Job Batching
 
-_Job batching was contributed by [Taylor Otwell](https://github.com/taylorotwell) & [Mohamed Said](https://github.com/themsaid)_.
+### Розміщення робочих місць
 
-Laravel's job batching feature allows you to easily execute a batch of jobs and then perform some action when the batch of jobs has completed executing.
+_Розміщення робочих місць сприяло[Тейлор Отуелл](https://github.com/taylorotwell)&[Мохаммад Саєд](https://github.com/themsaid)_.
 
-The new `batch` method of the `Bus` facade may be used to dispatch a batch of jobs. Of course, batching is primarily useful when combined with completion callbacks. So, you may use the `then`, `catch`, and `finally` methods to define completion callbacks for the batch. Each of these callbacks will receive an `Illuminate\Bus\Batch` instance when they are invoked:
+Функція пакетного керування завданнями Laravel дозволяє вам легко виконати партію завдань, а потім виконати певні дії, коли партія завдань завершиться.
+
+Новий`batch`метод`Bus`Facadeможе бути використаний для відправки партії робочих місць. Звичайно, пакетне обслуговування в першу чергу корисно в поєднанні із зворотними викликами завершення. Отже, ви можете використовувати`then`,`catch`, і`finally`методи визначення зворотних викликів завершення для пакета. Кожен із цих зворотних дзвінків отримає`Illuminate\Bus\Batch`екземпляр, коли вони викликаються:
 
     use App\Jobs\ProcessPodcast;
     use App\Podcast;
@@ -167,16 +175,17 @@ The new `batch` method of the `Bus` facade may be used to dispatch a batch of jo
 
     return $batch->id;
 
-To learn more about job batching, please consult the [queue documentation](/docs/{{version}}/queues#job-batching).
+Щоб дізнатись більше про пакет роботи, проконсультуйтесь із[документація черги](/docs/{{version}}/queues#job-batching).
 
 <a name="improved-rate-limiting"></a>
-### Improved Rate Limiting
 
-_Rate limiting improvements were contributed by [Taylor Otwell](https://github.com/taylorotwell)_.
+### Покращене обмеження тарифу
 
-Laravel's request rate limiter feature has been augmented with more flexibility and power, while still maintaining backwards compatibility with previous release's `throttle` middleware API.
+_Поліпшення обмеження ставок зробили[Тейлор Отуелл](https://github.com/taylorotwell)_.
 
-Rate limiters are defined using the `RateLimiter` facade's `for` method. The `for` method accepts a rate limiter name and a Closure that returns the limit configuration that should apply to routes that are assigned this rate limiter:
+Функція обмеження швидкості запиту Laravel була розширена з більшою гнучкістю та потужністю, зберігаючи при цьому зворотну сумісність із попередніми випусками`throttle`API проміжного програмного забезпечення.
+
+Обмежувачі ставок визначаються за допомогою`RateLimiter`фасадні`for`метод.`for`метод приймає ім'я обмежувача швидкості та Закриття, яке повертає конфігурацію обмеження, яка повинна застосовуватися до маршрутів, яким призначений цей обмежувач швидкості:
 
     use Illuminate\Cache\RateLimiting\Limit;
     use Illuminate\Support\Facades\RateLimiter;
@@ -185,7 +194,7 @@ Rate limiters are defined using the `RateLimiter` facade's `for` method. The `fo
         return Limit::perMinute(1000);
     });
 
-Since rate limiter callbacks receive the incoming HTTP request instance, you may build the appropriate rate limit dynamically based on the incoming request or authenticated user:
+Оскільки зворотні виклики обмежувача швидкості отримують вхідний екземпляр запиту HTTP, ви можете динамічно створювати відповідне обмеження швидкості на основі вхідного запиту або автентифікованого користувача:
 
     RateLimiter::for('uploads', function (Request $request) {
         return $request->user()->vipCustomer()
@@ -193,7 +202,7 @@ Since rate limiter callbacks receive the incoming HTTP request instance, you may
                     : Limit::perMinute(100);
     });
 
-Sometimes you may wish to segment rate limits by some arbitrary value. For example, you may wish to allow users to access a given route 100 times per minute per IP address. To accomplish this, you may use the `by` method when building your rate limit:
+Іноді вам може знадобитися сегментувати обмеження тарифів на якесь довільне значення. Наприклад, ви можете дозволити користувачам отримати доступ до даного маршруту 100 разів на хвилину за IP-адресою. Для цього ви можете використовувати`by`метод при побудові обмеження тарифу:
 
     RateLimiter::for('uploads', function (Request $request) {
         return $request->user()->vipCustomer()
@@ -201,7 +210,7 @@ Sometimes you may wish to segment rate limits by some arbitrary value. For examp
                     : Limit::perMinute(100)->by($request->ip());
     });
 
-Rate limiters may be attached to routes or route groups using the `throttle` [middleware](/docs/{{version}}/middleware). The throttle middleware accepts the name of the rate limiter you wish to assign to the route:
+Обмежувачі ставок можуть бути прикріплені до маршрутів або груп маршрутів за допомогою`throttle`[проміжне програмне забезпечення](/docs/{{version}}/middleware). Middleware дросельної заслінки приймає назву обмежувача швидкості, який ви хочете призначити маршруту:
 
     Route::middleware(['throttle:uploads'])->group(function () {
         Route::post('/audio', function () {
@@ -213,40 +222,43 @@ Rate limiters may be attached to routes or route groups using the `throttle` [mi
         });
     });
 
-To learn more about rate limiting, please consult the [routing documentation](/docs/{{version}}/routing#rate-limiting).
+Щоб дізнатись більше про обмеження тарифу, зверніться до[документація про маршрутизацію](/docs/{{version}}/routing#rate-limiting).
 
 <a name="improved-maintenance-mode"></a>
-### Improved Maintenance Mode
 
-_Maintenance mode improvements were contributed by [Taylor Otwell](https://github.com/taylorotwell) with inspiration from [Spatie](https://spatie.be)_.
+### Покращений режим обслуговування
 
-In previous releases of Laravel, the `php artisan down` maintenance mode feature may be bypassed using an "allow list" of IP addresses that were allowed to access the application. This feature has been removed in favor of a simpler "secret" / token solution.
+_Покращенню режиму обслуговування сприяв[Тейлор Отуелл](https://github.com/taylorotwell)з натхненням від[Космос](https://spatie.be)_.
 
-While in maintenance mode, you may use the `secret` option to specify a maintenance mode bypass token:
+У попередніх випусках Laravel,`php artisan down`функцію режиму обслуговування можна обійти, використовуючи "список дозволів" IP-адрес, яким було дозволено отримати доступ до програми. Ця функція була вилучена на користь більш простого рішення "секрет" / маркер.
+
+Перебуваючи в режимі обслуговування, ви можете використовувати`secret`можливість вказати маркер обходу режиму обслуговування:
 
     php artisan down --secret="1630542a-246b-4b66-afa1-dd72a4c43515"
 
-After placing the application in maintenance mode, you may navigate to the application URL matching this token and Laravel will issue a maintenance mode bypass cookie to your browser:
+Після розміщення програми в режимі обслуговування ви можете перейти до URL-адреси програми, що відповідає цьому маркеру, і Laravel видасть браузеру обхідний файл cookie режиму обслуговування:
 
     https://example.com/1630542a-246b-4b66-afa1-dd72a4c43515
 
-When accessing this hidden route, you will then be redirected to the `/` route of the application. Once the cookie has been issued to your browser, you will be able to browse the application normally as if it was not in maintenance mode.
+Коли ви отримуєте доступ до цього прихованого маршруту, ви будете перенаправлені на`/`маршрут програми. Після видачі файлу cookie у ваш браузер ви зможете нормально переглядати програму, ніби вона не перебуває в режимі обслуговування.
 
 <a name="pre-rendering-the-maintenance-mode-view"></a>
-#### Pre-Rendering The Maintenance Mode View
 
-If you utilize the `php artisan down` command during deployment, your users may still occasionally encounter errors if they access the application while your Composer dependencies or other infrastructure components are updating. This occurs because a significant part of the Laravel framework must boot in order to determine your application is in maintenance mode and render the maintenance mode view using the templating engine.
+#### Попереднє відтворення View режиму обслуговування
 
-For this reason, Laravel now allows you to pre-render a maintenance mode view that will be returned at the very beginning of the request cycle. This view is rendered before any of your application's dependencies have loaded. You may pre-render a template of your choice using the `down` command's `render` option:
+Якщо ви використовуєте`php artisan down`під час розгортання, користувачі все одно можуть іноді стикатися з помилками, якщо отримують доступ до програми під час оновлення залежностей Composer або інших компонентів інфраструктури. Це відбувається тому, що значна частина фреймворку Laravel повинна завантажитися для того, щоб визначити, чи ваш додаток перебуває в режимі технічного обслуговування та відтворити View режиму обслуговування за допомогою механізму шаблонування.
+
+З цієї причини Laravel тепер дозволяє попередньо відтворити View режиму обслуговування, яке буде повернуто на самому початку циклу запиту. Цей View відображається до завантаження залежностей вашої програми. Ви можете попередньо відтворити обраний вами шаблон за допомогою`down`команди`render`варіант:
 
     php artisan down --render="errors::503"
 
 <a name="closure-dispatch-chain-catch"></a>
-### Closure Dispatch / Chain `catch`
 
-_Catch improvements were contributed by [Mohamed Said](https://github.com/themsaid)_.
+### Відправлення / ланцюг закриття`catch`
 
-Using the new `catch` method, you may now provide a Closure that should be executed if a queued Closure fails to complete successfully after exhausting all of your queue's configured retry attempts:
+_Поліпшенню вилову сприяв[Мохаммад Саєд](https://github.com/themsaid)_.
+
+Використання нового`catch`методом, тепер ви можете надати Закриття, яке слід виконати, якщо Закриття в черзі не вдається успішно завершити після вичерпання всіх спроблених спроб спроби повторної спроби у вашій черзі:
 
     use Throwable;
 
@@ -257,22 +269,24 @@ Using the new `catch` method, you may now provide a Closure that should be execu
     });
 
 <a name="dynamic-blade-components"></a>
-### Dynamic Blade Components
 
-_Dynamic Blade components were contributed by [Taylor Otwell](https://github.com/taylorotwell)_.
+### Динамічні компоненти леза
 
-Sometimes you may need to render a component but not know which component should be rendered until runtime. In this situation, you may now use Laravel's built-in `dynamic-component` component to render the component based on a runtime value or variable:
+_Динамічні компоненти леза внесли вклад[Тейлор Отуелл](https://github.com/taylorotwell)_.
+
+Іноді вам може знадобитися відобразити компонент, але не знати, який компонент повинен бути відтворений до часу виконання. У цій ситуації тепер ви можете використовувати вбудований Laravel`dynamic-component`компонент для візуалізації компонента на основі значення середовища або змінної:
 
     <x-dynamic-component :component="$componentName" class="mt-4" />
 
-To learn more about Blade components, please consult the [Blade documentation](/docs/{{version}}/blade#components).
+Щоб дізнатися більше про компоненти леза, зверніться до[Документація леза](/docs/{{version}}/blade#components).
 
 <a name="event-listener-improvements"></a>
-### Event Listener Improvements
 
-_Event listener improvements were contributed by [Taylor Otwell](https://github.com/taylorotwell)_.
+### Удосконалення прослуховувача подій
 
-Closure based event listeners may now be registered by only passing the Closure to the `Event::listen` method. Laravel will inspect the Closure to determine which type of event the listener handles:
+_Покращення слухачів подій зробив[Тейлор Отуелл](https://github.com/taylorotwell)_.
+
+Слухачі подій на основі закриття тепер можуть бути зареєстровані, лише передавши закриття до`Event::listen`метод. Laravel перевірить Закриття, щоб визначити, який тип події слухач обробляє:
 
     use App\Events\PodcastProcessed;
     use Illuminate\Support\Facades\Event;
@@ -281,7 +295,7 @@ Closure based event listeners may now be registered by only passing the Closure 
         //
     });
 
-In addition, Closure based event listeners may now be marked as queueable using the `Illuminate\Events\queueable` function:
+Крім того, прослуховувачі подій на основі закриття тепер можуть бути позначені як такі, що стоять у черзі за допомогою`Illuminate\Events\queueable`функція:
 
     use App\Events\PodcastProcessed;
     use function Illuminate\Events\queueable;
@@ -291,13 +305,13 @@ In addition, Closure based event listeners may now be marked as queueable using 
         //
     }));
 
-Like queued jobs, you may use the `onConnection`, `onQueue`, and `delay` methods to customize the execution of the queued listener:
+Як і завдання в черзі, ви можете використовувати`onConnection`,`onQueue`, і`delay`методи налаштування виконання прослуховувача в черзі:
 
     Event::listen(queueable(function (PodcastProcessed $event) {
         //
     })->onConnection('redis')->onQueue('podcasts')->delay(now()->addSeconds(10)));
 
-If you would like to handle anonymous queued listener failures, you may provide a Closure to the `catch` method while defining the `queueable` listener:
+Якщо ви хочете усунути анонімні помилки слухачів, що стоять у черзі, ви можете надати закриття для`catch`метод при визначенні`queueable`слухач:
 
     use App\Events\PodcastProcessed;
     use function Illuminate\Events\queueable;
@@ -311,11 +325,12 @@ If you would like to handle anonymous queued listener failures, you may provide 
     }));
 
 <a name="time-testing-helpers"></a>
-### Time Testing Helpers
 
-_Time testing helpers were contributed by [Taylor Otwell](https://github.com/taylorotwell) with inspiration from Ruby on Rails_.
+### Тестування часу помічників
 
-When testing, you may occasionally need to modify the time returned by helpers such as `now` or `Illuminate\Support\Carbon::now()`. Laravel's base feature test class now includes helpers that allow you to manipulate the current time:
+_Помічники тестування часу внесли[Тейлор Отуелл](https://github.com/taylorotwell)з натхненням від Ruby on Rails_.
+
+Під час тестування вам іноді може знадобитися змінити час, повернутий помічниками, такими як`now`або`Illuminate\Support\Carbon::now()`. Базовий клас тестування функцій Laravel тепер включає помічники, які дозволяють маніпулювати поточним часом:
 
     public function testTimeCanBeManipulated()
     {
@@ -339,32 +354,35 @@ When testing, you may occasionally need to modify the time returned by helpers s
     }
 
 <a name="artisan-serve-improvements"></a>
-### Artisan `serve` Improvements
 
-_Artisan `serve` improvements were contributed by [Taylor Otwell](https://github.com/taylorotwell)_.
+### Ремісник`serve`Покращення
 
-The Artisan `serve` command has been improved with automatic reloading when environment variable changes are detected within your local `.env` file. Previously, the command had to be manually stopped and restarted.
+_Ремісник`serve`вдосконаленням сприяв[Тейлор Отуелл](https://github.com/taylorotwell)_.
+
+Ремісник`serve`команда була покращена за допомогою автоматичного перезавантаження, коли зміни змінної середовища виявляються в межах вашого локального`.env`файл. Раніше команду потрібно було зупинити та перезапустити вручну.
 
 <a name="tailwind-pagination-views"></a>
-### Tailwind Pagination Views
 
-The Laravel paginator has been updated to use the [Tailwind CSS](https://tailwindcss.com) framework by default. Tailwind CSS is a highly customizable, low-level CSS framework that gives you all of the building blocks you need to build bespoke designs without any annoying opinionated styles you have to fight to override. Of course, Bootstrap 3 and 4 views remain available as well.
+### Перегляди пагінації хвостового вітру
+
+Пагінатор Laravel оновлений для використання[CSS вітру хвоста](https://tailwindcss.com)за замовчуванням. Tailwind CSS - це високо настроюваний, низькорівневий фреймворк CSS, який надає вам всі будівельні блоки, необхідні для створення індивідуальних проектів, без будь-яких настирливих, самовпевнених стилів, з якими вам доводиться боротися, щоб їх замінити. Звичайно, Bootstrap 3 і 4 також залишаються доступними.
 
 <a name="routing-namespace-updates"></a>
-### Routing Namespace Updates
 
-In previous releases of Laravel, the `RouteServiceProvider` contained a `$namespace` property. This property's value would automatically be prefixed onto controller route definitions and calls to the `action` helper / `URL::action` method. In Laravel 8.x, this property is `null` by default. This means that no automatic namespace prefixing will be done by Laravel. Therefore, in new Laravel 8.x applications, controller route definitions should be defined using standard PHP callable syntax:
+### Routing оновлень простору імен
+
+У попередніх випусках Laravel,`RouteServiceProvider`містили a`$namespace`майно. Значення цієї властивості буде автоматично додано до префіксу до визначень маршруту контролера та викликів до`action`помічник /`URL::action`метод. У Laravel 8.x це властивість`null`за замовчуванням. Це означає, що Laravel не робить автоматичного префікса простору імен. Отже, у нових програмах Laravel 8.x визначення маршрутів контролера слід визначати, використовуючи стандартний синтаксис, що викликається PHP:
 
     use App\Http\Controllers\UserController;
 
     Route::get('/users', [UserController::class, 'index']);
 
-Calls to the `action` related methods should use the same callable syntax:
+Дзвінки до`action`пов'язані методи повинні використовувати однаковий синтаксис, що викликається:
 
     action([UserController::class, 'index']);
 
     return Redirect::action([UserController::class, 'index']);
 
-If you prefer Laravel 7.x style controller route prefixing, you may simply add the `$namespace` property into your application's `RouteServiceProvider`.
+Якщо ви віддаєте перевагу префіксу маршруту контролера стилю Laravel 7.x, ви можете просто додати`$namespace`власності у вашій програмі`RouteServiceProvider`.
 
-> {note} This change only affects new Laravel 8.x applications. Applications upgrading from Laravel 7.x will still have the `$namespace` property in their `RouteServiceProvider`.
+> {note} Ця зміна стосується лише нових програм Laravel 8.x. Програми, що оновлюються з Laravel 7.x, все ще матимуть`$namespace`майно в їх`RouteServiceProvider`.
