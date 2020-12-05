@@ -785,7 +785,7 @@ Notification транслюватимуться на приватному кан
 
 ### Передумови
 
-Надсилання SMS-сповіщень у Laravel забезпечується[Nexmo](https://www.nexmo.com/). Перш ніж ви зможете надсилати Notification через Nexmo, вам потрібно встановити`laravel/nexmo-notification-channel`Пакет композитора:
+Надсилання SMS-сповіщень у Laravel забезпечується[Nexmo](https://www.nexmo.com/). Перш ніж ви зможете надсилати Notification через Nexmo, вам потрібно встановити`laravel/nexmo-notification-channel`Пакет composer:
 
     composer require laravel/nexmo-notification-channel
 

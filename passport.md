@@ -1,77 +1,80 @@
-# Laravel Passport
+# Паспорт Laravel
 
-- [Introduction](#introduction)
-- [Upgrading Passport](#upgrading)
-- [Installation](#installation)
-    - [Deploying Passport](#deploying-passport)
-    - [Migration Customization](#migration-customization)
-- [Configuration](#configuration)
-    - [Client Secret Hashing](#client-secret-hashing)
-    - [Token Lifetimes](#token-lifetimes)
-    - [Overriding Default Models](#overriding-default-models)
-- [Issuing Access Tokens](#issuing-access-tokens)
-    - [Managing Clients](#managing-clients)
-    - [Requesting Tokens](#requesting-tokens)
-    - [Refreshing Tokens](#refreshing-tokens)
-    - [Revoking Tokens](#revoking-tokens)
-    - [Purging Tokens](#purging-tokens)
-- [Authorization Code Grant with PKCE](#code-grant-pkce)
-    - [Creating The Client](#creating-a-auth-pkce-grant-client)
-    - [Requesting Tokens](#requesting-auth-pkce-grant-tokens)
-- [Password Grant Tokens](#password-grant-tokens)
-    - [Creating A Password Grant Client](#creating-a-password-grant-client)
-    - [Requesting Tokens](#requesting-password-grant-tokens)
-    - [Requesting All Scopes](#requesting-all-scopes)
-    - [Customizing The User Provider](#customizing-the-user-provider)
-    - [Customizing The Username Field](#customizing-the-username-field)
-    - [Customizing The Password Validation](#customizing-the-password-validation)
-- [Implicit Grant Tokens](#implicit-grant-tokens)
-- [Client Credentials Grant Tokens](#client-credentials-grant-tokens)
-- [Personal Access Tokens](#personal-access-tokens)
-    - [Creating A Personal Access Client](#creating-a-personal-access-client)
-    - [Managing Personal Access Tokens](#managing-personal-access-tokens)
-- [Protecting Routes](#protecting-routes)
-    - [Via Middleware](#via-middleware)
-    - [Passing The Access Token](#passing-the-access-token)
-- [Token Scopes](#token-scopes)
-    - [Defining Scopes](#defining-scopes)
-    - [Default Scope](#default-scope)
-    - [Assigning Scopes To Tokens](#assigning-scopes-to-tokens)
-    - [Checking Scopes](#checking-scopes)
-- [Consuming Your API With JavaScript](#consuming-your-api-with-javascript)
-- [Events](#events)
-- [Testing](#testing)
+-   [Вступ](#introduction)
+-   [Оновлення паспорта](#upgrading)
+-   [Встановлення](#installation)
+    -   [Розгортання паспорта](#deploying-passport)
+    -   [Налаштування міграції](#migration-customization)
+-   [Конфігурація](#configuration)
+    -   [Клієнтське таємне хешування](#client-secret-hashing)
+    -   [Життєві терміни](#token-lifetimes)
+    -   [Заміна стандартних моделей](#overriding-default-models)
+-   [Видача токенів доступу](#issuing-access-tokens)
+    -   [Управління клієнтами](#managing-clients)
+    -   [Запит жетонів](#requesting-tokens)
+    -   [Освіжаючі жетони](#refreshing-tokens)
+    -   [Відкликання жетонів](#revoking-tokens)
+    -   [Очищення токенів](#purging-tokens)
+-   [Код дозволу Надання з PKCE](#code-grant-pkce)
+    -   [Створення клієнта](#creating-a-auth-pkce-grant-client)
+    -   [Запит жетонів](#requesting-auth-pkce-grant-tokens)
+-   [Токени надання пароля](#password-grant-tokens)
+    -   [Створення клієнта надання пароля](#creating-a-password-grant-client)
+    -   [Запит жетонів](#requesting-password-grant-tokens)
+    -   [Запит на всі сфери](#requesting-all-scopes)
+    -   [Налаштування постачальника користувачів](#customizing-the-user-provider)
+    -   [Налаштування поля імені користувача](#customizing-the-username-field)
+    -   [Налаштування перевірки пароля](#customizing-the-password-validation)
+-   [Неявні жетони надання](#implicit-grant-tokens)
+-   [Повноваження клієнта надають токени](#client-credentials-grant-tokens)
+-   [Токени особистого доступу](#personal-access-tokens)
+    -   [Створення клієнта персонального доступу](#creating-a-personal-access-client)
+    -   [Керування токенами особистого доступу](#managing-personal-access-tokens)
+-   [Захист маршрутів](#protecting-routes)
+    -   [Через Middleware](#via-middleware)
+    -   [Передача маркера доступу](#passing-the-access-token)
+-   [Токени](#token-scopes)
+    -   [Визначення обсягу](#defining-scopes)
+    -   [Область за замовчуванням](#default-scope)
+    -   [Присвоєння сфери дії маркерам](#assigning-scopes-to-tokens)
+    -   [Перевірка обсягу](#checking-scopes)
+-   [Споживання вашого API за допомогою JavaScript](#consuming-your-api-with-javascript)
+-   [Події](#events)
+-   [Тестування](#testing)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel already makes it easy to perform authentication via traditional login forms, but what about APIs? APIs typically use tokens to authenticate users and do not maintain session state between requests. Laravel makes API authentication a breeze using Laravel Passport, which provides a full OAuth2 server implementation for your Laravel application in a matter of minutes. Passport is built on top of the [League OAuth2 server](https://github.com/thephpleague/oauth2-server) that is maintained by Andy Millington and Simon Hamp.
+## Вступ
 
-> {note} This documentation assumes you are already familiar with OAuth2. If you do not know anything about OAuth2, consider familiarizing yourself with the general [terminology](https://oauth2.thephpleague.com/terminology/) and features of OAuth2 before continuing.
+Laravel вже дозволяє легко виконувати автентифікацію за допомогою традиційних форм входу, але як щодо API? API зазвичай використовують маркери для автентифікації користувачів і не підтримують стан сеансу між запитами. Laravel робить автентифікацію API легкою, використовуючи Laravel Passport, який забезпечує повну реалізацію сервера OAuth2 для вашого додатку Laravel за лічені хвилини. Паспорт будується поверх[Сервер OAuth2 ліги](https://github.com/thephpleague/oauth2-server)що підтримують Енді Міллінгтон і Саймон Хемп.
+
+> {note} Ця документація передбачає, що ви вже знайомі з OAuth2. Якщо ви нічого не знаєте про OAuth2, подумайте про ознайомлення із загальним[термінологія](https://oauth2.thephpleague.com/terminology/)та особливості OAuth2 перед продовженням.
 
 <a name="upgrading"></a>
-## Upgrading Passport
 
-When upgrading to a new major version of Passport, it's important that you carefully review [the upgrade guide](https://github.com/laravel/passport/blob/master/UPGRADE.md).
+## Оновлення паспорта
+
+Під час оновлення до нової основної версії Passport важливо уважно переглянути[посібник з оновлення](https://github.com/laravel/passport/blob/master/UPGRADE.md).
 
 <a name="installation"></a>
-## Installation
 
-To get started, install Passport via the Composer package manager:
+## Встановлення
+
+Для початку встановіть Passport через менеджер пакетів Composer:
 
     composer require laravel/passport
 
-The Passport service provider registers its own database migration directory with the framework, so you should migrate your database after installing the package. The Passport migrations will create the tables your application needs to store clients and access tokens:
+Постачальник послуг Passport реєструє власний каталог міграції баз даних із фреймворком, тому вам слід перенести базу даних після встановлення пакету. Міграція Passport створить таблиці, необхідні вашій програмі для зберігання клієнтів та доступу до маркерів:
 
     php artisan migrate
 
-Next, you should run the `passport:install` command. This command will create the encryption keys needed to generate secure access tokens. In addition, the command will create "personal access" and "password grant" clients which will be used to generate access tokens:
+Далі вам слід запустити`passport:install`команди. Ця команда створить ключі шифрування, необхідні для створення маркерів безпечного доступу. Крім того, команда створить клієнтів "особистий доступ" та "надання пароля", які будуть використовуватися для генерації маркерів доступу:
 
     php artisan passport:install
 
-> {tip} If you would like to use UUIDs as the primary key value of the Passport `Client` model instead of auto-incrementing integers, please install Passport using [the `uuids` option](#client-uuids).
+> {tip} Якщо ви хочете використовувати UUID як значення первинного ключа паспорта`Client`модель замість автоматичного збільшення цілих чисел, встановіть Passport за допомогою[`uuids`варіант](#client-uuids).
 
-After running the `passport:install` command, add the `Laravel\Passport\HasApiTokens` trait to your `App\Models\User` model. This trait will provide a few helper methods to your model which allow you to inspect the authenticated user's token and scopes:
+Після запуску`passport:install`додайте команду`Laravel\Passport\HasApiTokens`риса до вашого`App\Models\User`модель. Ця ознака надасть кілька допоміжних методів для вашої моделі, які дозволять вам перевірити маркер і сфери дії аутентифікованого користувача:
 
     <?php
 
@@ -87,7 +90,7 @@ After running the `passport:install` command, add the `Laravel\Passport\HasApiTo
         use HasApiTokens, HasFactory, Notifiable;
     }
 
-Next, you should call the `Passport::routes` method within the `boot` method of your `AuthServiceProvider`. This method will register the routes necessary to issue access tokens and revoke access tokens, clients, and personal access tokens:
+Далі вам слід зателефонувати до`Passport::routes`метод у межах`boot`метод вашого`AuthServiceProvider`. Цей метод реєструє маршрути, необхідні для видачі маркерів доступу та анулювання маркерів доступу, клієнтів та персональних маркерів доступу:
 
     <?php
 
@@ -121,7 +124,7 @@ Next, you should call the `Passport::routes` method within the `boot` method of 
         }
     }
 
-Finally, in your `config/auth.php` configuration file, you should set the `driver` option of the `api` authentication guard to `passport`. This will instruct your application to use Passport's `TokenGuard` when authenticating incoming API requests:
+Нарешті, у вашому`config/auth.php`конфігураційний файл, вам слід встановити файл`driver`варіант`api`перевірка автентичності до`passport`. Це дозволить вашій заявці використовувати паспорт`TokenGuard`при автентифікації вхідних запитів API:
 
     'guards' => [
         'web' => [
@@ -136,20 +139,22 @@ Finally, in your `config/auth.php` configuration file, you should set the `drive
     ],
 
 <a name="client-uuids"></a>
-#### Client UUIDs
 
-You may run the `passport:install` command with the `--uuids` option present. This flag will instruct Passport that you would like to use UUIDs instead of auto-incrementing integers as the Passport `Client` model's primary key values. After running the `passport:install` command with the `--uuids` option, you will be given additional instructions regarding disabling Passport's default migrations:
+#### Клієнтські UUID
+
+Ви можете запустити`passport:install`команда за допомогою`--uuids`варіант присутній. Цей прапор повідомляє Passport, що ви хочете використовувати UUID замість автоматичного збільшення цілих чисел як Passport`Client`значення первинного ключа моделі. Після запуску`passport:install`команда за допомогою`--uuids`Вам буде надано додаткові вказівки щодо вимкнення міграції Passport за замовчуванням:
 
     php artisan passport:install --uuids
 
 <a name="deploying-passport"></a>
-### Deploying Passport
 
-When deploying Passport to your production servers for the first time, you will likely need to run the `passport:keys` command. This command generates the encryption keys Passport needs in order to generate access token. The generated keys are not typically kept in source control:
+### Розгортання паспорта
+
+Розгортаючи Passport на своїх виробничих серверах вперше, вам, ймовірно, доведеться запустити`passport:keys`команди. Ця команда генерує ключі шифрування, необхідні паспорту для генерації маркера доступу. Створені ключі, як правило, не зберігаються в контролі джерела:
 
     php artisan passport:keys
 
-If necessary, you may define the path where Passport's keys should be loaded from. You may use the `Passport::loadKeysFrom` method to accomplish this:
+При необхідності ви можете визначити шлях, з якого слід завантажувати ключі Passport. Ви можете використовувати`Passport::loadKeysFrom`метод для досягнення цього:
 
     /**
      * Register any authentication / authorization services.
@@ -165,7 +170,7 @@ If necessary, you may define the path where Passport's keys should be loaded fro
         Passport::loadKeysFrom('/secret-keys/oauth');
     }
 
-Additionally, you may publish Passport's configuration file using `php artisan vendor:publish --tag=passport-config`, which will then provide the option to load the encryption keys from your environment variables:
+Крім того, ви можете опублікувати файл конфігурації Passport за допомогою`php artisan vendor:publish --tag=passport-config`, який надасть можливість завантажити ключі шифрування зі змінних середовища:
 
     PASSPORT_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
     <private key here>
@@ -176,26 +181,30 @@ Additionally, you may publish Passport's configuration file using `php artisan v
     -----END PUBLIC KEY-----"
 
 <a name="migration-customization"></a>
-### Migration Customization
 
-If you are not going to use Passport's default migrations, you should call the `Passport::ignoreMigrations` method in the `register` method of your `AppServiceProvider`. You may export the default migrations using `php artisan vendor:publish --tag=passport-migrations`.
+### Налаштування міграції
+
+Якщо ви не збираєтеся використовувати міграції Passport за замовчуванням, вам слід зателефонувати до`Passport::ignoreMigrations`метод у`register`метод вашого`AppServiceProvider`. Ви можете експортувати міграції за замовчуванням за допомогою`php artisan vendor:publish --tag=passport-migrations`.
 
 <a name="configuration"></a>
-## Configuration
+
+## Конфігурація
 
 <a name="client-secret-hashing"></a>
-### Client Secret Hashing
 
-If you would like your client's secrets to be hashed when stored in your database, you should call the `Passport::hashClientSecrets` method in the `boot` method of your `AppServiceProvider`:
+### Клієнтське таємне хешування
+
+Якщо ви хочете, щоб секрети вашого клієнта були хешовані при зберіганні у вашій базі даних, вам слід зателефонувати до`Passport::hashClientSecrets`метод у`boot`метод вашого`AppServiceProvider`:
 
     Passport::hashClientSecrets();
 
-Once enabled, all of your client secrets will only be shown one time when your client is created. Since the plain-text client secret value is never stored in the database, it is not possible to recover if lost.
+Після ввімкнення всі ваші секрети клієнта відображатимуться лише один раз, коли ваш клієнт буде створений. Оскільки секретне значення клієнтського текстового тексту ніколи не зберігається в базі даних, відновити його у разі втрати неможливо.
 
 <a name="token-lifetimes"></a>
-### Token Lifetimes
 
-By default, Passport issues long-lived access tokens that expire after one year. If you would like to configure a longer / shorter token lifetime, you may use the `tokensExpireIn`, `refreshTokensExpireIn`, and `personalAccessTokensExpireIn` methods. These methods should be called from the `boot` method of your `AuthServiceProvider`:
+### Життєві терміни
+
+За замовчуванням Passport видає довговічні маркери доступу, термін дії яких закінчується через рік. Якщо ви хочете налаштувати довший / коротший термін служби маркера, ви можете використовувати`tokensExpireIn`,`refreshTokensExpireIn`, і`personalAccessTokensExpireIn`методи. Ці методи слід викликати з`boot`метод вашого`AuthServiceProvider`:
 
     /**
      * Register any authentication / authorization services.
@@ -215,12 +224,13 @@ By default, Passport issues long-lived access tokens that expire after one year.
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
     }
 
-> {note} The `expires_at` columns on the Passport database tables are read-only and for display purposes only. When issuing tokens, Passport stores the expiration information within the signed and encrypted tokens. If you need to invalidate a token you should revoke it.
+> {примітка}`expires_at`стовпці таблиць бази даних Passport доступні лише для читання та лише для відображення. Під час випуску токенів Passport зберігає інформацію про термін дії у підписаних та зашифрованих токенах. Якщо вам потрібно визнати маркер недійсним, його слід відкликати.
 
 <a name="overriding-default-models"></a>
-### Overriding Default Models
 
-You are free to extend the models used internally by Passport:
+### Заміна стандартних моделей
+
+Ви можете розширити моделі, які використовуються внутрішньо Passport:
 
     use Laravel\Passport\Client as PassportClient;
 
@@ -229,7 +239,7 @@ You are free to extend the models used internally by Passport:
         // ...
     }
 
-Then, you may instruct Passport to use your custom models via the `Passport` class:
+Потім ви можете доручити Passport використовувати власні моделі через`Passport`клас:
 
     use App\Models\Passport\AuthCode;
     use App\Models\Passport\Client;
@@ -254,43 +264,48 @@ Then, you may instruct Passport to use your custom models via the `Passport` cla
     }
 
 <a name="issuing-access-tokens"></a>
-## Issuing Access Tokens
 
-Using OAuth2 with authorization codes is how most developers are familiar with OAuth2. When using authorization codes, a client application will redirect a user to your server where they will either approve or deny the request to issue an access token to the client.
+## Видача токенів доступу
+
+Використання OAuth2 з кодами авторизації - це те, як більшість розробників знайомі з OAuth2. При використанні кодів авторизації клієнтська програма перенаправляє користувача на ваш сервер, де він або схвалює, або відхиляє запит на видачу клієнту маркера доступу.
 
 <a name="managing-clients"></a>
-### Managing Clients
 
-First, developers building applications that need to interact with your application's API will need to register their application with yours by creating a "client". Typically, this consists of providing the name of their application and a URL that your application can redirect to after users approve their request for authorization.
+### Управління клієнтами
+
+По-перше, розробники, що створюють додатки, які повинні взаємодіяти з API вашого додатка, повинні зареєструвати свою програму у вашій, створивши "клієнт". Як правило, це полягає у наданні назви їхньої програми та URL-адреси, на яку ваша програма може переспрямовувати після того, як користувачі затвердять їхній запит на авторизацію.
 
 <a name="the-passportclient-command"></a>
-#### The `passport:client` Command
 
-The simplest way to create a client is using the `passport:client` Artisan command. This command may be used to create your own clients for testing your OAuth2 functionality. When you run the `client` command, Passport will prompt you for more information about your client and will provide you with a client ID and secret:
+#### `passport:client`Команда
+
+Найпростіший спосіб створити клієнта - використання`passport:client`Ремісниче командування. Ця команда може бути використана для створення власних клієнтів для тестування функціональності OAuth2. Коли ви запускаєте`client`команда, Passport запропонує вам отримати додаткову інформацію про вашого клієнта та надасть ідентифікатор клієнта та секрет:
 
     php artisan passport:client
 
-**Redirect URLs**
+**Переспрямування URL-адрес**
 
-If you would like to allow multiple redirect URLs for your client, you may specify them using a comma-delimited list when prompted for the URL by the `passport:client` command:
+Якщо ви хочете дозволити для свого клієнта декілька URL-адрес для переадресації, ви можете вказати їх за допомогою списку, розділеного комами, коли запит на URL-адресу`passport:client`команда:
 
     http://example.com/callback,http://examplefoo.com/callback
 
-> {note} Any URL which contains commas must be encoded.
+> {note} Будь-яка URL-адреса, яка містить коми, повинна бути закодована.
 
 <a name="clients-json-api"></a>
-#### JSON API
 
-Since your users will not be able to utilize the `client` command, Passport provides a JSON API that you may use to create clients. This saves you the trouble of having to manually code controllers for creating, updating, and deleting clients.
+#### API JSON
 
-However, you will need to pair Passport's JSON API with your own frontend to provide a dashboard for your users to manage their clients. Below, we'll review all of the API endpoints for managing clients. For convenience, we'll use [Axios](https://github.com/axios/axios) to demonstrate making HTTP requests to the endpoints.
+Оскільки ваші користувачі не зможуть використовувати`client`команда Passport надає JSON API, який ви можете використовувати для створення клієнтів. Це економить вам проблеми з необхідністю вручну кодувати контролери для створення, оновлення та видалення клієнтів.
 
-The JSON API is guarded by the `web` and `auth` middleware; therefore, it may only be called from your own application. It is not able to be called from an external source.
+Однак вам потрібно буде з'єднати JSON API Passport зі своїм власним інтерфейсом, щоб забезпечити інформаційну панель для ваших користувачів для управління своїми клієнтами. Нижче ми розглянемо всі кінцеві точки API для управління клієнтами. Для зручності ми будемо використовувати[Аксіос](https://github.com/axios/axios)для демонстрації надсилання HTTP-запитів до кінцевих точок.
+
+API JSON охороняється`web`і`auth`проміжне програмне забезпечення; тому його можна викликати лише з вашої власної програми. Його не можна викликати із зовнішнього джерела.
 
 <a name="get-oauthclients"></a>
+
 #### `GET /oauth/clients`
 
-This route returns all of the clients for the authenticated user. This is primarily useful for listing all of the user's clients so that they may edit or delete them:
+Цей маршрут повертає всіх клієнтів для автентифікованого користувача. Це в першу чергу корисно для переліку всіх клієнтів користувача, щоб вони могли їх редагувати або видаляти:
 
     axios.get('/oauth/clients')
         .then(response => {
@@ -298,11 +313,12 @@ This route returns all of the clients for the authenticated user. This is primar
         });
 
 <a name="post-oauthclients"></a>
+
 #### `POST /oauth/clients`
 
-This route is used to create new clients. It requires two pieces of data: the client's `name` and a `redirect` URL. The `redirect` URL is where the user will be redirected after approving or denying a request for authorization.
+Цей маршрут використовується для створення нових клієнтів. Для цього потрібні дві частини даних: дані клієнта`name`і a`redirect`URL.`redirect`URL-адреса - це те, куди користувач буде перенаправлений після схвалення чи відмови у запиті на авторизацію.
 
-When a client is created, it will be issued a client ID and client secret. These values will be used when requesting access tokens from your application. The client creation route will return the new client instance:
+Коли клієнт створюється, йому видається ідентифікатор клієнта та секрет клієнта. Ці значення будуть використовуватися при запиті маркерів доступу з вашої програми. Маршрут створення клієнта поверне новий екземпляр клієнта:
 
     const data = {
         name: 'Client Name',
@@ -318,9 +334,10 @@ When a client is created, it will be issued a client ID and client secret. These
         });
 
 <a name="put-oauthclientsclient-id"></a>
+
 #### `PUT /oauth/clients/{client-id}`
 
-This route is used to update clients. It requires two pieces of data: the client's `name` and a `redirect` URL. The `redirect` URL is where the user will be redirected after approving or denying a request for authorization. The route will return the updated client instance:
+Цей маршрут використовується для оновлення клієнтів. Для цього потрібні дві частини даних: дані клієнта`name`і a`redirect`URL.`redirect`URL-адреса - це те, куди користувач буде перенаправлений після схвалення чи відмови у запиті на авторизацію. Маршрут поверне оновлений екземпляр клієнта:
 
     const data = {
         name: 'New Client Name',
@@ -336,9 +353,10 @@ This route is used to update clients. It requires two pieces of data: the client
         });
 
 <a name="delete-oauthclientsclient-id"></a>
+
 #### `DELETE /oauth/clients/{client-id}`
 
-This route is used to delete clients:
+Цей маршрут використовується для видалення клієнтів:
 
     axios.delete('/oauth/clients/' + clientId)
         .then(response => {
@@ -346,12 +364,14 @@ This route is used to delete clients:
         });
 
 <a name="requesting-tokens"></a>
-### Requesting Tokens
+
+### Запит жетонів
 
 <a name="requesting-tokens-redirecting-for-authorization"></a>
-#### Redirecting For Authorization
 
-Once a client has been created, developers may use their client ID and secret to request an authorization code and access token from your application. First, the consuming application should make a redirect request to your application's `/oauth/authorize` route like so:
+#### Перенаправлення на авторизацію
+
+Після створення клієнта розробники можуть використовувати його ідентифікатор та секрет для запиту коду авторизації та маркера доступу з вашої програми. По-перше, програма-споживач повинна зробити запит на перенаправлення до програми`/oauth/authorize`маршрут так:
 
     Route::get('/redirect', function (Request $request) {
         $request->session()->put('state', $state = Str::random(40));
@@ -367,18 +387,19 @@ Once a client has been created, developers may use their client ID and secret to
         return redirect('http://your-app.com/oauth/authorize?'.$query);
     });
 
-> {tip} Remember, the `/oauth/authorize` route is already defined by the `Passport::routes` method. You do not need to manually define this route.
+> {tip} Пам'ятайте,`/oauth/authorize`маршрут вже визначений`Passport::routes`метод. Вам не потрібно вручну визначати цей маршрут.
 
 <a name="approving-the-request"></a>
-#### Approving The Request
 
-When receiving authorization requests, Passport will automatically display a template to the user allowing them to approve or deny the authorization request. If they approve the request, they will be redirected back to the `redirect_uri` that was specified by the consuming application. The `redirect_uri` must match the `redirect` URL that was specified when the client was created.
+#### Затвердження запиту
 
-If you would like to customize the authorization approval screen, you may publish Passport's views using the `vendor:publish` Artisan command. The published views will be placed in `resources/views/vendor/passport`:
+При отриманні запитів на авторизацію Passport автоматично відображає користувачеві шаблон, що дозволяє йому схвалити або відхилити запит на авторизацію. Якщо вони затвердять запит, вони будуть перенаправлені назад до`redirect_uri`що було вказано додатком-споживачем.`redirect_uri`повинен відповідати`redirect`URL-адреса, вказана під час створення клієнта.
+
+Якщо ви хочете налаштувати екран затвердження авторизації, ви можете опублікувати подання Passport за допомогою`vendor:publish`Ремісниче командування. Опубліковані погляди будуть розміщені в`resources/views/vendor/passport`:
 
     php artisan vendor:publish --tag=passport-views
 
-Sometimes you may wish to skip the authorization prompt, such as when authorizing a first-party client. You may accomplish this by [extending the `Client` model](#overriding-default-models) and defining a `skipsAuthorization` method. If `skipsAuthorization` returns `true` the client will be approved and the user will be redirected back to the `redirect_uri` immediately:
+Іноді вам може знадобитися пропустити запит авторизації, наприклад, під час авторизації власного клієнта. Ви можете досягти цього до[розширення`Client`модель](#overriding-default-models)та визначення а`skipsAuthorization`метод. Якщо`skipsAuthorization`повертається`true`клієнт буде схвалений, а користувач буде перенаправлений назад до`redirect_uri`негайно:
 
     <?php
 
@@ -400,9 +421,10 @@ Sometimes you may wish to skip the authorization prompt, such as when authorizin
     }
 
 <a name="requesting-tokens-converting-authorization-codes-to-access-tokens"></a>
-#### Converting Authorization Codes To Access Tokens
 
-If the user approves the authorization request, they will be redirected back to the consuming application. The consumer should first verify the `state` parameter against the value that was stored prior to the redirect. If the state parameter matches the consumer should issue a `POST` request to your application to request an access token. The request should include the authorization code that was issued by your application when the user approved the authorization request. In this example, we'll use the Guzzle HTTP library to make the `POST` request:
+#### Перетворення кодів авторизації для доступу до маркерів
+
+Якщо користувач схвалить запит на авторизацію, він буде перенаправлений назад до програми-споживача. Спочатку споживач повинен перевірити`state`параметра проти значення, яке зберігалося до перенаправлення. Якщо параметр стану відповідає споживачеві, слід видати a`POST`запит до вашої програми на запит маркера доступу. Запит повинен містити код авторизації, виданий вашим додатком, коли користувач схвалив запит авторизації. У цьому прикладі ми будемо використовувати бібліотеку Guzzle HTTP для створення`POST`запит:
 
     Route::get('/callback', function (Request $request) {
         $state = $request->session()->pull('state');
@@ -427,19 +449,21 @@ If the user approves the authorization request, they will be redirected back to 
         return json_decode((string) $response->getBody(), true);
     });
 
-This `/oauth/token` route will return a JSON response containing `access_token`, `refresh_token`, and `expires_in` attributes. The `expires_in` attribute contains the number of seconds until the access token expires.
+Це`/oauth/token`route поверне відповідь JSON, що містить`access_token`,`refresh_token`, і`expires_in`атрибути.`expires_in`атрибут містить кількість секунд до закінчення терміну дії маркера доступу.
 
-> {tip} Like the `/oauth/authorize` route, the `/oauth/token` route is defined for you by the `Passport::routes` method. There is no need to manually define this route. By default, this route is throttled using the settings of the `ThrottleRequests` middleware.
+> {tip} Подобається`/oauth/authorize`маршрут,`/oauth/token`маршрут для вас визначений`Passport::routes`метод. Не потрібно вручну визначати цей маршрут. За замовчуванням цей маршрут регулюється за допомогою налаштувань`ThrottleRequests`проміжне програмне забезпечення.
 
 <a name="tokens-json-api"></a>
-#### JSON API
 
-Passport also includes a JSON API for managing authorized access tokens. You may pair this with your own frontend to offer your users a dashboard for managing access tokens. For convenience, we'll use [Axios](https://github.com/mzabriskie/axios) to demonstrate making HTTP requests to the endpoints. The JSON API is guarded by the `web` and `auth` middleware; therefore, it may only be called from your own application.
+#### API JSON
+
+Паспорт також включає API JSON для управління авторизованими маркерами доступу. Ви можете поєднати це зі своїм власним інтерфейсом, щоб запропонувати своїм користувачам інформаційну панель для управління маркерами доступу. Для зручності ми будемо використовувати[Аксіос](https://github.com/mzabriskie/axios)для демонстрації надсилання HTTP-запитів до кінцевих точок. API JSON охороняється`web`і`auth`проміжне програмне забезпечення; тому його можна викликати лише з вашої власної програми.
 
 <a name="get-oauthtokens"></a>
+
 #### `GET /oauth/tokens`
 
-This route returns all of the authorized access tokens that the authenticated user has created. This is primarily useful for listing all of the user's tokens so that they can revoke them:
+Цей маршрут повертає всі авторизовані маркери доступу, які створив аутентифікований користувач. Це в першу чергу корисно для переліку всіх токенів користувача, щоб вони могли їх відкликати:
 
     axios.get('/oauth/tokens')
         .then(response => {
@@ -447,16 +471,18 @@ This route returns all of the authorized access tokens that the authenticated us
         });
 
 <a name="delete-oauthtokenstoken-id"></a>
+
 #### `DELETE /oauth/tokens/{token-id}`
 
-This route may be used to revoke authorized access tokens and their related refresh tokens:
+Цей маршрут може бути використаний для скасування авторизованих маркерів доступу та пов’язаних з ними маркерів оновлення:
 
     axios.delete('/oauth/tokens/' + tokenId);
 
 <a name="refreshing-tokens"></a>
-### Refreshing Tokens
 
-If your application issues short-lived access tokens, users will need to refresh their access tokens via the refresh token that was provided to them when the access token was issued. In this example, we'll use the Guzzle HTTP library to refresh the token:
+### Освіжаючі жетони
+
+Якщо ваша програма видає короткочасні маркери доступу, користувачам потрібно буде оновити свої маркери доступу за допомогою маркера оновлення, який був наданий їм під час видачі маркера доступу. У цьому прикладі ми будемо використовувати бібліотеку Guzzle HTTP для оновлення маркера:
 
     $http = new GuzzleHttp\Client;
 
@@ -472,12 +498,13 @@ If your application issues short-lived access tokens, users will need to refresh
 
     return json_decode((string) $response->getBody(), true);
 
-This `/oauth/token` route will return a JSON response containing `access_token`, `refresh_token`, and `expires_in` attributes. The `expires_in` attribute contains the number of seconds until the access token expires.
+Це`/oauth/token`route поверне відповідь JSON, що містить`access_token`,`refresh_token`, і`expires_in`атрибути.`expires_in`атрибут містить кількість секунд до закінчення терміну дії маркера доступу.
 
 <a name="revoking-tokens"></a>
-### Revoking Tokens
 
-You may revoke a token by using the `revokeAccessToken` method on the `TokenRepository`. You may revoke a token's refresh tokens using the `revokeRefreshTokensByAccessTokenId` method on the `RefreshTokenRepository`:
+### Відкликання жетонів
+
+Ви можете відкликати маркер, використовуючи`revokeAccessToken`метод на`TokenRepository`. Ви можете відкликати маркери оновлення маркера за допомогою`revokeRefreshTokensByAccessTokenId`метод на`RefreshTokenRepository`:
 
     $tokenRepository = app('Laravel\Passport\TokenRepository');
     $refreshTokenRepository = app('Laravel\Passport\RefreshTokenRepository');
@@ -489,9 +516,10 @@ You may revoke a token by using the `revokeAccessToken` method on the `TokenRepo
     $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($tokenId);
 
 <a name="purging-tokens"></a>
-### Purging Tokens
 
-When tokens have been revoked or expired, you might want to purge them from the database. Passport ships with a command that can do this for you:
+### Очищення токенів
+
+Коли маркери скасовано або закінчився термін їх дії, можливо, ви захочете видалити їх із бази даних. Паспорт поставляється з командою, яка може зробити це за вас:
 
     # Purge revoked and expired tokens and auth codes...
     php artisan passport:purge
@@ -502,7 +530,7 @@ When tokens have been revoked or expired, you might want to purge them from the 
     # Only purge expired tokens and auth codes...
     php artisan passport:purge --expired
 
-You may also configure a [scheduled job](/docs/{{version}}/scheduling) in your console `Kernel` class to automatically prune your tokens on a schedule:
+Ви також можете налаштувати a[запланована робота](/docs/{{version}}/scheduling)у вашій консолі`Kernel`клас для автоматичного обрізання ваших токенів за розкладом:
 
     /**
      * Define the application's command schedule.
@@ -516,37 +544,42 @@ You may also configure a [scheduled job](/docs/{{version}}/scheduling) in your c
     }
 
 <a name="code-grant-pkce"></a>
-## Authorization Code Grant with PKCE
 
-The Authorization Code grant with "Proof Key for Code Exchange" (PKCE) is a secure way to authenticate single page applications or native applications to access your API. This grant should be used when you can't guarantee that the client secret will be stored confidentially or in order to mitigate the threat of having the authorization code intercepted by an attacker. A combination of a "code verifier" and a "code challenge" replaces the client secret when exchanging the authorization code for an access token.
+## Код дозволу Надання з PKCE
+
+Надання коду авторизації з «Ключем доказу для обміну кодами» (PKCE) - це надійний спосіб автентифікації односторінкових програм або власних програм для доступу до вашого API. Цей грант слід використовувати, коли ви не можете гарантувати, що таємниця клієнта буде зберігатися конфіденційно або для того, щоб зменшити загрозу перехоплення зловмисником коду авторизації. Поєднання "перевірявача коду" та "виклику коду" замінює клієнтський секрет при обміні кодом авторизації на маркер доступу.
 
 <a name="creating-a-auth-pkce-grant-client"></a>
-### Creating The Client
 
-Before your application can issue tokens via the authorization code grant with PKCE, you will need to create a PKCE-enabled client. You may do this using the `passport:client` command with the `--public` option:
+### Створення клієнта
+
+Перш ніж ваша програма зможе видавати маркери через надання дозволу коду авторизації за допомогою PKCE, вам потрібно буде створити клієнт із підтримкою PKCE. Ви можете зробити це за допомогою`passport:client`команда за допомогою`--public`варіант:
 
     php artisan passport:client --public
 
 <a name="requesting-auth-pkce-grant-tokens"></a>
-### Requesting Tokens
+
+### Запит жетонів
 
 <a name="code-verifier-code-challenge"></a>
-#### Code Verifier & Code Challenge
 
-As this authorization grant does not provide a client secret, developers will need to generate a combination of a code verifier and a code challenge in order to request a token.
+#### Верифікатор коду та виклик коду
 
-The code verifier should be a random string of between 43 and 128 characters containing letters, numbers and  `"-"`, `"."`, `"_"`, `"~"`, as defined in the [RFC 7636 specification](https://tools.ietf.org/html/rfc7636).
+Оскільки цей дозвіл на авторизацію не надає таємницю клієнта, розробникам потрібно буде згенерувати комбінацію перевірителя коду та виклику коду, щоб запросити маркер.
 
-The code challenge should be a Base64 encoded string with URL and filename-safe characters. The trailing `'='` characters should be removed and no line breaks, whitespace, or other additional characters should be present.
+Код, що перевіряє, повинен бути випадковим рядком із 43 до 128 символів, що містить літери, цифри та`"-"`,`"."`,`"_"`,`"~"`, як визначено в[Специфікація RFC 7636](https://tools.ietf.org/html/rfc7636).
+
+Викликом коду має бути кодований рядок Base64 із символами, захищеними URL-адресами та іменами файлів. Відставання`'='`символи слід видаляти, а розривів рядків, пробілів та інших додаткових символів не повинно бути.
 
     $encoded = base64_encode(hash('sha256', $code_verifier, true));
 
     $codeChallenge = strtr(rtrim($encoded, '='), '+/', '-_');
 
 <a name="code-grant-pkce-redirecting-for-authorization"></a>
-#### Redirecting For Authorization
 
-Once a client has been created, you may use the client ID and the generated code verifier and code challenge to request an authorization code and access token from your application. First, the consuming application should make a redirect request to your application's `/oauth/authorize` route:
+#### Перенаправлення на авторизацію
+
+Після створення клієнта ви можете використовувати ідентифікатор клієнта та згенерований код перевірки та виклик коду для запиту коду авторизації та маркера доступу з вашої програми. По-перше, програма-споживач повинна зробити запит на перенаправлення до програми`/oauth/authorize`маршрут:
 
     Route::get('/redirect', function (Request $request) {
         $request->session()->put('state', $state = Str::random(40));
@@ -571,11 +604,12 @@ Once a client has been created, you may use the client ID and the generated code
     });
 
 <a name="code-grant-pkce-converting-authorization-codes-to-access-tokens"></a>
-#### Converting Authorization Codes To Access Tokens
 
-If the user approves the authorization request, they will be redirected back to the consuming application. The consumer should verify the `state` parameter against the value that was stored prior to the redirect, as in the standard Authorization Code Grant.
+#### Перетворення кодів авторизації для доступу до маркерів
 
-If the state parameter matches, the consumer should issue a `POST` request to your application to request an access token. The request should include the authorization code that was issued by your application when the user approved the authorization request along with the originally generated code verifier:
+Якщо користувач схвалить запит на авторизацію, він буде перенаправлений назад до програми-споживача. Споживач повинен перевірити`state`параметра проти значення, яке зберігалося до перенаправлення, як у стандартному наданні коду авторизації.
+
+Якщо параметр стану відповідає, споживач повинен видати a`POST`запит до вашої програми на запит маркера доступу. Запит повинен містити код авторизації, виданий вашим додатком, коли користувач схвалив запит авторизації, разом із спочатку сформованим засобом перевірки коду:
 
     Route::get('/callback', function (Request $request) {
         $state = $request->session()->pull('state');
@@ -601,21 +635,24 @@ If the state parameter matches, the consumer should issue a `POST` request to yo
     });
 
 <a name="password-grant-tokens"></a>
-## Password Grant Tokens
 
-The OAuth2 password grant allows your other first-party clients, such as a mobile application, to obtain an access token using an e-mail address / username and password. This allows you to issue access tokens securely to your first-party clients without requiring your users to go through the entire OAuth2 authorization code redirect flow.
+## Токени надання пароля
+
+Надання пароля OAuth2 дозволяє вашим стороннім клієнтам, таким як мобільний додаток, отримати маркер доступу, використовуючи адресу електронної пошти / ім’я користувача та пароль. Це дозволяє безпечно видавати маркери доступу своїм стороннім клієнтам, не вимагаючи, щоб користувачі проходили весь потік перенаправлення коду авторизації OAuth2.
 
 <a name="creating-a-password-grant-client"></a>
-### Creating A Password Grant Client
 
-Before your application can issue tokens via the password grant, you will need to create a password grant client. You may do this using the `passport:client` command with the `--password` option. If you have already run the `passport:install` command, you do not need to run this command:
+### Створення клієнта надання пароля
+
+Перш ніж ваша програма зможе видавати маркери за допомогою надання пароля, вам потрібно буде створити клієнт надання пароля. Ви можете зробити це за допомогою`passport:client`команда за допомогою`--password`варіант. Якщо ви вже запустили`passport:install`команда, вам не потрібно запускати цю команду:
 
     php artisan passport:client --password
 
 <a name="requesting-password-grant-tokens"></a>
-### Requesting Tokens
 
-Once you have created a password grant client, you may request an access token by issuing a `POST` request to the `/oauth/token` route with the user's email address and password. Remember, this route is already registered by the `Passport::routes` method so there is no need to define it manually. If the request is successful, you will receive an `access_token` and `refresh_token` in the JSON response from the server:
+### Запит жетонів
+
+Після створення клієнта надання пароля ви можете подати запит на маркер доступу, видавши файл`POST`запит до`/oauth/token`маршрут із адресою електронної пошти та паролем користувача. Пам’ятайте, цей маршрут вже зареєстровано`Passport::routes`методу, тому немає необхідності визначати його вручну. Якщо запит буде успішним, ви отримаєте`access_token`і`refresh_token`у відповіді JSON із сервера:
 
     $http = new GuzzleHttp\Client;
 
@@ -632,12 +669,13 @@ Once you have created a password grant client, you may request an access token b
 
     return json_decode((string) $response->getBody(), true);
 
-> {tip} Remember, access tokens are long-lived by default. However, you are free to [configure your maximum access token lifetime](#configuration) if needed.
+> {tip} Пам’ятайте, маркери доступу за замовчуванням довговічні. Тим не менш, ти вільний[налаштуйте максимальний термін служби маркера доступу](#configuration)при необхідності.
 
 <a name="requesting-all-scopes"></a>
-### Requesting All Scopes
 
-When using the password grant or client credentials grant, you may wish to authorize the token for all of the scopes supported by your application. You can do this by requesting the `*` scope. If you request the `*` scope, the `can` method on the token instance will always return `true`. This scope may only be assigned to a token that is issued using the `password` or `client_credentials` grant:
+### Запит на всі сфери
+
+Використовуючи надання пароля або надання клієнтських ідентифікаційних даних, ви можете авторизувати маркер для всіх областей, що підтримуються вашою програмою. Ви можете зробити це, запитувавши файл`*`сфера застосування. Якщо ви запитуєте`*`сфера застосування`can`метод на екземплярі маркера завжди повертається`true`. Цей обсяг може бути призначений лише маркеру, який видається за допомогою`password`або`client_credentials`грант:
 
     $response = $http->post('http://your-app.com/oauth/token', [
         'form_params' => [
@@ -651,14 +689,16 @@ When using the password grant or client credentials grant, you may wish to autho
     ]);
 
 <a name="customizing-the-user-provider"></a>
-### Customizing The User Provider
 
-If your application uses more than one [authentication user provider](/docs/{{version}}/authentication#introduction), you may specify which user provider the password grant client uses by providing a `--provider` option when creating the client via the `artisan passport:client --password` command. The given provider name should match a valid provider defined in your `config/auth.php` configuration file. You can then [protect your route using middleware](#via-middleware) to ensure that only users from the guard's specified provider are authorized.
+### Налаштування постачальника користувачів
+
+Якщо у вашій програмі використовується більше одного[аутентифікація постачальника користувачів](/docs/{{version}}/authentication#introduction), Ви можете вказати, якого постачальника користувачів використовує клієнт, що надає пароль, вказавши a`--provider`опція при створенні клієнта через`artisan passport:client --password`команди. Вказане ім'я постачальника має відповідати дійсному постачальнику, визначеному у вашому`config/auth.php`файл конфігурації. Тоді можна[захистити свій маршрут за допомогою проміжного програмного забезпечення](#via-middleware)забезпечити авторизацію лише користувачів із зазначеного постачальника послуг охорони.
 
 <a name="customizing-the-username-field"></a>
-### Customizing The Username Field
 
-When authenticating using the password grant, Passport will use the `email` attribute of your model as the "username". However, you may customize this behavior by defining a `findForPassport` method on your model:
+### Налаштування поля імені користувача
+
+Під час автентифікації за допомогою надання пароля Passport буде використовувати`email`атрибут вашої моделі як "ім'я користувача". Однак ви можете налаштувати цю поведінку, визначивши a`findForPassport`метод на вашій моделі:
 
     <?php
 
@@ -685,9 +725,10 @@ When authenticating using the password grant, Passport will use the `email` attr
     }
 
 <a name="customizing-the-password-validation"></a>
-### Customizing The Password Validation
 
-When authenticating using the password grant, Passport will use the `password` attribute of your model to validate the given password. If your model does not have a `password` attribute or you wish to customize the password validation logic, you can define a `validateForPassportPasswordGrant` method on your model:
+### Налаштування перевірки пароля
+
+Під час автентифікації за допомогою надання пароля Passport буде використовувати`password`атрибут вашої моделі для перевірки даного пароля. Якщо у вашій моделі немає`password`атрибут або ви хочете налаштувати логіку перевірки пароля, ви можете визначити a`validateForPassportPasswordGrant`метод на вашій моделі:
 
     <?php
 
@@ -715,9 +756,10 @@ When authenticating using the password grant, Passport will use the `password` a
     }
 
 <a name="implicit-grant-tokens"></a>
-## Implicit Grant Tokens
 
-The implicit grant is similar to the authorization code grant; however, the token is returned to the client without exchanging an authorization code. This grant is most commonly used for JavaScript or mobile applications where the client credentials can't be securely stored. To enable the grant, call the `enableImplicitGrant` method in your `AuthServiceProvider`:
+## Неявні жетони надання
+
+Явне надання подібне до дозволу коду авторизації; однак маркер повертається клієнту без обміну кодом авторизації. Цей грант найчастіше використовується для JavaScript або мобільних додатків, де облікові дані клієнта неможливо надійно зберегти. Щоб увімкнути надання, зателефонуйте на`enableImplicitGrant`метод у вашому`AuthServiceProvider`:
 
     /**
      * Register any authentication / authorization services.
@@ -733,7 +775,7 @@ The implicit grant is similar to the authorization code grant; however, the toke
         Passport::enableImplicitGrant();
     }
 
-Once a grant has been enabled, developers may use their client ID to request an access token from your application. The consuming application should make a redirect request to your application's `/oauth/authorize` route like so:
+Після ввімкнення гранту розробники можуть використовувати свій ідентифікатор клієнта для запиту маркера доступу з вашої програми. Програма-споживач повинна зробити запит на перенаправлення до вашої програми`/oauth/authorize`маршрут так:
 
     Route::get('/redirect', function (Request $request) {
         $request->session()->put('state', $state = Str::random(40));
@@ -749,18 +791,19 @@ Once a grant has been enabled, developers may use their client ID to request an 
         return redirect('http://your-app.com/oauth/authorize?'.$query);
     });
 
-> {tip} Remember, the `/oauth/authorize` route is already defined by the `Passport::routes` method. You do not need to manually define this route.
+> {tip} Пам'ятайте,`/oauth/authorize`маршрут вже визначений`Passport::routes`метод. Вам не потрібно вручну визначати цей маршрут.
 
 <a name="client-credentials-grant-tokens"></a>
-## Client Credentials Grant Tokens
 
-The client credentials grant is suitable for machine-to-machine authentication. For example, you might use this grant in a scheduled job which is performing maintenance tasks over an API.
+## Повноваження клієнта надають токени
 
-Before your application can issue tokens via the client credentials grant, you will need to create a client credentials grant client. You may do this using the `--client` option of the `passport:client` command:
+Надання облікових даних клієнта підходить для автентифікації машини на машину. Наприклад, ви можете використовувати цей грант у запланованому завданні, яке виконує завдання технічного обслуговування через API.
+
+Перш ніж ваша програма зможе видавати токени за допомогою надання клієнтських облікових даних, вам потрібно буде створити клієнтський сертифікат для надання клієнта. Ви можете зробити це за допомогою`--client`варіант`passport:client`команда:
 
     php artisan passport:client --client
 
-Next, to use this grant type, you need to add the `CheckClientCredentials` middleware to the `$routeMiddleware` property of your `app/Http/Kernel.php` file:
+Далі, щоб використовувати цей тип гранту, вам потрібно додати`CheckClientCredentials`проміжне програмне забезпечення для`$routeMiddleware`власність вашого`app/Http/Kernel.php`файл:
 
     use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
@@ -768,22 +811,23 @@ Next, to use this grant type, you need to add the `CheckClientCredentials` middl
         'client' => CheckClientCredentials::class,
     ];
 
-Then, attach the middleware to a route:
+Потім приєднайте проміжне програмне забезпечення до маршруту:
 
     Route::get('/orders', function (Request $request) {
         ...
     })->middleware('client');
 
-To restrict access to the route to specific scopes you may provide a comma-delimited list of the required scopes when attaching the `client` middleware to the route:
+Щоб обмежити доступ до маршруту певними областями, ви можете надати список необхідних областей, розділених комами, при додаванні`client`проміжне програмне забезпечення до маршруту:
 
     Route::get('/orders', function (Request $request) {
         ...
     })->middleware('client:check-status,your-scope');
 
 <a name="retrieving-tokens"></a>
-### Retrieving Tokens
 
-To retrieve a token using this grant type, make a request to the `oauth/token` endpoint:
+### Отримання жетонів
+
+Щоб отримати маркер за допомогою цього типу надання, зробіть запит до`oauth/token`кінцева точка:
 
     $guzzle = new GuzzleHttp\Client;
 
@@ -799,26 +843,29 @@ To retrieve a token using this grant type, make a request to the `oauth/token` e
     return json_decode((string) $response->getBody(), true)['access_token'];
 
 <a name="personal-access-tokens"></a>
-## Personal Access Tokens
 
-Sometimes, your users may want to issue access tokens to themselves without going through the typical authorization code redirect flow. Allowing users to issue tokens to themselves via your application's UI can be useful for allowing users to experiment with your API or may serve as a simpler approach to issuing access tokens in general.
+## Токени особистого доступу
+
+Іноді ваші користувачі можуть захотіти видати собі маркери доступу, не проходячи звичайний потік перенаправлення коду авторизації. Дозвіл користувачам видавати маркери собі через інтерфейс вашого додатка може бути корисним для того, щоб дозволити користувачам експериментувати з вашим API, або може слугувати більш простим підходом до видачі маркерів доступу загалом.
 
 <a name="creating-a-personal-access-client"></a>
-### Creating A Personal Access Client
 
-Before your application can issue personal access tokens, you will need to create a personal access client. You may do this using the `passport:client` command with the `--personal` option. If you have already run the `passport:install` command, you do not need to run this command:
+### Створення клієнта персонального доступу
+
+Перш ніж ваша програма зможе видавати маркери особистого доступу, вам потрібно буде створити клієнт персонального доступу. Ви можете зробити це за допомогою`passport:client`команда за допомогою`--personal`варіант. Якщо ви вже запустили`passport:install`команда, вам не потрібно запускати цю команду:
 
     php artisan passport:client --personal
 
-After creating your personal access client, place the client's ID and plain-text secret value in your application's `.env` file:
+Створивши клієнт вашого особистого доступу, помістіть ідентифікатор клієнта та секретне значення у тексті вашого додатка`.env`файл:
 
     PASSPORT_PERSONAL_ACCESS_CLIENT_ID=client-id-value
     PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET=unhashed-client-secret-value
 
 <a name="managing-personal-access-tokens"></a>
-### Managing Personal Access Tokens
 
-Once you have created a personal access client, you may issue tokens for a given user using the `createToken` method on the `User` model instance. The `createToken` method accepts the name of the token as its first argument and an optional array of [scopes](#token-scopes) as its second argument:
+### Керування токенами особистого доступу
+
+Після створення клієнта особистого доступу ви можете видавати маркери для даного користувача за допомогою`createToken`метод на`User`екземпляр моделі.`createToken`Метод приймає ім'я маркера як перший аргумент та необов'язковий масив[сфери дії](#token-scopes)як другий аргумент:
 
     $user = App\Models\User::find(1);
 
@@ -829,16 +876,18 @@ Once you have created a personal access client, you may issue tokens for a given
     $token = $user->createToken('My Token', ['place-orders'])->accessToken;
 
 <a name="personal-access-tokens-json-api"></a>
-#### JSON API
 
-Passport also includes a JSON API for managing personal access tokens. You may pair this with your own frontend to offer your users a dashboard for managing personal access tokens. Below, we'll review all of the API endpoints for managing personal access tokens. For convenience, we'll use [Axios](https://github.com/mzabriskie/axios) to demonstrate making HTTP requests to the endpoints.
+#### API JSON
 
-The JSON API is guarded by the `web` and `auth` middleware; therefore, it may only be called from your own application. It is not able to be called from an external source.
+Паспорт також включає JSON API для управління маркерами особистого доступу. Ви можете поєднати це зі своїм власним інтерфейсом, щоб запропонувати своїм користувачам інформаційну панель для управління маркерами особистого доступу. Нижче ми розглянемо всі кінцеві точки API для управління маркерами особистого доступу. Для зручності ми будемо використовувати[Аксіос](https://github.com/mzabriskie/axios)для демонстрації надсилання HTTP-запитів до кінцевих точок.
+
+API JSON охороняється`web`і`auth`проміжне програмне забезпечення; тому його можна викликати лише з вашої власної програми. Його не можна викликати із зовнішнього джерела.
 
 <a name="get-oauthscopes"></a>
+
 #### `GET /oauth/scopes`
 
-This route returns all of the [scopes](#token-scopes) defined for your application. You may use this route to list the scopes a user may assign to a personal access token:
+Цей маршрут повертає всі[сфери дії](#token-scopes)визначено для вашої програми. Ви можете використовувати цей маршрут для переліку областей, які користувач може призначити особистому маркеру доступу:
 
     axios.get('/oauth/scopes')
         .then(response => {
@@ -846,9 +895,10 @@ This route returns all of the [scopes](#token-scopes) defined for your applicati
         });
 
 <a name="get-oauthpersonal-access-tokens"></a>
+
 #### `GET /oauth/personal-access-tokens`
 
-This route returns all of the personal access tokens that the authenticated user has created. This is primarily useful for listing all of the user's tokens so that they may edit or revoke them:
+Цей маршрут повертає всі маркери особистого доступу, які створив аутентифікований користувач. Це в першу чергу корисно для переліку всіх токенів користувача, щоб вони могли їх редагувати або відкликати:
 
     axios.get('/oauth/personal-access-tokens')
         .then(response => {
@@ -856,9 +906,10 @@ This route returns all of the personal access tokens that the authenticated user
         });
 
 <a name="post-oauthpersonal-access-tokens"></a>
+
 #### `POST /oauth/personal-access-tokens`
 
-This route creates new personal access tokens. It requires two pieces of data: the token's `name` and the `scopes` that should be assigned to the token:
+Цей маршрут створює нові маркери особистого доступу. Для цього потрібні дві частини даних: маркер`name`та`scopes`що слід призначити маркеру:
 
     const data = {
         name: 'Token Name',
@@ -874,28 +925,32 @@ This route creates new personal access tokens. It requires two pieces of data: t
         });
 
 <a name="delete-oauthpersonal-access-tokenstoken-id"></a>
+
 #### `DELETE /oauth/personal-access-tokens/{token-id}`
 
-This route may be used to revoke personal access tokens:
+Цей маршрут може бути використаний для відкликання жетонів особистого доступу:
 
     axios.delete('/oauth/personal-access-tokens/' + tokenId);
 
 <a name="protecting-routes"></a>
-## Protecting Routes
+
+## Захист маршрутів
 
 <a name="via-middleware"></a>
-### Via Middleware
 
-Passport includes an [authentication guard](/docs/{{version}}/authentication#adding-custom-guards) that will validate access tokens on incoming requests. Once you have configured the `api` guard to use the `passport` driver, you only need to specify the `auth:api` middleware on any routes that require a valid access token:
+### Через Middleware
+
+Паспорт включає[аутентифікаційний охоронець](/docs/{{version}}/authentication#adding-custom-guards)що перевірить маркери доступу на вхідні запити. Після налаштування`api`охоронець для використання`passport`драйвера, вам потрібно лише вказати`auth:api`проміжне програмне забезпечення на будь-яких маршрутах, які вимагають дійсного маркера доступу:
 
     Route::get('/user', function () {
         //
     })->middleware('auth:api');
 
 <a name="multiple-authentication-guards"></a>
-#### Multiple Authentication Guards
 
-If your application authenticates different types of users that perhaps use entirely different Eloquent models, you will likely need to define a guard configuration for each user provider type in your application. This allows you to protect requests intended for specific user providers. For example, given the following guard configuration the `config/auth.php` configuration file:
+#### Кілька захисників автентифікації
+
+Якщо ваша програма автентифікує різні типи користувачів, які, можливо, використовують абсолютно різні моделі Eloquent, вам, ймовірно, доведеться визначити конфігурацію охорони для кожного типу постачальника користувачів у вашій програмі. Це дозволяє захистити запити, призначені для конкретних постачальників користувачів. Наприклад, враховуючи наступну конфігурацію охорони`config/auth.php`файл конфігурації:
 
     'api' => [
         'driver' => 'passport',
@@ -907,18 +962,19 @@ If your application authenticates different types of users that perhaps use enti
         'provider' => 'customers',
     ],
 
-The following route will utilize the `api-customers` guard, which uses the `customers` user provider, to authenticate incoming requests:
+Наступний маршрут буде використовувати`api-customers`гвардія, яка використовує`customers`постачальника користувачів для автентифікації вхідних запитів:
 
     Route::get('/customer', function () {
         //
     })->middleware('auth:api-customers');
 
-> {tip} For more information on using multiple user providers with Passport, please consult the [password grant documentation](#customizing-the-user-provider).
+> {tip} Щоб отримати додаткову інформацію про використання кількох постачальників послуг із Passport, зверніться до[документація про надання пароля](#customizing-the-user-provider).
 
 <a name="passing-the-access-token"></a>
-### Passing The Access Token
 
-When calling routes that are protected by Passport, your application's API consumers should specify their access token as a `Bearer` token in the `Authorization` header of their request. For example, when using the Guzzle HTTP library:
+### Передача маркера доступу
+
+Під час виклику маршрутів, захищених Passport, споживачі API вашого додатку повинні вказати свій маркер доступу як`Bearer`лексема в`Authorization`заголовок їх запиту. Наприклад, під час використання бібліотеки Guzzle HTTP&#x3A;
 
     $response = $client->request('GET', '/api/user', [
         'headers' => [
@@ -928,14 +984,16 @@ When calling routes that are protected by Passport, your application's API consu
     ]);
 
 <a name="token-scopes"></a>
-## Token Scopes
 
-Scopes allow your API clients to request a specific set of permissions when requesting authorization to access an account. For example, if you are building an e-commerce application, not all API consumers will need the ability to place orders. Instead, you may allow the consumers to only request authorization to access order shipment statuses. In other words, scopes allow your application's users to limit the actions a third-party application can perform on their behalf.
+## Токени
+
+Області дозволяють вашим клієнтам API запитувати певний набір дозволів під час запиту авторизації для доступу до облікового запису. Наприклад, якщо ви створюєте додаток для електронної комерції, не всі споживачі API потребуватимуть можливості робити замовлення. Натомість ви можете дозволити споживачам вимагати лише дозволу на доступ до статусів відвантаження замовлення. Іншими словами, сфери дії дозволяють користувачам вашого додатку обмежувати дії, які сторонні програми можуть виконувати від їх імені.
 
 <a name="defining-scopes"></a>
-### Defining Scopes
 
-You may define your API's scopes using the `Passport::tokensCan` method in the `boot` method of your `AuthServiceProvider`. The `tokensCan` method accepts an array of scope names and scope descriptions. The scope description may be anything you wish and will be displayed to users on the authorization approval screen:
+### Визначення обсягу
+
+Ви можете визначити область застосування вашого API за допомогою`Passport::tokensCan`метод у`boot`метод вашого`AuthServiceProvider`.`tokensCan`метод приймає масив імен областей та описів області. Опис області може бути будь-яким, що забажаєте, і відображатиметься користувачам на екрані затвердження авторизації:
 
     use Laravel\Passport\Passport;
 
@@ -945,9 +1003,10 @@ You may define your API's scopes using the `Passport::tokensCan` method in the `
     ]);
 
 <a name="default-scope"></a>
-### Default Scope
 
-If a client does not request any specific scopes, you may configure your Passport server to attach a default scope to the token using the `setDefaultScope` method. Typically, you should call this method from the `boot` method of your `AuthServiceProvider`:
+### Область за замовчуванням
+
+Якщо клієнт не вимагає будь-яких конкретних областей застосування, ви можете налаштувати сервер Passport на приєднання до маркера області за замовчуванням за допомогою`setDefaultScope`метод. Як правило, вам слід викликати цей метод із`boot`метод вашого`AuthServiceProvider`:
 
     use Laravel\Passport\Passport;
 
@@ -957,12 +1016,14 @@ If a client does not request any specific scopes, you may configure your Passpor
     ]);
 
 <a name="assigning-scopes-to-tokens"></a>
-### Assigning Scopes To Tokens
+
+### Присвоєння сфери дії маркерам
 
 <a name="when-requesting-authorization-codes"></a>
-#### When Requesting Authorization Codes
 
-When requesting an access token using the authorization code grant, consumers should specify their desired scopes as the `scope` query string parameter. The `scope` parameter should be a space-delimited list of scopes:
+#### Під час запиту кодів авторизації
+
+Запитуючи маркер доступу з використанням дозволу коду авторизації, споживачі повинні вказати бажаний обсяг як`scope`параметр рядка запиту.`scope`параметром повинен бути розділений пробілом список областей:
 
     Route::get('/redirect', function () {
         $query = http_build_query([
@@ -976,42 +1037,47 @@ When requesting an access token using the authorization code grant, consumers sh
     });
 
 <a name="when-issuing-personal-access-tokens"></a>
-#### When Issuing Personal Access Tokens
 
-If you are issuing personal access tokens using the `User` model's `createToken` method, you may pass the array of desired scopes as the second argument to the method:
+#### При видачі токенів особистого доступу
+
+Якщо ви видаєте маркери особистого доступу за допомогою`User`моделі`createToken`методу, ви можете передати масив бажаних областей дії як другий аргумент методу:
 
     $token = $user->createToken('My Token', ['place-orders'])->accessToken;
 
 <a name="checking-scopes"></a>
-### Checking Scopes
 
-Passport includes two middleware that may be used to verify that an incoming request is authenticated with a token that has been granted a given scope. To get started, add the following middleware to the `$routeMiddleware` property of your `app/Http/Kernel.php` file:
+### Перевірка обсягу
+
+Паспорт включає два проміжні програми, які можна використовувати для перевірки автентичності вхідного запиту за допомогою маркера, якому було надано задану область дії. Для початку додайте наступне проміжне програмне забезпечення до`$routeMiddleware`власність вашого`app/Http/Kernel.php`файл:
 
     'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
     'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
 
 <a name="check-for-all-scopes"></a>
-#### Check For All Scopes
 
-The `scopes` middleware may be assigned to a route to verify that the incoming request's access token has *all* of the listed scopes:
+#### Перевірте всі сфери
+
+`scopes`проміжне програмне забезпечення може бути призначене маршруту для перевірки наявності маркера доступу вхідного запиту_всі_з перелічених областей застосування:
 
     Route::get('/orders', function () {
         // Access token has both "check-status" and "place-orders" scopes...
     })->middleware(['auth:api', 'scopes:check-status,place-orders']);
 
 <a name="check-for-any-scopes"></a>
-#### Check For Any Scopes
 
-The `scope` middleware may be assigned to a route to verify that the incoming request's access token has *at least one* of the listed scopes:
+#### Перевірте будь-які сфери застосування
+
+`scope`проміжне програмне забезпечення може бути призначене маршруту для перевірки наявності маркера доступу вхідного запиту_принаймні один_з перелічених областей застосування:
 
     Route::get('/orders', function () {
         // Access token has either "check-status" or "place-orders" scope...
     })->middleware(['auth:api', 'scope:check-status,place-orders']);
 
 <a name="checking-scopes-on-a-token-instance"></a>
-#### Checking Scopes On A Token Instance
 
-Once an access token authenticated request has entered your application, you may still check if the token has a given scope using the `tokenCan` method on the authenticated `User` instance:
+#### Перевірка обсягу на екземплярі маркера
+
+Після того, як запит автентифікації маркера доступу увійшов у вашу програму, ви все ще можете перевірити, чи має маркер задану область застосування, використовуючи`tokenCan`метод на аутентифікованому`User`примірник:
 
     use Illuminate\Http\Request;
 
@@ -1022,39 +1088,41 @@ Once an access token authenticated request has entered your application, you may
     });
 
 <a name="additional-scope-methods"></a>
-#### Additional Scope Methods
 
-The `scopeIds` method will return an array of all defined IDs / names:
+#### Додаткові методи застосування
+
+`scopeIds`метод поверне масив усіх визначених ідентифікаторів / імен:
 
     Laravel\Passport\Passport::scopeIds();
 
-The `scopes` method will return an array of all defined scopes as instances of `Laravel\Passport\Scope`:
+`scopes`Метод повертає масив усіх визначених областей як екземпляри`Laravel\Passport\Scope`:
 
     Laravel\Passport\Passport::scopes();
 
-The `scopesFor` method will return an array of `Laravel\Passport\Scope` instances matching the given IDs / names:
+`scopesFor`метод поверне масив`Laravel\Passport\Scope`екземпляри, що відповідають заданим ідентифікаторам / іменам:
 
     Laravel\Passport\Passport::scopesFor(['place-orders', 'check-status']);
 
-You may determine if a given scope has been defined using the `hasScope` method:
+Ви можете визначити, чи визначена дана область застосування, використовуючи`hasScope`метод:
 
     Laravel\Passport\Passport::hasScope('place-orders');
 
 <a name="consuming-your-api-with-javascript"></a>
-## Consuming Your API With JavaScript
 
-When building an API, it can be extremely useful to be able to consume your own API from your JavaScript application. This approach to API development allows your own application to consume the same API that you are sharing with the world. The same API may be consumed by your web application, mobile applications, third-party applications, and any SDKs that you may publish on various package managers.
+## Споживання вашого API за допомогою JavaScript
 
-Typically, if you want to consume your API from your JavaScript application, you would need to manually send an access token to the application and pass it with each request to your application. However, Passport includes a middleware that can handle this for you. All you need to do is add the `CreateFreshApiToken` middleware to your `web` middleware group in your `app/Http/Kernel.php` file:
+Створюючи API, може бути надзвичайно корисно мати можливість використовувати ваш власний API із вашої програми JavaScript. Цей підхід до розробки API дозволяє вашому власному додатку використовувати той самий API, яким ви ділитесь зі світом. Той самий API може використовуватися вашою веб-програмою, мобільними програмами, сторонніми програмами та будь-якими SDK, які ви можете публікувати на різних менеджерах пакетів.
+
+Як правило, якщо ви хочете використовувати ваш API із вашої програми JavaScript, вам доведеться вручну надіслати маркер доступу до програми та передати його з кожним запитом до вашої програми. Однак Passport включає проміжне програмне забезпечення, яке може це впоратись із вами. Все, що вам потрібно зробити, це додати`CreateFreshApiToken`проміжне програмне забезпечення для вашого`web`група проміжного програмного забезпечення у вашому`app/Http/Kernel.php`файл:
 
     'web' => [
         // Other middleware...
         \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
     ],
 
-> {note} You should ensure that the `CreateFreshApiToken` middleware is the last middleware listed in your middleware stack.
+> {note} Ви повинні переконатися, що`CreateFreshApiToken`проміжне програмне забезпечення є останнім проміжним програмним забезпеченням, переліченим у вашому стеку проміжного програмного забезпечення.
 
-This Passport middleware will attach a `laravel_token` cookie to your outgoing responses. This cookie contains an encrypted JWT that Passport will use to authenticate API requests from your JavaScript application. The JWT has a lifetime equal to your `session.lifetime` configuration value. Now, you may make requests to your application's API without explicitly passing an access token:
+До цього проміжного програмного забезпечення Passport буде додано файл`laravel_token`cookie до ваших вихідних відповідей. Цей файл cookie містить зашифрований JWT, який Passport буде використовувати для автентифікації запитів API із вашої програми JavaScript. Термін служби JWT дорівнює вашому`session.lifetime`значення конфігурації. Тепер ви можете надсилати запити до API вашого додатка, не передаючи явно маркер доступу:
 
     axios.get('/api/user')
         .then(response => {
@@ -1062,9 +1130,10 @@ This Passport middleware will attach a `laravel_token` cookie to your outgoing r
         });
 
 <a name="customizing-the-cookie-name"></a>
-#### Customizing The Cookie Name
 
-If needed, you can customize the `laravel_token` cookie's name using the `Passport::cookie` method. Typically, this method should be called from the `boot` method of your `AuthServiceProvider`:
+#### Налаштування назви файлу cookie
+
+Якщо потрібно, ви можете налаштувати`laravel_token`ім'я файлу cookie з використанням`Passport::cookie`метод. Як правило, цей метод слід викликати з`boot`метод вашого`AuthServiceProvider`:
 
     /**
      * Register any authentication / authorization services.
@@ -1081,16 +1150,18 @@ If needed, you can customize the `laravel_token` cookie's name using the `Passpo
     }
 
 <a name="csrf-protection"></a>
-#### CSRF Protection
 
-When using this method of authentication, you will need to ensure a valid CSRF token header is included in your requests. The default Laravel JavaScript scaffolding includes an Axios instance, which will automatically use the encrypted `XSRF-TOKEN` cookie value to send a `X-XSRF-TOKEN` header on same-origin requests.
+#### Захист CSRF
 
-> {tip} If you choose to send the `X-CSRF-TOKEN` header instead of `X-XSRF-TOKEN`, you will need to use the unencrypted token provided by `csrf_token()`.
+Використовуючи цей метод автентифікації, вам потрібно буде переконатися, що у ваші запити включено дійсний заголовок токена CSRF. Підмостки за замовчуванням JavaScript включають екземпляр Axios, який автоматично використовуватиме зашифрований`XSRF-TOKEN`значення файлу cookie для відправки`X-XSRF-TOKEN`заголовок на запити того самого походження.
+
+> {tip} Якщо ви вирішите надіслати файл`X-CSRF-TOKEN`заголовок замість`X-XSRF-TOKEN`, вам потрібно буде використовувати незашифрований маркер, наданий`csrf_token()`.
 
 <a name="events"></a>
-## Events
 
-Passport raises events when issuing access tokens and refresh tokens. You may use these events to prune or revoke other access tokens in your database. You may attach listeners to these events in your application's `EventServiceProvider`:
+## Події
+
+Passport викликає події при видачі маркерів доступу та оновлення маркерів. Ви можете використовувати ці події, щоб обрізати або скасувати інші маркери доступу у вашій базі даних. Ви можете приєднати слухачів до цих подій у програмі своєї програми`EventServiceProvider`:
 
     /**
      * The event listener mappings for the application.
@@ -1108,9 +1179,10 @@ Passport raises events when issuing access tokens and refresh tokens. You may us
     ];
 
 <a name="testing"></a>
-## Testing
 
-Passport's `actingAs` method may be used to specify the currently authenticated user as well as its scopes. The first argument given to the `actingAs` method is the user instance and the second is an array of scopes that should be granted to the user's token:
+## Тестування
+
+Паспорт`actingAs`метод може бути використаний для вказівки поточного аутентифікованого користувача, а також його обсягу. Перший аргумент, наданий`actingAs`метод є екземпляром користувача, а другий - масивом областей, які повинні бути надані маркеру користувача:
 
     use App\Models\User;
     use Laravel\Passport\Passport;
@@ -1127,7 +1199,7 @@ Passport's `actingAs` method may be used to specify the currently authenticated 
         $response->assertStatus(201);
     }
 
-Passport's `actingAsClient` method may be used to specify the currently authenticated client as well as its scopes. The first argument given to the `actingAsClient` method is the client instance and the second is an array of scopes that should be granted to the client's token:
+Паспорт`actingAsClient`метод може бути використаний для вказівки поточного аутентифікованого клієнта, а також його обсягу. Перший аргумент, наданий`actingAsClient`метод є екземпляром клієнта, а другий - масивом областей, які повинні бути надані маркеру клієнта:
 
     use Laravel\Passport\Client;
     use Laravel\Passport\Passport;

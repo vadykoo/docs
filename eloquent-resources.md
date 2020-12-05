@@ -22,7 +22,7 @@
 
 ## Генерування ресурсів
 
-Для створення класу ресурсів ви можете використовувати`make:resource`Ремісниче командування. За замовчуванням ресурси будуть розміщені в`app/Http/Resources`каталог вашої програми. Ресурси розширюють`Illuminate\Http\Resources\Json\JsonResource`клас:
+Для створення класу ресурсів ви можете використовувати`make:resource`artisan командування. За замовчуванням ресурси будуть розміщені в`app/Http/Resources`каталог вашої програми. Ресурси розширюють`Illuminate\Http\Resources\Json\JsonResource`клас:
 
     php artisan make:resource User
 
