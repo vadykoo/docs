@@ -1,9 +1,10 @@
-# Upgrade Guide
+# Посібник з оновлення
 
-- [Upgrading To 8.0 From 7.x](#upgrade-8.0)
+-   [Оновлення до 8.0 з 7.x](#upgrade-8.0)
 
 <a name="high-impact-changes"></a>
-## High Impact Changes
+
+## Значні зміни впливу
 
 <div class="content-list" markdown="1">
 - [Model Factories](#model-factories)
@@ -15,7 +16,8 @@
 </div>
 
 <a name="medium-impact-changes"></a>
-## Medium Impact Changes
+
+## Зміни середнього впливу
 
 <div class="content-list" markdown="1">
 - [PHP 7.3.0 Required](#php-7.3.0-required)
@@ -26,24 +28,28 @@
 </div>
 
 <a name="upgrade-8.0"></a>
-## Upgrading To 8.0 From 7.x
+
+## Оновлення до 8.0 з 7.x
 
 <a name="estimated-upgrade-time-15-minutes"></a>
-#### Estimated Upgrade Time: 15 Minutes
 
-> {note} We attempt to document every possible breaking change. Since some of these breaking changes are in obscure parts of the framework only a portion of these changes may actually affect your application.
+#### Розрахунковий час оновлення: 15 хвилин
+
+> {note} Ми намагаємося задокументувати всі можливі порушення. Оскільки деякі з цих невід'ємних змін знаходяться в незрозумілих частинах фреймворку, лише частина цих змін може насправді вплинути на вашу програму.
 
 <a name="php-7.3.0-required"></a>
-### PHP 7.3.0 Required
 
-**Likelihood Of Impact: Medium**
+### Потрібно PHP 7.3.0
 
-The new minimum PHP version is now 7.3.0.
+**Ймовірність впливу: середній**
+
+Нова мінімальна версія PHP тепер 7.3.0.
 
 <a name="updating-dependencies"></a>
-### Updating Dependencies
 
-Update the following dependencies in your `composer.json` file:
+### Оновлення залежностей
+
+Оновіть наведені нижче залежності у вашому`composer.json`файл:
 
 <div class="content-list" markdown="1">
 - `guzzlehttp/guzzle` to `^7.0.1`
@@ -54,7 +60,7 @@ Update the following dependencies in your `composer.json` file:
 - `phpunit/phpunit` to `^9.0`
 </div>
 
-The following first-party packages have new major releases to support Laravel 8. If applicable, you should read their individual upgrade guides before upgrading:
+Наступні основні пакети мають нові основні випуски для підтримки Laravel 8. Якщо це можливо, перед оновленням слід прочитати їхні індивідуальні посібники з оновлення:
 
 <div class="content-list" markdown="1">
 - [Horizon v5.0](https://github.com/laravel/horizon/blob/master/UPGRADE.md)
@@ -63,19 +69,21 @@ The following first-party packages have new major releases to support Laravel 8.
 - [Telescope v4.0](https://github.com/laravel/telescope/blob/master/UPGRADE.md)
 </div>
 
-In addition, the Laravel installer has been updated to support `composer create-project` and Laravel Jetstream. Any installer older than 4.0 will cease to work after October 2020. You should upgrade your global installer to `^4.0` as soon as possible.
+Крім того, інсталятор Laravel оновлено для підтримки`composer create-project`та Laravel Jetstream. Будь-який інсталятор старше 4,0 перестане працювати після жовтня 2020 року. Вам слід оновити глобальний інсталятор до`^4.0`якнайшвидше.
 
-Finally, examine any other third-party packages consumed by your application and verify you are using the proper version for Laravel 8 support.
+Нарешті, вивчіть будь-які інші сторонні пакети, споживані вашим додатком, і переконайтесь, що ви використовуєте відповідну версію для підтримки Laravel 8.
 
 <a name="collections"></a>
-### Collections
+
+### Колекції
 
 <a name="the-isset-method"></a>
-#### The `isset` Method
 
-**Likelihood Of Impact: Low**
+#### `isset`Метод
 
-To be consistent with typical PHP behavior, the `offsetExists` method of `Illuminate\Support\Collection` has been updated to use `isset` instead of `array_key_exists`. This may present a change in behavior when dealing with collection items that have a value of `null`:
+**Ймовірність впливу: низька**
+
+Щоб відповідати типовій поведінці PHP, файл`offsetExists`метод`Illuminate\Support\Collection`було оновлено до використання`isset`замість`array_key_exists`. Це може змінити поведінку при роботі з предметами колекції, які мають значення`null`:
 
     $collection = collect([null]);
 
@@ -86,14 +94,16 @@ To be consistent with typical PHP behavior, the `offsetExists` method of `Illumi
     isset($collection[0]);
 
 <a name="database"></a>
-### Database
+
+### База даних
 
 <a name="seeder-factory-namespaces"></a>
-#### Seeder & Factory Namespaces
 
-**Likelihood Of Impact: High**
+#### Простір імен сівалок та фабрик
 
-Seeders and factories are now namespaced. To accommodate for these changes, add the `Database\Seeders` namespace to your seeder classes. In addition, the previous `database/seeds` directory should be renamed to `database/seeders`:
+**Ймовірність впливу: висока**
+
+Зараз сівалки та заводи розміщені на просторах імен. Щоб врахувати ці зміни, додайте`Database\Seeders`простору імен для ваших класів сівалок. Крім того, попередній`database/seeds`каталог повинен бути перейменований на`database/seeders`:
 
     <?php
 
@@ -115,9 +125,9 @@ Seeders and factories are now namespaced. To accommodate for these changes, add 
         }
     }
 
-If you are choosing to use the `laravel/legacy-factories` package, no changes to your factory classes are required. However, if you are upgrading your factories, you should add the `Database\Factories` namespace to those classes.
+Якщо ви вирішили використовувати`laravel/legacy-factories`пакунку, ніяких змін у ваших заводських класах не потрібно. Однак, якщо ви модернізуєте свої заводи, вам слід додати`Database\Factories`простір імен для цих класів.
 
-Next, in your `composer.json` file, remove `classmap` block from the `autoload` section and add the new namespaced class directory mappings:
+Далі, у вашому`composer.json`файл, видаліть`classmap`блок від`autoload`і додайте нові зіставлення каталогів класів із простором імен:
 
     "autoload": {
         "psr-4": {
@@ -128,54 +138,62 @@ Next, in your `composer.json` file, remove `classmap` block from the `autoload` 
     },
 
 <a name="eloquent"></a>
-### Eloquent
+
+### Красномовний
 
 <a name="model-factories"></a>
-#### Model Factories
 
-**Likelihood Of Impact: High**
+#### Модельні фабрики
 
-Laravel's [model factories](/docs/{{version}}/database-testing#creating-factories) feature has been totally rewritten to support classes and is not compatible with Laravel 7.x style factories. However, to ease the upgrade process, a new `laravel/legacy-factories` package has been created to continue using your existing factories with Laravel 8.x. You may install this package via Composer:
+**Ймовірність впливу: висока**
+
+Ларавеля[модельні заводи](/docs/{{version}}/database-testing#creating-factories)Функція була повністю переписана для підтримки класів і не сумісна з фабриками стилю Laravel 7.x. Однак, щоб полегшити процес оновлення, новий`laravel/legacy-factories`пакет створений для продовження використання існуючих фабрик з Laravel 8.x. Ви можете встановити цей пакет через Composer:
 
     composer require laravel/legacy-factories
 
 <a name="the-castable-interface"></a>
-#### The `Castable` Interface
 
-**Likelihood Of Impact: Low**
+#### `Castable`Інтерфейс
 
-The `castUsing` method of the `Castable` interface has been updated to accept an array of arguments. If you are implementing this interface you should update your implementation accordingly:
+**Ймовірність впливу: низька**
+
+`castUsing`метод`Castable`інтерфейс оновлений, щоб прийняти масив аргументів. Якщо ви впроваджуєте цей інтерфейс, вам слід відповідно оновити реалізацію:
 
     public static function castUsing(array $arguments);
 
 <a name="increment-decrement-events"></a>
-#### Increment / Decrement Events
 
-**Likelihood Of Impact: Low**
+#### Події збільшення / зменшення
 
-Proper "update" and "save" related model events will now be dispatched when executing the `increment` or `decrement` methods on Eloquent model instances.
+**Ймовірність впливу: низька**
+
+Належне "оновлення" та "збереження" пов'язаних з моделлю подій тепер буде відправлено під час запуску`increment`або`decrement`методи на екземплярах красномовної моделі.
 
 <a name="events"></a>
-### Events
+
+### Події
 
 <a name="the-dispatcher-contract"></a>
-#### The `Dispatcher` Contract
 
-**Likelihood Of Impact: Low**
+#### `Dispatcher`Договір
 
-The `listen` method of the `Illuminate\Contracts\Events\Dispatcher` contract has been updated to make the `$listener` property optional. This change was made to support automatic detection of handled event types via reflection. If you are manually implementing this interface, you should update your implementation accordingly:
+**Ймовірність впливу: низька**
+
+`listen`метод`Illuminate\Contracts\Events\Dispatcher`контракт був оновлений, щоб зробити`$listener`властивість необов’язкова. Ця зміна була зроблена для підтримки автоматичного виявлення оброблених типів подій за допомогою відображення. Якщо ви реалізуєте цей інтерфейс вручну, вам слід відповідно оновити реалізацію:
 
     public function listen($events, $listener = null);
 
 <a name="framework"></a>
-### Framework
+
+### Рамки
 
 <a name="maintenance-mode-updates"></a>
-#### Maintenance Mode Updates
 
-**Likelihood Of Impact: Optional**
+#### Оновлення режиму обслуговування
 
-The [maintenance mode](/docs/{{version}}/configuration#maintenance-mode) feature of Laravel has been improved in Laravel 8.x. Pre-rendering the maintenance mode template is now supported and eliminates the chances of end users encountering errors during maintenance mode. However, to support this, the following lines must be added to your `public/index.php` file. These lines should be placed directly under the existing `LARAVEL_START` constant definition:
+**Імовірність впливу: Необов’язково**
+
+[режим обслуговування](/docs/{{version}}/configuration#maintenance-mode)особливість Laravel була покращена в Laravel 8.x. Попередня візуалізація шаблону режиму обслуговування тепер підтримується і виключає ймовірність зіткнення кінцевих користувачів під час режиму обслуговування. Однак, щоб підтвердити це, наступні рядки потрібно додати до вашого`public/index.php`файл. Ці рядки слід розміщувати безпосередньо під існуючими`LARAVEL_START`постійне визначення:
 
     define('LARAVEL_START', microtime(true));
 
@@ -184,94 +202,107 @@ The [maintenance mode](/docs/{{version}}/configuration#maintenance-mode) feature
     }
 
 <a name="artisan-down-message"></a>
-#### The `php artisan down --message` Option
 
-**Likelihood Of Impact: Medium**
+#### `php artisan down --message`Варіант
 
-The `--message` option of the `php artisan down` command has been removed. As an alternative, consider [pre-rendering your maintenance mode views](/docs/{{version}}/configuration#maintenance-mode) with the message of your choice.
+**Ймовірність впливу: середній**
+
+`--message`варіант`php artisan down`команда була видалена. В якості альтернативи розглянемо[попередній рендерінг подань режиму обслуговування](/docs/{{version}}/configuration#maintenance-mode)з повідомленням на ваш вибір.
 
 <a name="php-artisan-serve-no-reload-option"></a>
-#### The `php artisan serve --no-reload` Option
 
-**Likelihood Of Impact: Low**
+#### `php artisan serve --no-reload`Варіант
 
-A `--no-reload` option has been added to the `php artisan serve` command. This will instruct the built-in server to not reload the server when environment file changes are detected. This option is primarily helpful when running Laravel Dusk tests in a CI environment.
+**Ймовірність впливу: низька**
+
+A`--no-reload`опція була додана до`php artisan serve`команди. Це дасть вказівку вбудованому серверу не перезавантажувати сервер, коли будуть виявлені зміни файлів середовища. Цей параметр в першу чергу корисний під час запуску тестів Laravel Dusk в середовищі CI.
 
 <a name="manager-app-property"></a>
-#### Manager `$app` Property
 
-**Likelihood Of Impact: Low**
+#### Менеджер`$app`Власність
 
-The previously deprecated `$app` property of the `Illuminate\Support\Manager` class has been removed. If you were relying on this property, you should use the `$container` property instead.
+**Ймовірність впливу: низька**
+
+Раніше застарілий`$app`власність`Illuminate\Support\Manager`клас видалено. Якщо ви покладалися на цю властивість, вам слід використовувати`$container`власності замість цього.
 
 <a name="the-elixir-helper"></a>
-#### The `elixir` Helper
 
-**Likelihood Of Impact: Low**
+#### `elixir`Помічник
 
-The previously deprecated `elixir` helper has been removed. Applications still using this method are encouraged to upgrade to [Laravel Mix](https://github.com/JeffreyWay/laravel-mix).
+**Ймовірність впливу: низька**
+
+Раніше застарілий`elixir`помічник видалено. Програми, які все ще використовують цей метод, рекомендується оновити до[Laravel Mix](https://github.com/JeffreyWay/laravel-mix).
 
 <a name="mail"></a>
-### Mail
+
+### Пошта
 
 <a name="the-sendnow-method"></a>
-#### The `sendNow` Method
 
-**Likelihood Of Impact: Low**
+#### `sendNow`Метод
 
-The previously deprecated `sendNow` method has been removed. Instead, please use the `send` method.
+**Ймовірність впливу: низька**
+
+Раніше застарілий`sendNow`метод видалено. Натомість використовуйте`send`метод.
 
 <a name="pagination"></a>
-### Pagination
+
+### Пагінація
 
 <a name="pagination-defaults"></a>
-#### Pagination Defaults
 
-**Likelihood Of Impact: High**
+#### За замовчуванням розміщення сторінок
 
-The paginator now uses the [Tailwind CSS framework](https://tailwindcss.com) for its default styling. In order to keep using Bootstrap, you should add the following method call to the `boot` method of your application's `AppServiceProvider`:
+**Ймовірність впливу: висока**
+
+Пагінатор тепер використовує файл[Фреймворк CSS Tailwind](https://tailwindcss.com)для стилю за замовчуванням. Щоб продовжувати використовувати Bootstrap, слід додати наступний виклик методу до`boot`метод вашої програми`AppServiceProvider`:
 
     use Illuminate\Pagination\Paginator;
 
     Paginator::useBootstrap();
 
 <a name="queue"></a>
-### Queue
+
+### Черга
 
 <a name="queue-retry-after-method"></a>
-#### The `retryAfter` Method
 
-**Likelihood Of Impact: High**
+#### `retryAfter`Метод
 
-For consistency with other features of Laravel, the `retryAfter` method and `retryAfter` property of queued jobs, mailers, notifications, and listeners has been renamed to `backoff`. You should update the name of this method / property in the relevant classes in your application.
+**Ймовірність впливу: висока**
+
+Для узгодження з іншими особливостями Laravel,`retryAfter`метод і`retryAfter`властивість завдань, що перебувають у черзі, розсильників, сповіщень та слухачів було перейменовано на`backoff`. Вам слід оновити назву цього методу / властивості у відповідних класах у вашій програмі.
 
 <a name="queue-timeout-at-property"></a>
-#### The `timeoutAt` Property
 
-**Likelihood Of Impact: High**
+#### `timeoutAt`Власність
 
-The `timeoutAt` property of queued jobs, notifications, and listeners has been renamed to `retryUntil`. You should update the name of this property in the relevant classes in your application.
+**Ймовірність впливу: висока**
+
+`timeoutAt`властивість завдань у черзі, сповіщень та слухачів було перейменовано на`retryUntil`. Вам слід оновити назву цього властивості у відповідних класах у вашій програмі.
 
 <a name="queue-allOnQueue-allOnConnection"></a>
-#### The `allOnQueue()` / `allOnConnection()` Methods
 
-**Likelihood Of Impact: High**
+#### `allOnQueue()`/`allOnConnection()`Методи
 
-For consistency with other dispatching methods, the `allOnQueue()` and `allOnConnection()` methods used with job chaining have been removed. You may use the `onQueue()` and `onConnection()` methods instead. These methods should be called before calling the `dispatch` method:
+**Ймовірність впливу: висока**
+
+Для узгодження з іншими методами диспетчеризації,`allOnQueue()`і`allOnConnection()`методи, що використовуються з ланцюжком робіт, були вилучені. Ви можете використовувати`onQueue()`і`onConnection()`методи замість цього. Ці методи слід викликати перед викликом`dispatch`метод:
 
     ProcessPodcast::withChain([
         new OptimizePodcast,
         new ReleasePodcast
     ])->onConnection('redis')->onQueue('podcasts')->dispatch();
 
-Note that this change only affects code using the `withChain` method. The `allOnQueue()` and `allOnConnection()` are still available when using the global `dispatch()` helper.
+Зверніть увагу, що ця зміна стосується лише коду, що використовує`withChain`метод.`allOnQueue()`і`allOnConnection()`все ще доступні при використанні глобальної`dispatch()`помічник.
 
 <a name="failed-jobs-table-batch-support"></a>
-#### Failed Jobs Table Batch Support
 
-**Likelihood Of Impact: Optional**
+#### Підтримка пакетної таблиці невдалих завдань
 
-If you plan to use the [job batching](/docs/{{version}}/queues#job-batching) features of Laravel 8.x, your `failed_jobs` database table will need to be updated. First, a new `uuid` column should be added to your table:
+**Імовірність впливу: Необов’язково**
+
+Якщо ви плануєте використовувати[пакет роботи](/docs/{{version}}/queues#job-batching)особливості Laravel 8.x, ваш`failed_jobs`таблицю бази даних потрібно буде оновити. По-перше, новий`uuid`стовпець слід додати до вашої таблиці:
 
     use Illuminate\Database\Schema\Blueprint;
     use Illuminate\Support\Facades\Schema;
@@ -280,9 +311,9 @@ If you plan to use the [job batching](/docs/{{version}}/queues#job-batching) fea
         $table->string('uuid')->after('id')->nullable()->unique();
     });
 
-Next, the `failed.driver` configuration option within your `queue` configuration file should be updated to `database-uuids`.
+Далі,`failed.driver`варіант конфігурації у вашому`queue`файл конфігурації слід оновити до`database-uuids`.
 
-In addition, you may wish to generate UUIDs for your existing failed jobs:
+Крім того, ви можете створити UUID для існуючих невдалих завдань:
 
     DB::table('failed_jobs')->whereNull('uuid')->cursor()->each(function ($job) {
         DB::table('failed_jobs')
@@ -291,16 +322,18 @@ In addition, you may wish to generate UUIDs for your existing failed jobs:
     });
 
 <a name="routing"></a>
-### Routing
+
+### Маршрутизація
 
 <a name="automatic-controller-namespace-prefixing"></a>
-#### Automatic Controller Namespace Prefixing
 
-**Likelihood Of Impact: Optional**
+#### Префікс простору імен автоматичного контролера
 
-In previous releases of Laravel, the `RouteServiceProvider` class contained a `$namespace` property with a value of `App\Http\Controllers`. This value of this property was used to automatically prefix controller route declarations and controller route URL generation such as when calling the `action` helper.
+**Імовірність впливу: Необов’язково**
 
-In Laravel 8, this property is set to `null` by default. This allows your controller route declarations to use the standard PHP callable syntax, which provides better support for jumping to the controller class in many IDEs:
+У попередніх випусках Laravel,`RouteServiceProvider`клас містив a`$namespace`властивість зі значенням`App\Http\Controllers`. Це значення цієї властивості було використано для автоматичного префікса оголошень маршруту контролера та генерації URL-адреси маршруту контролера, наприклад, під час виклику`action`помічник.
+
+У Laravel 8 для цієї властивості встановлено значення`null`за замовчуванням. Це дозволяє оголошенням маршрутів контролера використовувати стандартний синтаксис, що викликається PHP, що забезпечує кращу підтримку переходу до класу контролера у багатьох середовищах розробки:
 
     use App\Http\Controllers\UserController;
 
@@ -310,9 +343,9 @@ In Laravel 8, this property is set to `null` by default. This allows your contro
     // Using string syntax...
     Route::get('/users', 'App\Http\Controllers\UserController@index');
 
-In most cases this won't impact applications that are being upgraded because your `RouteServiceProvider` will still contain the `$namespace` property with its previous value. However, if you upgrade your application by creating a brand new Laravel project, you may encounter this as a breaking change.
+У більшості випадків це не вплине на програми, які оновлюються, оскільки ваш`RouteServiceProvider`все ще міститиме`$namespace`майно з попередньою вартістю. Однак, якщо ви оновите свою програму, створивши абсолютно новий проект Laravel, ви можете зіткнутися з цим як зломлива зміна.
 
-If you would like to continue using the original auto-prefixed controller routing, you can simply set the value of the `$namespace` property within your `RouteServiceProvider` and update the route registrations within the `boot` method to use the `$namespace` property:
+Якщо ви хочете продовжувати використовувати оригінальну маршрутизацію контролера з попередньо встановленим префіксом, ви можете просто встановити значення`$namespace`майно в межах вашого`RouteServiceProvider`та оновити реєстрацію маршруту в межах`boot`метод використання`$namespace`властивість:
 
     class RouteServiceProvider extends ServiceProvider
     {
@@ -369,24 +402,28 @@ If you would like to continue using the original auto-prefixed controller routin
     }
 
 <a name="scheduling"></a>
-### Scheduling
+
+### Планування
 
 <a name="the-cron-expression-library"></a>
-#### The `cron-expression` Library
 
-**Likelihood Of Impact: Low**
+#### `cron-expression`Бібліотека
 
-Laravel's dependency on `dragonmantank/cron-expression` has been updated from `2.x` to `3.x`. This should not cause any breaking change in your application unless you are interacting with the `cron-expression` library directly. If you are interacting with this library directly, please review its [change log](https://github.com/dragonmantank/cron-expression/blob/master/CHANGELOG.md).
+**Ймовірність впливу: низька**
+
+Залежність Ларавеля від`dragonmantank/cron-expression`було оновлено з`2.x`до`3.x`. Це не повинно спричинити жодних змін у вашій програмі, якщо ви не взаємодієте з`cron-expression`бібліотека безпосередньо. Якщо ви взаємодієте з цією бібліотекою безпосередньо, перегляньте її[журнал змін](https://github.com/dragonmantank/cron-expression/blob/master/CHANGELOG.md).
 
 <a name="session"></a>
-### Session
+
+### Сесія
 
 <a name="the-session-contract"></a>
-#### The `Session` Contract
 
-**Likelihood Of Impact: Low**
+#### `Session`Договір
 
-The `Illuminate\Contracts\Session\Session` contract has received a new `pull` method. If you are implementing this contract manually, you should update your implementation accordingly:
+**Ймовірність впливу: низька**
+
+`Illuminate\Contracts\Session\Session`контракт отримав новий`pull`метод. Якщо ви реалізуєте цей контракт вручну, вам слід відповідно оновити його реалізацію:
 
     /**
      * Get the value of a given key and then forget it.
@@ -398,33 +435,39 @@ The `Illuminate\Contracts\Session\Session` contract has received a new `pull` me
     public function pull($key, $default = null);
 
 <a name="testing"></a>
-### Testing
+
+### Тестування
 
 <a name="decode-response-json-method"></a>
-#### The `decodeResponseJson` Method
 
-**Likelihood Of Impact: Low**
+#### `decodeResponseJson`Метод
 
-The `decodeResponseJson` method that belongs to the `Illuminate\Testing\TestResponse` class no longer accepts any arguments. Please consider using the `json` method instead.
+**Ймовірність впливу: низька**
+
+`decodeResponseJson`метод, що належить до`Illuminate\Testing\TestResponse`клас більше не приймає жодних аргументів. Будь ласка, розгляньте можливість використання`json`замість цього.
 
 <a name="assert-exact-json-method"></a>
-#### The `assertExactJson` Method
 
-**Likelihood Of Impact: Medium**
+#### `assertExactJson`Метод
 
-The `assertExactJson` method now requires numeric keys of compared arrays to match and be in the same order. If you would like to compare JSON against an array without requiring numerically keyed arrays to have the same order, you may use the `assertSimilarJson` method instead.
+**Ймовірність впливу: середній**
+
+`assertExactJson`Метод тепер вимагає, щоб числові клавіші порівняних масивів збігалися та були в тому самому порядку. Якщо ви хочете порівняти JSON з масивом, не вимагаючи, щоб масиви з цифровою клавіатурою мали однаковий порядок, ви можете використовувати`assertSimilarJson`замість цього.
 
 <a name="validation"></a>
-### Validation
+
+### Перевірка
 
 <a name="database-rule-connections"></a>
-### Database Rule Connections
 
-**Likelihood Of Impact: Low**
+### Зв'язки правил бази даних
 
-The `unique` and `exists` rules will now respect the specified connection name (accessed via the model's `getConnectionName` method) of Eloquent models when performing queries.
+**Ймовірність впливу: низька**
+
+`unique`і`exists`правила тепер будуть поважати вказане ім'я з'єднання (доступ до якого здійснюється через`getConnectionName`метод) Eloquent моделей при виконанні запитів.
 
 <a name="miscellaneous"></a>
-### Miscellaneous
 
-We also encourage you to view the changes in the `laravel/laravel` [GitHub repository](https://github.com/laravel/laravel). While many of these changes are not required, you may wish to keep these files in sync with your application. Some of these changes will be covered in this upgrade guide, but others, such as changes to configuration files or comments, will not be. You can easily view the changes with the [GitHub comparison tool](https://github.com/laravel/laravel/compare/7.x...master) and choose which updates are important to you.
+### Різне
+
+Ми також закликаємо Вас переглянути зміни в`laravel/laravel`[Репозиторій GitHub](https://github.com/laravel/laravel). Хоча багато з цих змін не потрібні, можливо, ви захочете синхронізувати ці файли із вашим додатком. Деякі з цих змін будуть висвітлені в цьому посібнику з оновлення, а інші, наприклад, зміни у файлах конфігурації чи коментарі, не будуть. Ви можете легко переглянути зміни за допомогою[Інструмент порівняння GitHub](https://github.com/laravel/laravel/compare/7.x...master)і виберіть, які оновлення є важливими для вас.

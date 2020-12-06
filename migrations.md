@@ -1,73 +1,77 @@
-# Database: Migrations
+# База даних: Міграції
 
-- [Introduction](#introduction)
-- [Generating Migrations](#generating-migrations)
-    - [Squashing Migrations](#squashing-migrations)
-- [Migration Structure](#migration-structure)
-- [Running Migrations](#running-migrations)
-    - [Rolling Back Migrations](#rolling-back-migrations)
-- [Tables](#tables)
-    - [Creating Tables](#creating-tables)
-    - [Renaming / Dropping Tables](#renaming-and-dropping-tables)
-- [Columns](#columns)
-    - [Creating Columns](#creating-columns)
-    - [Column Modifiers](#column-modifiers)
-    - [Modifying Columns](#modifying-columns)
-    - [Dropping Columns](#dropping-columns)
-- [Indexes](#indexes)
-    - [Creating Indexes](#creating-indexes)
-    - [Renaming Indexes](#renaming-indexes)
-    - [Dropping Indexes](#dropping-indexes)
-    - [Foreign Key Constraints](#foreign-key-constraints)
+-   [Вступ](#introduction)
+-   [Generating Migrations](#generating-migrations)
+    -   [Міграція, що стискає](#squashing-migrations)
+-   [Структура міграції](#migration-structure)
+-   [Запуск міграцій](#running-migrations)
+    -   [Відкочування міграцій](#rolling-back-migrations)
+-   [Столи](#tables)
+    -   [Створення таблиць](#creating-tables)
+    -   [Перейменування / скидання таблиць](#renaming-and-dropping-tables)
+-   [Стовпці](#columns)
+    -   [Створення стовпців](#creating-columns)
+    -   [Модифікатори стовпців](#column-modifiers)
+    -   [Змінення стовпців](#modifying-columns)
+    -   [Скидання стовпців](#dropping-columns)
+-   [Покажчики](#indexes)
+    -   [Створення індексів](#creating-indexes)
+    -   [Перейменування покажчиків](#renaming-indexes)
+    -   [Падіння індексів](#dropping-indexes)
+    -   [Зовнішні ключові обмеження](#foreign-key-constraints)
 
 <a name="introduction"></a>
-## Introduction
 
-Migrations are like version control for your database, allowing your team to modify and share the application's database schema. Migrations are typically paired with Laravel's schema builder to build your application's database schema. If you have ever had to tell a teammate to manually add a column to their local database schema, you've faced the problem that database migrations solve.
+## Вступ
 
-The Laravel `Schema` [facade](/docs/{{version}}/facades) provides database agnostic support for creating and manipulating tables across all of Laravel's supported database systems.
+Міграції - це як контроль версій для вашої бази даних, що дозволяє вашій команді змінювати та надавати спільний доступ до схеми бази даних програми. Міграції, як правило, поєднуються з конструктором схем Laravel для побудови схеми бази даних вашої програми. Якщо вам коли-небудь доводилося казати товаришу по команді вручну додати стовпець до їх локальної схеми бази даних, ви зіткнулися з проблемою, яку вирішує міграція бази даних.
+
+Ларавель`Schema`[фасад](/docs/{{version}}/facades)надає агностичну підтримку баз даних для створення та обробки таблиць у всіх підтримуваних системах баз даних Laravel.
 
 <a name="generating-migrations"></a>
-## Generating Migrations
 
-To create a migration, use the `make:migration` [Artisan command](/docs/{{version}}/artisan):
+## Генерування міграцій
+
+Щоб створити міграцію, використовуйте`make:migration`[Artisan командування](/docs/{{version}}/artisan):
 
     php artisan make:migration create_users_table
 
-The new migration will be placed in your `database/migrations` directory. Each migration file name contains a timestamp, which allows Laravel to determine the order of the migrations.
+Нова міграція буде розміщена у вашому`database/migrations`каталог. Кожне ім'я файлу міграції містить мітку часу, що дозволяє Laravel визначати порядок міграцій.
 
-> {tip} Migration stubs may be customized using [stub publishing](/docs/{{version}}/artisan#stub-customization)
+> {tip} Заглушки міграції можна налаштувати за допомогою[заглушка видавництва](/docs/{{version}}/artisan#stub-customization)
 
-The `--table` and `--create` options may also be used to indicate the name of the table and whether or not the migration will be creating a new table. These options pre-fill the generated migration stub file with the specified table:
+`--table`і`--create`Параметри також можуть використовуватися для вказівки назви таблиці та того, чи буде міграція створювати нову таблицю. Ці параметри попередньо заповнюють згенерований файл заглушки вказаною таблицею:
 
     php artisan make:migration create_users_table --create=users
 
     php artisan make:migration add_votes_to_users_table --table=users
 
-If you would like to specify a custom output path for the generated migration, you may use the `--path` option when executing the `make:migration` command. The given path should be relative to your application's base path.
+Якщо ви хочете вказати власний вихідний шлях для згенерованої міграції, ви можете використовувати`--path`параметр при виконанні`make:migration`команди. Вказаний шлях повинен бути відносно базового шляху вашої програми.
 
 <a name="squashing-migrations"></a>
-### Squashing Migrations
 
-As you build your application, you may accumulate more and more migrations over time. This can lead to your migration directory becoming bloated with potentially hundreds of migrations. If you would like, you may "squash" your migrations into a single SQL file. To get started, execute the `schema:dump` command:
+### Міграція, що стискає
+
+Створюючи додаток, з часом ви можете накопичувати все більше і більше міграцій. Це може призвести до того, що ваш каталог міграції роздується потенційно сотнями міграцій. Якщо ви хочете, ви можете "зім'яти" свої міграції в один файл SQL. Для початку виконайте`schema:dump`команда:
 
     php artisan schema:dump
 
     // Dump the current database schema and prune all existing migrations...
     php artisan schema:dump --prune
 
-When you execute this command, Laravel will write a "schema" file to your `database/schema` directory. Now, when you attempt to migrate your database and no other migrations have been executed, Laravel will execute the schema file's SQL first. After executing the schema file's commands, Laravel will execute any remaining migrations that were not part of the schema dump.
+Коли ви виконуєте цю команду, Laravel напише файл "schema" на ваш`database/schema`каталог. Тепер, коли ви намагаєтесь перенести вашу базу даних і жодної іншої міграції не було виконано, Laravel спочатку виконає SQL-файл файлу схеми. Після виконання команд файлу схеми Laravel виконає всі залишені міграції, які не були частиною дампа схеми.
 
-You should commit your database schema file to source control so that other new developers on your team may quickly create your application's initial database structure.
+Вам слід закріпити файл схеми бази даних для керування джерелом, щоб інші нові розробники у вашій команді могли швидко створити початкову структуру бази даних вашого додатка.
 
-> {note} Migration squashing is only available for the MySQL, PostgreSQL, and SQLite databases. However, database dumps may not be restored to in-memory SQLite databases.
+> {note} Зменшення міграції доступне лише для баз даних MySQL, PostgreSQL та SQLite. Однак дампи бази даних не можуть бути відновлені до баз даних SQLite в пам'яті.
 
 <a name="migration-structure"></a>
-## Migration Structure
 
-A migration class contains two methods: `up` and `down`. The `up` method is used to add new tables, columns, or indexes to your database, while the `down` method should reverse the operations performed by the `up` method.
+## Структура міграції
 
-Within both of these methods you may use the Laravel schema builder to expressively create and modify tables. To learn about all of the methods available on the `Schema` builder, [check out its documentation](#creating-tables). For example, the following migration creates a `flights` table:
+Клас міграції містить два методи:`up`і`down`.`up`метод використовується для додавання нових таблиць, стовпців або індексів до вашої бази даних, тоді як`down`метод повинен змінити операції, що виконуються`up`метод.
+
+В обох цих методах ви можете використовувати конструктор схем Laravel для виразного створення та модифікації таблиць. Щоб дізнатись про всі методи, доступні на`Schema`будівельник,[ознайомтесь з його документацією](#creating-tables). Наприклад, наступна міграція створює файл`flights`стіл:
 
     <?php
 
@@ -104,79 +108,87 @@ Within both of these methods you may use the Laravel schema builder to expressiv
     }
 
 <a name="running-migrations"></a>
-## Running Migrations
 
-To run all of your outstanding migrations, execute the `migrate` Artisan command:
+## Запуск міграцій
+
+Щоб запустити всі ваші видатні міграції, запустіть`migrate`Команда ремісників:
 
     php artisan migrate
 
-> {note} If you are using the [Homestead virtual machine](/docs/{{version}}/homestead), you should run this command from within your virtual machine.
+> {note} Якщо ви використовуєте[Віртуальна машина Homestead](/docs/{{version}}/homestead), вам слід запустити цю команду з віртуальної машини.
 
 <a name="forcing-migrations-to-run-in-production"></a>
-#### Forcing Migrations To Run In Production
 
-Some migration operations are destructive, which means they may cause you to lose data. In order to protect you from running these commands against your production database, you will be prompted for confirmation before the commands are executed. To force the commands to run without a prompt, use the `--force` flag:
+#### Примушування міграцій до виробництва
+
+Деякі операції міграції є руйнівними, а це означає, що вони можуть призвести до втрати даних. Щоб захистити вас від запуску цих команд проти вашої виробничої бази даних, перед виконанням команд вам буде запропоновано підтвердити. Щоб змусити команди запускатись без підказки, використовуйте`--force`прапор:
 
     php artisan migrate --force
 
 <a name="rolling-back-migrations"></a>
-### Rolling Back Migrations
 
-To roll back the latest migration operation, you may use the `rollback` command. This command rolls back the last "batch" of migrations, which may include multiple migration files:
+### Відкочування міграцій
+
+Щоб повернути останню операцію міграції, ви можете використовувати`rollback`команди. Ця команда відкочує останню "партію" міграцій, яка може включати кілька файлів міграції:
 
     php artisan migrate:rollback
 
-You may roll back a limited number of migrations by providing the `step` option to the `rollback` command. For example, the following command will roll back the last five migrations:
+Ви можете відкотити обмежену кількість міграцій, надавши`step`варіант для`rollback`команди. Наприклад, наступна команда відкотить останні п’ять міграцій:
 
     php artisan migrate:rollback --step=5
 
-The `migrate:reset` command will roll back all of your application's migrations:
+`migrate:reset`команда відкотить усі міграції програми:
 
     php artisan migrate:reset
 
 <a name="roll-back-migrate-using-a-single-command"></a>
-#### Roll Back & Migrate Using A Single Command
 
-The `migrate:refresh` command will roll back all of your migrations and then execute the `migrate` command. This command effectively re-creates your entire database:
+#### Відкат і перехід за допомогою однієї команди
+
+`migrate:refresh`команда відкотить усі ваші міграції, а потім виконає`migrate`команди. Ця команда ефективно відтворює всю вашу базу даних:
 
     php artisan migrate:refresh
 
     // Refresh the database and run all database seeds...
     php artisan migrate:refresh --seed
 
-You may roll back & re-migrate a limited number of migrations by providing the `step` option to the `refresh` command. For example, the following command will roll back & re-migrate the last five migrations:
+Ви можете відкотитись і повторно перенести обмежену кількість міграцій, надавши`step`варіант для`refresh`команди. Наприклад, наступна команда відкотить і повторно мігрує останні п’ять міграцій:
 
     php artisan migrate:refresh --step=5
 
 <a name="drop-all-tables-migrate"></a>
-#### Drop All Tables & Migrate
 
-The `migrate:fresh` command will drop all tables from the database and then execute the `migrate` command:
+#### Відкиньте всі таблиці та перенесіть
+
+`migrate:fresh`команда видалить усі таблиці з бази даних, а потім виконає`migrate`команда:
 
     php artisan migrate:fresh
 
     php artisan migrate:fresh --seed
 
-> {note} The `migrate:fresh` command will drop all database tables regardless of their prefix. This command should be used with caution when developing on a database that is shared with other applications.
+> {примітка}`migrate:fresh`команда скине всі таблиці бази даних незалежно від їх префікса. Цю команду слід застосовувати з обережністю при розробці бази даних, спільно використовуваної з іншими програмами.
 
 <a name="tables"></a>
-## Tables
+
+## Столи
 
 <a name="creating-tables"></a>
-### Creating Tables
 
-To create a new database table, use the `create` method on the `Schema` facade. The `create` method accepts two arguments: the first is the name of the table, while the second is a `Closure` which receives a `Blueprint` object that may be used to define the new table:
+### Створення таблиць
+
+Щоб створити нову таблицю бази даних, використовуйте`create`метод на`Schema`фасад.`create`метод приймає два аргументи: перший - це назва таблиці, а другий - a`Closure`який отримує a`Blueprint`об'єкт, який може бути використаний для визначення нової таблиці:
 
     Schema::create('users', function (Blueprint $table) {
         $table->id();
     });
 
-When creating the table, you may use any of the schema builder's [column methods](#creating-columns) to define the table's columns.
+Створюючи таблицю, ви можете використовувати будь-яку з конструкторів схем[колонкові методи](#creating-columns)для визначення стовпців таблиці.
 
 <a name="checking-for-table-column-existence"></a>
-#### Checking For Table / Column Existence
 
-You may check for the existence of a table or column using the `hasTable` and `hasColumn` methods:
+#### Перевірка наявності таблиці / стовпця
+
+Ви можете перевірити наявність таблиці або стовпця за допомогою`hasTable`і`hasColumn`методи:
 
     if (Schema::hasTable('users')) {
         //
@@ -187,57 +199,61 @@ You may check for the existence of a table or column using the `hasTable` and `h
     }
 
 <a name="database-connection-table-options"></a>
-#### Database Connection & Table Options
 
-If you want to perform a schema operation on a database connection that is not your default connection, use the `connection` method:
+#### Параметри підключення до бази даних та таблиці
+
+Якщо ви хочете виконати операцію схеми з підключенням до бази даних, яке не є вашим з'єднанням за замовчуванням, використовуйте`connection`метод:
 
     Schema::connection('foo')->create('users', function (Blueprint $table) {
         $table->id();
     });
 
-You may use the following commands on the schema builder to define the table's options:
+Ви можете використовувати такі команди у конструкторі схем для визначення параметрів таблиці:
 
-Command  |  Description
--------  |  -----------
-`$table->engine = 'InnoDB';`  |  Specify the table storage engine (MySQL).
-`$table->charset = 'utf8mb4';`  |  Specify a default character set for the table (MySQL).
-`$table->collation = 'utf8mb4_unicode_ci';`  |  Specify a default collation for the table (MySQL).
-`$table->temporary();`  |  Create a temporary table (except SQL Server).
+| Команда                                     | Опис                                                         |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| `$table->engine = 'InnoDB';`                | Вкажіть механізм зберігання таблиць (MySQL).                 |
+| `$table->charset = 'utf8mb4';`              | Вкажіть набір символів за замовчуванням для таблиці (MySQL). |
+| `$table->collation = 'utf8mb4_unicode_ci';` | Вкажіть порівняння за замовчуванням для таблиці (MySQL).     |
+| `$table->temporary();`                      | Створіть тимчасову таблицю (крім SQL Server).                |
 
 <a name="renaming-and-dropping-tables"></a>
-### Renaming / Dropping Tables
 
-To rename an existing database table, use the `rename` method:
+### Перейменування / скидання таблиць
+
+Щоб перейменувати існуючу таблицю бази даних, використовуйте`rename`метод:
 
     Schema::rename($from, $to);
 
-To drop an existing table, you may use the `drop` or `dropIfExists` methods:
+Щоб скинути існуючу таблицю, ви можете використовувати`drop`або`dropIfExists`методи:
 
     Schema::drop('users');
 
     Schema::dropIfExists('users');
 
 <a name="renaming-tables-with-foreign-keys"></a>
-#### Renaming Tables With Foreign Keys
 
-Before renaming a table, you should verify that any foreign key constraints on the table have an explicit name in your migration files instead of letting Laravel assign a convention based name. Otherwise, the foreign key constraint name will refer to the old table name.
+#### Перейменування таблиць за допомогою іноземних ключів
+
+Перш ніж перейменовувати таблицю, слід переконатися, що будь-які обмеження зовнішнього ключа в таблиці мають явне ім'я у файлах міграції, замість того, щоб дозволяти Laravel присвоювати ім'я на основі конвенції. В іншому випадку ім’я обмеження зовнішнього ключа буде посилатися на старе ім’я таблиці.
 
 <a name="columns"></a>
-## Columns
+
+## Стовпці
 
 <a name="creating-columns"></a>
-### Creating Columns
 
-The `table` method on the `Schema` facade may be used to update existing tables. Like the `create` method, the `table` method accepts two arguments: the name of the table and a `Closure` that receives a `Blueprint` instance you may use to add columns to the table:
+### Створення стовпців
+
+`table`метод на`Schema`фасад може використовуватися для оновлення існуючих таблиць. Подобається`create`метод,`table`метод приймає два аргументи: ім'я таблиці та a`Closure`що отримує a`Blueprint`екземпляр, який ви можете використовувати для додавання стовпців до таблиці:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('email');
     });
 
 <a name="available-column-types"></a>
-#### Available Column Types
 
-The schema builder contains a variety of column types that you may specify when building your tables:
+#### Доступні типи стовпців
 
 Command  |  Description
 -------  |  -----------
@@ -304,15 +320,16 @@ Command  |  Description
 `$table->year('birth_year');`  |  YEAR equivalent column.
 
 <a name="column-modifiers"></a>
-### Column Modifiers
 
-In addition to the column types listed above, there are several column "modifiers" you may use while adding a column to a database table. For example, to make the column "nullable", you may use the `nullable` method:
+### Модифікатори стовпців
+
+На додаток до перерахованих вище типів стовпців, є кілька "модифікаторів" стовпців, які ви можете використовувати під час додавання стовпця до таблиці бази даних. Наприклад, щоб зробити стовпець "нульовим", ви можете використовувати`nullable`метод:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('email')->nullable();
     });
 
-The following list contains all available column modifiers. This list does not include the [index modifiers](#creating-indexes):
+Наступний список містить усі доступні модифікатори стовпців. Цей список не включає[модифікатори індексу](#creating-indexes):
 
 Modifier  |  Description
 --------  |  -----------
@@ -334,9 +351,10 @@ Modifier  |  Description
 `->always()`  |  Defines the precedence of sequence values over input for an identity column (PostgreSQL)
 
 <a name="default-expressions"></a>
-#### Default Expressions
 
-The `default` modifier accepts a value or an `\Illuminate\Database\Query\Expression` instance. Using an `Expression` instance will prevent wrapping the value in quotes and allow you to use database specific functions. One situation where this is particularly useful is when you need to assign default values to JSON columns:
+#### Вирази за замовчуванням
+
+`default`модифікатор приймає значення або`\Illuminate\Database\Query\Expression`інстанції. Використання`Expression`екземпляр запобіжить загортанню значення у лапки та дозволить використовувати спеціальні функції бази даних. Одна ситуація, коли це особливо корисно, це коли вам потрібно призначити значення за замовчуванням стовпцям JSON:
 
     <?php
 
@@ -362,65 +380,71 @@ The `default` modifier accepts a value or an `\Illuminate\Database\Query\Express
         }
     }
 
-> {note} Support for default expressions depends on your database driver, database version, and the field type. Please refer to the appropriate documentation for compatibility. Also note that using database specific functions may tightly couple you to a specific driver.
+> {note} Підтримка виразів за замовчуванням залежить від драйвера бази даних, версії бази даних та типу поля. Будь ласка, зверніться до відповідної документації щодо сумісності. Також зауважте, що використання певних функцій бази даних може щільно поєднати вас із певним драйвером.
 
 <a name="modifying-columns"></a>
-### Modifying Columns
+
+### Змінення стовпців
 
 <a name="prerequisites"></a>
-#### Prerequisites
 
-Before modifying a column, be sure to add the `doctrine/dbal` dependency to your `composer.json` file. The Doctrine DBAL library is used to determine the current state of the column and create the SQL queries needed to make the required adjustments:
+#### Передумови
+
+Перш ніж змінювати стовпець, обов’язково додайте`doctrine/dbal`залежність від вашого`composer.json`файл. Бібліотека DBAL Doctrine використовується для визначення поточного стану стовпця та створення запитів SQL, необхідних для внесення необхідних коригувань:
 
     composer require doctrine/dbal
 
 <a name="updating-column-attributes"></a>
-#### Updating Column Attributes
 
-The `change` method allows you to modify type and attributes of existing columns. For example, you may wish to increase the size of a `string` column. To see the `change` method in action, let's increase the size of the `name` column from 25 to 50:
+#### Оновлення атрибутів стовпців
+
+`change`метод дозволяє змінювати тип та атрибути існуючих стовпців. Наприклад, ви можете збільшити розмір a`string`стовпець. Щоб побачити`change`в дії, давайте збільшимо розмір`name` column from 25 to 50:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('name', 50)->change();
     });
 
-We could also modify a column to be nullable:
+Ми також можемо змінити стовпець, щоб його можна було опустити:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('name', 50)->nullable()->change();
     });
 
-> {note} Only the following column types can be "changed": bigInteger, binary, boolean, date, dateTime, dateTimeTz, decimal, integer, json, longText, mediumText, smallInteger, string, text, time, unsignedBigInteger, unsignedInteger, unsignedSmallInteger and uuid.
+> {note} Можна змінити лише такі типи стовпців: bigInteger, двійкові, логічні, дата, dateTime, dateTimeTz, десяткове, ціле число, json, longText, mediumText, smallInteger, рядок, текст, час, unsignedBigInteger, unsignedInteger, unsignedSmallInteger і uuid.
 
 <a name="renaming-columns"></a>
-#### Renaming Columns
 
-To rename a column, you may use the `renameColumn` method on the schema builder. Before renaming a column, be sure to add the `doctrine/dbal` dependency to your `composer.json` file:
+#### Перейменування стовпців
+
+Щоб перейменувати стовпець, ви можете використовувати`renameColumn`у конструкторі схем. Перш ніж перейменовувати стовпець, обов’язково додайте`doctrine/dbal`залежність від вашого`composer.json`файл:
 
     Schema::table('users', function (Blueprint $table) {
         $table->renameColumn('from', 'to');
     });
 
-> {note} Renaming an `enum` column is not currently supported.
+> {note} Перейменування`enum`На даний момент стовпець не підтримується.
 
 <a name="dropping-columns"></a>
-### Dropping Columns
 
-To drop a column, use the `dropColumn` method on the schema builder. Before dropping columns from a SQLite database, you will need to add the `doctrine/dbal` dependency to your `composer.json` file and run the `composer update` command in your terminal to install the library:
+### Скидання стовпців
+
+Щоб скинути стовпець, використовуйте`dropColumn`у конструкторі схем. Перш ніж скидати стовпці з бази даних SQLite, вам потрібно додати файл`doctrine/dbal`залежність від вашого`composer.json`файл і запустіть`composer update`команда у вашому терміналі для встановлення бібліотеки:
 
     Schema::table('users', function (Blueprint $table) {
         $table->dropColumn('votes');
     });
 
-You may drop multiple columns from a table by passing an array of column names to the `dropColumn` method:
+Ви можете скинути кілька таблиць із таблиці, передавши масив імен стовпців до`dropColumn`метод:
 
     Schema::table('users', function (Blueprint $table) {
         $table->dropColumn(['votes', 'avatar', 'location']);
     });
 
-> {note} Dropping or modifying multiple columns within a single migration while using a SQLite database is not supported.
+> {note} Видалення або зміна кількох стовпців у межах однієї міграції під час використання бази даних SQLite не підтримується.
 
 <a name="available-command-aliases"></a>
-#### Available Command Aliases
+
+#### Доступні псевдоніми команд
 
 Command  |  Description
 -------  |  -----------
@@ -432,44 +456,48 @@ Command  |  Description
 `$table->dropTimestampsTz();` |  Alias of `dropTimestamps()` method.
 
 <a name="indexes"></a>
+
 ## Indexes
 
 <a name="creating-indexes"></a>
-### Creating Indexes
 
-The Laravel schema builder supports several types of indexes. The following example creates a new `email` column and specifies that its values should be unique. To create the index, we can chain the `unique` method onto the column definition:
+### Створення індексів
+
+Конструктор схем Laravel підтримує кілька типів індексів. Наступний приклад створює новий`email`і вказує, що його значення повинні бути унікальними. Для створення індексу ми можемо встановити ланцюжок`unique`метод до визначення стовпця:
 
     $table->string('email')->unique();
 
-Alternatively, you may create the index after defining the column. For example:
+Крім того, ви можете створити індекс після визначення стовпця. Наприклад:
 
     $table->unique('email');
 
-You may even pass an array of columns to an index method to create a compound (or composite) index:
+Ви навіть можете передати масив стовпців методу індексу для створення складеного (або складеного) індексу:
 
     $table->index(['account_id', 'created_at']);
 
-Laravel will automatically generate an index name based on the table, column names, and the index type, but you may pass a second argument to the method to specify the index name yourself:
+Laravel автоматично генерує ім'я індексу на основі таблиці, імен стовпців та типу індексу, але ви можете передати другий аргумент методу, щоб вказати ім'я індексу самостійно:
 
     $table->unique('email', 'unique_email');
 
 <a name="available-index-types"></a>
-#### Available Index Types
 
-Each index method accepts an optional second argument to specify the name of the index. If omitted, the name will be derived from the names of the table and column(s) used for the index, as well as the index type.
+#### Доступні типи індексів
 
-Command  |  Description
--------  |  -----------
-`$table->primary('id');`  |  Adds a primary key.
-`$table->primary(['id', 'parent_id']);`  |  Adds composite keys.
-`$table->unique('email');`  |  Adds a unique index.
-`$table->index('state');`  |  Adds a plain index.
-`$table->spatialIndex('location');`  |  Adds a spatial index. (except SQLite)
+Кожен метод індексу приймає необов’язковий другий аргумент, щоб вказати ім’я індексу. Якщо його не вказати, ім’я буде отримано з назв таблиці та стовпців, що використовуються для індексу, а також типу індексу.
+
+| Команда                                 | Опис                                    |
+| --------------------------------------- | --------------------------------------- |
+| `$table->primary('id');`                | Додає первинний ключ.                   |
+| `$table->primary(['id', 'parent_id']);` | Додає складені клавіші.                 |
+| `$table->unique('email');`              | Додає унікальний індекс.                |
+| `$table->index('state');`               | Додає звичайний індекс.                 |
+| `$table->spatialIndex('location');`     | Додає просторовий індекс. (крім SQLite) |
 
 <a name="index-lengths-mysql-mariadb"></a>
-#### Index Lengths & MySQL / MariaDB
 
-Laravel uses the `utf8mb4` character set by default, which includes support for storing "emojis" in the database. If you are running a version of MySQL older than the 5.7.7 release or MariaDB older than the 10.2.2 release, you may need to manually configure the default string length generated by migrations in order for MySQL to create indexes for them. You may configure this by calling the `Schema::defaultStringLength` method within your `AppServiceProvider`:
+#### Довжини індексу & MySQL / MariaDB
+
+Laravel використовує`utf8mb4`набір символів за замовчуванням, що включає підтримку зберігання "смайликів" у базі даних. Якщо у вас запущена версія MySQL, старша за версію 5.7.7 або MariaDB, старша за версію 10.2.2, можливо, вам доведеться вручну налаштувати довжину рядка за замовчуванням, що генерується міграціями, щоб MySQL створював для них індекси. Ви можете налаштувати це, зателефонувавши до`Schema::defaultStringLength`метод у вашому`AppServiceProvider`:
 
     use Illuminate\Support\Facades\Schema;
 
@@ -483,37 +511,40 @@ Laravel uses the `utf8mb4` character set by default, which includes support for 
         Schema::defaultStringLength(191);
     }
 
-Alternatively, you may enable the `innodb_large_prefix` option for your database. Refer to your database's documentation for instructions on how to properly enable this option.
+Ви також можете ввімкнути`innodb_large_prefix`варіант для вашої бази даних. Зверніться до документації вашої бази даних, щоб отримати інструкції щодо того, як правильно увімкнути цю опцію.
 
 <a name="renaming-indexes"></a>
-### Renaming Indexes
 
-To rename an index, you may use the `renameIndex` method. This method accepts the current index name as its first argument and the desired new name as its second argument:
+### Перейменування покажчиків
+
+Щоб перейменувати індекс, ви можете використовувати`renameIndex`метод. Цей метод приймає поточне ім'я індексу як перший аргумент, а бажане нове ім'я як другий аргумент:
 
     $table->renameIndex('from', 'to')
 
 <a name="dropping-indexes"></a>
-### Dropping Indexes
 
-To drop an index, you must specify the index's name. By default, Laravel automatically assigns an index name based on the table name, the name of the indexed column, and the index type. Here are some examples:
+### Падіння індексів
 
-Command  |  Description
--------  |  -----------
-`$table->dropPrimary('users_id_primary');`  |  Drop a primary key from the "users" table.
-`$table->dropUnique('users_email_unique');`  |  Drop a unique index from the "users" table.
-`$table->dropIndex('geo_state_index');`  |  Drop a basic index from the "geo" table.
-`$table->dropSpatialIndex('geo_location_spatialindex');`  |  Drop a spatial index from the "geo" table  (except SQLite).
+Щоб скинути індекс, потрібно вказати його назву. За замовчуванням Laravel автоматично призначає ім'я індексу на основі імені таблиці, імені індексованого стовпця та типу індексу. Ось кілька прикладів:
 
-If you pass an array of columns into a method that drops indexes, the conventional index name will be generated based on the table name, columns and key type:
+| Команда                                                  | Опис                                                        |
+| -------------------------------------------------------- | ----------------------------------------------------------- |
+| `$table->dropPrimary('users_id_primary');`               | Видаліть первинний ключ із таблиці "користувачі".           |
+| `$table->dropUnique('users_email_unique');`              | Видаліть унікальний індекс із таблиці "користувачі".        |
+| `$table->dropIndex('geo_state_index');`                  | Видаліть основний індекс із таблиці "geo".                  |
+| `$table->dropSpatialIndex('geo_location_spatialindex');` | Видаліть просторовий індекс із таблиці "geo" (крім SQLite). |
+
+Якщо ви передаєте масив стовпців у метод, який скидає індекси, звичайне ім'я індексу буде сформовано на основі імені таблиці, стовпців і типу ключа:
 
     Schema::table('geo', function (Blueprint $table) {
         $table->dropIndex(['state']); // Drops index 'geo_state_index'
     });
 
 <a name="foreign-key-constraints"></a>
-### Foreign Key Constraints
 
-Laravel also provides support for creating foreign key constraints, which are used to force referential integrity at the database level. For example, let's define a `user_id` column on the `posts` table that references the `id` column on a `users` table:
+### Зовнішні ключові обмеження
+
+Laravel також надає підтримку для створення обмежень зовнішнього ключа, які використовуються для примусу посилальної цілісності на рівні бази даних. Наприклад, визначимо a`user_id`на стовпці`posts`таблиця, яка посилається на`id`стовпець на a`users`стіл:
 
     Schema::table('posts', function (Blueprint $table) {
         $table->unsignedBigInteger('user_id');
@@ -521,43 +552,42 @@ Laravel also provides support for creating foreign key constraints, which are us
         $table->foreign('user_id')->references('id')->on('users');
     });
 
-Since this syntax is rather verbose, Laravel provides additional, terser methods that use convention to provide a better developer experience. The example above could be written like so:
+Оскільки цей синтаксис досить багатослівний, Laravel пропонує додаткові, строгіші методи, які використовують конвенцію, щоб забезпечити кращий досвід для розробників. Приклад вище можна написати так:
 
     Schema::table('posts', function (Blueprint $table) {
         $table->foreignId('user_id')->constrained();
     });
 
-The `foreignId` method is an alias for `unsignedBigInteger` while the `constrained` method will use convention to determine the table and column name being referenced. If your table name does not match the convention, you may specify the table name by passing it as an argument to the `constrained` method:
+`foreignId`метод є псевдонімом для`unsignedBigInteger`в той час як`constrained`метод буде використовувати конвенцію для визначення імені таблиці та стовпця, на яку посилаються. Якщо назва вашої таблиці не відповідає умовам, ви можете вказати назву таблиці, передавши її як аргумент до`constrained`метод:
 
     Schema::table('posts', function (Blueprint $table) {
         $table->foreignId('user_id')->constrained('users');
     });
 
-
-You may also specify the desired action for the "on delete" and "on update" properties of the constraint:
+Ви також можете вказати бажану дію для властивостей обмеження "при видаленні" та "при оновленні":
 
     $table->foreignId('user_id')
           ->constrained()
           ->onDelete('cascade');
 
-Any additional [column modifiers](#column-modifiers) must be called before `constrained`:
+Будь-які додаткові[модифікатори стовпців](#column-modifiers)потрібно дзвонити раніше`constrained`:
 
     $table->foreignId('user_id')
           ->nullable()
           ->constrained();
 
-To drop a foreign key, you may use the `dropForeign` method, passing the foreign key constraint to be deleted as an argument. Foreign key constraints use the same naming convention as indexes, based on the table name and the columns in the constraint, followed by a "\_foreign" suffix:
+Щоб випустити зовнішній ключ, ви можете використовувати`dropForeign`метод, передаючи обмеження зовнішнього ключа, яке буде видалено як аргумент. Обмеження зовнішнього ключа використовують те саме правило іменування, що і індекси, на основі імені таблиці та стовпців у обмеженні, після чого "\_іноземний "суфікс:
 
     $table->dropForeign('posts_user_id_foreign');
 
-Alternatively, you may pass an array containing the column name that holds the foreign key to the `dropForeign` method. The array will be automatically converted using the constraint name convention used by Laravel's schema builder:
+Крім того, ви можете передати масив, що містить ім'я стовпця, що містить зовнішній ключ до`dropForeign`метод. Масив буде автоматично перетворений, використовуючи дозвіл імені обмеження, використовуваний конструктором схем Laravel:
 
     $table->dropForeign(['user_id']);
 
-You may enable or disable foreign key constraints within your migrations by using the following methods:
+Ви можете ввімкнути або вимкнути обмеження зовнішнього ключа в рамках своїх міграцій, використовуючи такі методи:
 
     Schema::enableForeignKeyConstraints();
 
     Schema::disableForeignKeyConstraints();
 
-> {note} SQLite disables foreign key constraints by default. When using SQLite, make sure to [enable foreign key support](/docs/{{version}}/database#configuration) in your database configuration before attempting to create them in your migrations. In addition, SQLite only supports foreign keys upon creation of the table and [not when tables are altered](https://www.sqlite.org/omitted.html).
+> {note} SQLite за замовчуванням вимикає обмеження зовнішнього ключа. Використовуючи SQLite, обов’язково[увімкнути підтримку зовнішнього ключа](/docs/{{version}}/database#configuration)у конфігурації бази даних перед спробою створити їх під час міграції. Крім того, SQLite підтримує зовнішні ключі лише при створенні таблиці та[не при зміні таблиць](https://www.sqlite.org/omitted.html).

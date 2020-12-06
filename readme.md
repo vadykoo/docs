@@ -1,7 +1,7 @@
-# Laravel Documentation
+# Документація Laravel
 
-You can find the online version of the Laravel documentation at [https://laravel.com/docs](https://laravel.com/docs)
+Інтернет-версію документації Laravel ви можете знайти за адресою<https://laravel.com/docs>
 
-## Contribution Guidelines
+## Вказівки щодо внеску
 
-If you are submitting documentation for the **current stable release**, submit it to the corresponding branch. For example, documentation for Laravel 8 would be submitted to the `8.x` branch. Documentation intended for the next release of Laravel should be submitted to the `master` branch.
+Якщо ви подаєте документацію для**поточний стабільний випуск**, подайте його у відповідне відділення. Наприклад, документація для Laravel 8 буде подана до`8.x`відділення. Документацію, призначену для наступного випуску Laravel, слід подати до`master`відділення.

@@ -1,32 +1,35 @@
-# Testing: Getting Started
+# Тестування: Початок роботи
 
-- [Introduction](#introduction)
-- [Environment](#environment)
-- [Creating & Running Tests](#creating-and-running-tests)
-    - [Artisan Test Runner](#artisan-test-runner)
+-   [Вступ](#introduction)
+-   [Навколишнє середовище](#environment)
+-   [Створення та проведення тестів](#creating-and-running-tests)
+    -   [Artisan Test Runner](#artisan-test-runner)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel is built with testing in mind. In fact, support for testing with PHPUnit is included out of the box and a `phpunit.xml` file is already set up for your application. The framework also ships with convenient helper methods that allow you to expressively test your applications.
+## Вступ
 
-By default, your application's `tests` directory contains two directories: `Feature` and `Unit`. Unit tests are tests that focus on a very small, isolated portion of your code. In fact, most unit tests probably focus on a single method. Feature tests may test a larger portion of your code, including how several objects interact with each other or even a full HTTP request to a JSON endpoint.
+Laravel створений з урахуванням тестування. Насправді підтримка тестування за допомогою PHPUnit надається нестандартно та a`phpunit.xml`файл уже налаштовано для вашої програми. Фреймворк також постачається із зручними допоміжними методами, які дозволяють виразно перевірити ваші програми.
 
-An `ExampleTest.php` file is provided in both the `Feature` and `Unit` test directories. After installing a new Laravel application, run `vendor/bin/phpunit` on the command line to run your tests.
+За замовчуванням ваш додаток`tests`каталог містить два каталоги:`Feature`і`Unit`. Модульні тести - це тести, орієнтовані на дуже невелику, ізольовану частину вашого коду. Насправді, більшість модульних тестів, ймовірно, зосереджені на одному методі. Тести функцій можуть перевірити більшу частину вашого коду, включаючи те, як кілька об'єктів взаємодіють між собою або навіть повний HTTP-запит до кінцевої точки JSON.
+
+Ан`ExampleTest.php`файл міститься в обох файлах`Feature`і`Unit`тестові каталоги. Після встановлення нової програми Laravel запустіть`vendor/bin/phpunit`у командному рядку для запуску тестів.
 
 <a name="environment"></a>
-## Environment
 
-When running tests via `vendor/bin/phpunit`, Laravel will automatically set the configuration environment to `testing` because of the environment variables defined in the `phpunit.xml` file. Laravel also automatically configures the session and cache to the `array` driver while testing, meaning no session or cache data will be persisted while testing.
+## Навколишнє середовище
 
-You are free to define other testing environment configuration values as necessary. The `testing` environment variables may be configured in the `phpunit.xml` file, but make sure to clear your configuration cache using the `config:clear` Artisan command before running your tests!
+При запуску тестів через`vendor/bin/phpunit`, Laravel автоматично встановить для середовища конфігурації значення`testing`через змінні середовища, визначені в`phpunit.xml`файл. Laravel також автоматично налаштовує сеанс і кеш на`array`драйвер під час тестування, тобто дані сеансу чи кешу не зберігатимуться під час тестування.
 
-In addition, you may create a `.env.testing` file in the root of your project. This file will override the `.env` file when running PHPUnit tests or executing Artisan commands with the `--env=testing` option.
+Ви можете визначити інші значення конфігурації середовища тестування за необхідності.`testing`змінні середовища можуть бути налаштовані в`phpunit.xml`файл, але не забудьте очистити кеш конфігурації за допомогою`config:clear`Реміснича команда перед запуском тестів!
+
+Крім того, ви можете створити файл`.env.testing`файл у кореневій частині вашого проекту. Цей файл замінить файл`.env`файл під час запуску тестів PHPUnit або виконання команд Artisan за допомогою`--env=testing`варіант.
 
 <a name="creating-and-running-tests"></a>
-## Creating & Running Tests
 
-To create a new test case, use the `make:test` Artisan command:
+## Створення та проведення тестів
+
+Щоб створити новий тест, використовуйте`make:test`Команда ремісників:
 
     // Create a test in the Feature directory...
     php artisan make:test UserTest
@@ -34,9 +37,9 @@ To create a new test case, use the `make:test` Artisan command:
     // Create a test in the Unit directory...
     php artisan make:test UserTest --unit
 
-> {tip} Test stubs may be customized using [stub publishing](/docs/{{version}}/artisan#stub-customization)
+> {tip} Тестові заглушки можна налаштувати за допомогою[заглушка видавництва](/docs/{{version}}/artisan#stub-customization)
 
-Once the test has been generated, you may define test methods as you normally would using PHPUnit. To run your tests, execute the `phpunit` or `artisan test` command from your terminal:
+Після створення тесту ви можете визначити методи тестування, як зазвичай, за допомогою PHPUnit. Для запуску тестів виконайте`phpunit`або`artisan test`команда з вашого терміналу:
 
     <?php
 
@@ -57,15 +60,16 @@ Once the test has been generated, you may define test methods as you normally wo
         }
     }
 
-> {note} If you define your own `setUp` / `tearDown` methods within a test class, be sure to call the respective `parent::setUp()` / `parent::tearDown()` methods on the parent class.
+> {note} Якщо ви визначите своє`setUp`/`tearDown`методів у тестовому класі, обов’язково викликайте відповідний`parent::setUp()`/`parent::tearDown()`методи батьківського класу.
 
 <a name="artisan-test-runner"></a>
+
 ### Artisan Test Runner
 
-In addition to the `phpunit` command, you may use the `test` Artisan command to run your tests. The Artisan test runner provides verbose test reports in order to ease development and debugging:
+На додаток до`phpunit`Ви можете використовувати`test`Команда Artisan для запуску тестів. Бігун тесту Artisan надає детальні звіти про тестування, щоб полегшити розробку та налагодження:
 
     php artisan test
 
-Any arguments that can be passed to the `phpunit` command may also be passed to the Artisan `test` command:
+Будь-які аргументи, які можна передати в`phpunit`команда також може бути передана Реміснику`test`команда:
 
     php artisan test --testsuite=Feature --stop-on-failure

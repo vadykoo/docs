@@ -1,46 +1,50 @@
-# Task Scheduling
+# Планування завдань
 
-- [Introduction](#introduction)
-- [Defining Schedules](#defining-schedules)
-    - [Scheduling Artisan Commands](#scheduling-artisan-commands)
-    - [Scheduling Queued Jobs](#scheduling-queued-jobs)
-    - [Scheduling Shell Commands](#scheduling-shell-commands)
-    - [Schedule Frequency Options](#schedule-frequency-options)
-    - [Timezones](#timezones)
-    - [Preventing Task Overlaps](#preventing-task-overlaps)
-    - [Running Tasks On One Server](#running-tasks-on-one-server)
-    - [Background Tasks](#background-tasks)
-    - [Maintenance Mode](#maintenance-mode)
-- [Task Output](#task-output)
-- [Task Hooks](#task-hooks)
+-   [Вступ](#introduction)
+-   [Визначення графіків](#defining-schedules)
+    -   [Планування команд ремісників](#scheduling-artisan-commands)
+    -   [Планування роботи в черзі](#scheduling-queued-jobs)
+    -   [Планування команд оболонки](#scheduling-shell-commands)
+    -   [Заплануйте параметри частоти](#schedule-frequency-options)
+    -   [Часові зони](#timezones)
+    -   [Запобігання перекриванню завдань](#preventing-task-overlaps)
+    -   [Запуск завдань на одному сервері](#running-tasks-on-one-server)
+    -   [Фонові завдання](#background-tasks)
+    -   [Режим обслуговування](#maintenance-mode)
+-   [Вихід завдання](#task-output)
+-   [Гачки завдань](#task-hooks)
 
 <a name="introduction"></a>
-## Introduction
 
-In the past, you may have generated a Cron entry for each task you needed to schedule on your server. However, this can quickly become a pain, because your task schedule is no longer in source control and you must SSH into your server to add additional Cron entries.
+## Вступ
 
-Laravel's command scheduler allows you to fluently and expressively define your command schedule within Laravel itself. When using the scheduler, only a single Cron entry is needed on your server. Your task schedule is defined in the `app/Console/Kernel.php` file's `schedule` method. To help you get started, a simple example is defined within the method.
+Раніше ви могли створювати запис Cron для кожного завдання, яке вам потрібно було запланувати на своєму сервері. Однак це може швидко стати проблемою, оскільки ваш графік завдань більше не контролюється джерелом, і ви повинні SSH на своєму сервері, щоб додати додаткові записи Cron.
+
+Планувальник команд Laravel дозволяє вам вільно та виразно визначити свій графік команд у самому Laravel. При використанні планувальника на вашому сервері потрібен лише один запис Cron. Розклад ваших завдань визначений у`app/Console/Kernel.php`файлів`schedule`метод. Щоб допомогти вам розпочати, у методі визначено простий приклад.
 
 <a name="starting-the-scheduler"></a>
-### Starting The Scheduler
 
-When using the scheduler, you only need to add the following Cron entry to your server. If you do not know how to add Cron entries to your server, consider using a service such as [Laravel Forge](https://forge.laravel.com) which can manage the Cron entries for you:
+### Запуск планувальника
+
+При використанні планувальника вам потрібно лише додати наступний запис Cron на ваш сервер. Якщо ви не знаєте, як додати записи Cron на свій сервер, подумайте про використання такої послуги, як[Кузня Laravel](https://forge.laravel.com)який може керувати записами Cron для вас:
 
     * * * * * cd /path-to-your-project && php artisan schedule:run >> /dev/null 2>&1
 
-This Cron will call the Laravel command scheduler every minute. When the `schedule:run` command is executed, Laravel will evaluate your scheduled tasks and run the tasks that are due.
+Цей Cron щохвилини телефонуватиме до планувальника команд Laravel. Коли`schedule:run`команда виконується, Laravel оцінить ваші заплановані завдання та виконає відповідні завдання.
 
 <a name="starting-the-scheduler-locally"></a>
-### Starting The Scheduler Locally
 
-Typically, you would not add a scheduler Cron entry to your local development machine. Instead you may use the `schedule:work` Artisan command. This command will run in the foreground and invoke the scheduler every minute until you exit the command:
+### Запуск планувальника локально
+
+Як правило, ви не додаєте запис планувальника Cron до вашої локальної машини розробки. Натомість ви можете використовувати`schedule:work`Artisan командування. Ця команда буде виконуватися на передньому плані та викликати планувальник щохвилини, поки ви не вийдете з команди:
 
     php artisan schedule:work
 
 <a name="defining-schedules"></a>
-## Defining Schedules
 
-You may define all of your scheduled tasks in the `schedule` method of the `App\Console\Kernel` class. To get started, let's look at an example of scheduling a task. In this example, we will schedule a `Closure` to be called every day at midnight. Within the `Closure` we will execute a database query to clear a table:
+## Визначення графіків
+
+Ви можете визначити всі заплановані завдання в`schedule`метод`App\Console\Kernel`клас. Для початку давайте розглянемо приклад планування завдання. У цьому прикладі ми заплануємо a`Closure`дзвонити щодня опівночі. У межах`Closure`ми виконаємо запит до бази даних для очищення таблиці:
 
     <?php
 
@@ -75,23 +79,25 @@ You may define all of your scheduled tasks in the `schedule` method of the `App\
         }
     }
 
-In addition to scheduling using Closures, you may also use [invokable objects](https://secure.php.net/manual/en/language.oop5.magic.php#object.invoke). Invokable objects are simple PHP classes that contain an `__invoke` method:
+Окрім планування за допомогою Closures, ви також можете використовувати[викликаються об'єкти](https://secure.php.net/manual/en/language.oop5.magic.php#object.invoke). Невідкличні об'єкти - це прості класи PHP, які містять`__invoke`метод:
 
     $schedule->call(new DeleteRecentUsers)->daily();
 
 <a name="scheduling-artisan-commands"></a>
-### Scheduling Artisan Commands
 
-In addition to scheduling Closure calls, you may also schedule [Artisan commands](/docs/{{version}}/artisan) and operating system commands. For example, you may use the `command` method to schedule an Artisan command using either the command's name or class:
+### Планування команд ремісників
+
+На додаток до планування дзвінків на закриття, ви також можете запланувати[Ремісничі команди](/docs/{{version}}/artisan)та команди операційної системи. Наприклад, ви можете використовувати`command`спосіб запланувати команду Artisan, використовуючи або назву команди, або клас:
 
     $schedule->command('emails:send Taylor --force')->daily();
 
     $schedule->command(EmailsCommand::class, ['Taylor', '--force'])->daily();
 
 <a name="scheduling-queued-jobs"></a>
-### Scheduling Queued Jobs
 
-The `job` method may be used to schedule a [queued job](/docs/{{version}}/queues). This method provides a convenient way to schedule jobs without using the `call` method to manually create Closures to queue the job:
+### Планування роботи в черзі
+
+`job`метод може бути використаний для планування a[робота в черзі](/docs/{{version}}/queues). Цей метод забезпечує зручний спосіб планування робіт без використання`call`спосіб вручну створити Закриття для черги на завдання:
 
     $schedule->job(new Heartbeat)->everyFiveMinutes();
 
@@ -99,49 +105,51 @@ The `job` method may be used to schedule a [queued job](/docs/{{version}}/queues
     $schedule->job(new Heartbeat, 'heartbeats')->everyFiveMinutes();
 
 <a name="scheduling-shell-commands"></a>
-### Scheduling Shell Commands
 
-The `exec` method may be used to issue a command to the operating system:
+### Планування команд оболонки
+
+`exec`метод може бути використаний для видачі команди операційній системі:
 
     $schedule->exec('node /home/forge/script.js')->daily();
 
 <a name="schedule-frequency-options"></a>
-### Schedule Frequency Options
 
-There are a variety of schedules you may assign to your task:
+### Заплануйте параметри частоти
 
-Method  | Description
-------------- | -------------
-`->cron('* * * * *');`  |  Run the task on a custom Cron schedule
-`->everyMinute();`  |  Run the task every minute
-`->everyTwoMinutes();`  |  Run the task every two minutes
-`->everyThreeMinutes();`  |  Run the task every three minutes
-`->everyFourMinutes();`  |  Run the task every four minutes
-`->everyFiveMinutes();`  |  Run the task every five minutes
-`->everyTenMinutes();`  |  Run the task every ten minutes
-`->everyFifteenMinutes();`  |  Run the task every fifteen minutes
-`->everyThirtyMinutes();`  |  Run the task every thirty minutes
-`->hourly();`  |  Run the task every hour
-`->hourlyAt(17);`  |  Run the task every hour at 17 minutes past the hour
-`->everyTwoHours();`  |  Run the task every two hours
-`->everyThreeHours();`  |  Run the task every three hours
-`->everyFourHours();`  |  Run the task every four hours
-`->everySixHours();`  |  Run the task every six hours
-`->daily();`  |  Run the task every day at midnight
-`->dailyAt('13:00');`  |  Run the task every day at 13:00
-`->twiceDaily(1, 13);`  |  Run the task daily at 1:00 & 13:00
-`->weekly();`  |  Run the task every Sunday at 00:00
-`->weeklyOn(1, '8:00');`  |  Run the task every week on Monday at 8:00
-`->monthly();`  |  Run the task on the first day of every month at 00:00
-`->monthlyOn(4, '15:00');`  |  Run the task every month on the 4th at 15:00
-`->twiceMonthly(1, 16, '13:00');`  |  Run the task monthly on the 1st and 16th at 13:00
-`->lastDayOfMonth('15:00');` | Run the task on the last day of the month at 15:00
-`->quarterly();` |  Run the task on the first day of every quarter at 00:00
-`->yearly();`  |  Run the task on the first day of every year at 00:00
-`->yearlyOn(6, 1, '17:00');`  |  Run the task every year on June 1st at 17:00
-`->timezone('America/New_York');` | Set the timezone
+Існує безліч графіків, які ви можете призначити для свого завдання:
 
-These methods may be combined with additional constraints to create even more finely tuned schedules that only run on certain days of the week. For example, to schedule a command to run weekly on Monday:
+| Метод                             | Опис                                                    |
+| --------------------------------- | ------------------------------------------------------- |
+| `->cron('* * * * *');`            | Запускає завдання за власним розкладом Cron            |
+| `->everyMinute();`                | Запускає завдання щохвилини                            |
+| `->everyTwoMinutes();`            | Запускає завдання кожні дві хвилини                    |
+| `->everyThreeMinutes();`          | Запускає завдання кожні три хвилини                    |
+| `->everyFourMinutes();`           | Запускає завдання кожні чотири хвилини                 |
+| `->everyFiveMinutes();`           | Запускає завдання кожні п’ять хвилин                   |
+| `->everyTenMinutes();`            | Запускає завдання кожні десять хвилин                  |
+| `->everyFifteenMinutes();`        | Запускає завдання кожні п’ятнадцять хвилин             |
+| `->everyThirtyMinutes();`         | Запускає завдання кожні тридцять хвилин                |
+| `->hourly();`                     | Запускає завдання щогодини                             |
+| `->hourlyAt(17);`                 | Запускає завдання кожну годину о 17 хвилинах за годину |
+| `->everyTwoHours();`              | Запускає завдання кожні дві години                     |
+| `->everyThreeHours();`            | Запускає завдання кожні три години                     |
+| `->everyFourHours();`             | Запускає завдання кожні чотири години                  |
+| `->everySixHours();`              | Запускає завдання кожні шість годин                    |
+| `->daily();`                      | Запускає завдання щодня опівночі                       |
+| `->dailyAt('13:00');`             | Запускає завдання щодня о 13:00                        |
+| `->twiceDaily(1, 13);`            | Запускає завдання щодня о 1:00 та 13:00                |
+| `->weekly();`                     | Запускає завдання щонеділі о 00:00                     |
+| `->weeklyOn(1, '8:00');`          | Запускає завдання щотижня в понеділок о 8:00           |
+| `->monthly();`                    | Запускає завдання в перший день кожного місяця о 00:00 |
+| `->monthlyOn(4, '15:00');`        | Запускає завдання щомісяця 4-го о 15:00                |
+| `->twiceMonthly(1, 16, '13:00');` | Запускає завдання щомісяця 1-го та 16-го о 13:00       |
+| `->lastDayOfMonth('15:00');`      | Запускає завдання в останній день місяця о 15:00       |
+| `->quarterly();`                  | Запускає завдання в перший день кожної чверті о 00:00  |
+| `->yearly();`                     | Запускає завдання в перший день кожного року о 00:00   |
+| `->yearlyOn(6, 1, '17:00');`      | Запускає завдання щороку 1 червня о 17:00              |
+| `->timezone('America/New_York');` | Встановіть часовий пояс                                 |
+
+Ці методи можуть поєднуватися з додатковими обмеженнями для створення ще більш точно налаштованих графіків, які виконуються лише в певні дні тижня. Наприклад, щоб запланувати команду для запуску щотижня в понеділок:
 
     // Run once per week on Monday at 1 PM...
     $schedule->call(function () {
@@ -155,85 +163,90 @@ These methods may be combined with additional constraints to create even more fi
               ->timezone('America/Chicago')
               ->between('8:00', '17:00');
 
-Below is a list of the additional schedule constraints:
+Нижче наведено перелік додаткових обмежень розкладу:
 
-Method  | Description
-------------- | -------------
-`->weekdays();`  |  Limit the task to weekdays
-`->weekends();`  |  Limit the task to weekends
-`->sundays();`  |  Limit the task to Sunday
-`->mondays();`  |  Limit the task to Monday
-`->tuesdays();`  |  Limit the task to Tuesday
-`->wednesdays();`  |  Limit the task to Wednesday
-`->thursdays();`  |  Limit the task to Thursday
-`->fridays();`  |  Limit the task to Friday
-`->saturdays();`  |  Limit the task to Saturday
-`->days(array|mixed);`  |  Limit the task to specific days
-`->between($startTime, $endTime);`  |  Limit the task to run between start and end times
-`->unlessBetween($startTime, $endTime);`  |  Limit the task to not run between start and end times
-`->when(Closure);`  |  Limit the task based on a truth test
-`->environments($env);`  |  Limit the task to specific environments
+| Метод                                    | Опис                                                       |                                    |
+| ---------------------------------------- | ---------------------------------------------------------- | ---------------------------------- |
+| `->weekdays();`                          | Обмежте завдання буднями                                   |                                    |
+| `->weekends();`                          | Обмежте завдання вихідними                                 |                                    |
+| `->sundays();`                           | Обмежте завдання неділею                                   |                                    |
+| `->mondays();`                           | Обмежте завдання понеділком                                |                                    |
+| `->tuesdays();`                          | Обмежте завдання вівторком                                 |                                    |
+| `->wednesdays();`                        | Обмежте завдання середою                                   |                                    |
+| `->thursdays();`                         | Обмежте завдання четвергом                                 |                                    |
+| `->fridays();`                           | Обмежте завдання п’ятницею                                 |                                    |
+| `->saturdays();`                         | Обмежте завдання суботою                                   |                                    |
+| \`-> дні (масив                          | змішаний); \`                                              | Обмежте завдання конкретними днями |
+| `->between($startTime, $endTime);`       | Обмежте завдання для запуску між часом початку та кінця    |                                    |
+| `->unlessBetween($startTime, $endTime);` | Обмежте завдання не запускатись між часом початку та кінця |                                    |
+| `->when(Closure);`                       | Обмежте завдання на основі перевірки істини                |                                    |
+| `->environments($env);`                  | Обмежте завдання конкретним середовищем                    |                                    |
 
 <a name="day-constraints"></a>
-#### Day Constraints
 
-The `days` method may be used to limit the execution of a task to specific days of the week. For example, you may schedule a command to run hourly on Sundays and Wednesdays:
+#### Денні обмеження
+
+`days`метод може бути використаний для обмеження виконання завдання певними днями тижня. Наприклад, ви можете запланувати команду для запуску щогодини в неділю та середу:
 
     $schedule->command('reminders:send')
                     ->hourly()
                     ->days([0, 3]);
 
 <a name="between-time-constraints"></a>
-#### Between Time Constraints
 
-The `between` method may be used to limit the execution of a task based on the time of day:
+#### Між часовими обмеженнями
+
+`between`метод може бути використаний для обмеження виконання завдання на основі часу доби:
 
     $schedule->command('reminders:send')
                         ->hourly()
                         ->between('7:00', '22:00');
 
-Similarly, the `unlessBetween` method can be used to exclude the execution of a task for a period of time:
+Подібним чином`unlessBetween`метод може бути використаний для виключення виконання завдання протягом певного періоду:
 
     $schedule->command('reminders:send')
                         ->hourly()
                         ->unlessBetween('23:00', '4:00');
 
 <a name="truth-test-constraints"></a>
-#### Truth Test Constraints
 
-The `when` method may be used to limit the execution of a task based on the result of a given truth test. In other words, if the given `Closure` returns `true`, the task will execute as long as no other constraining conditions prevent the task from running:
+#### Обмеження перевірки істини
+
+`when`метод може бути використаний для обмеження виконання завдання на основі результату даного тесту на істинність. Іншими словами, якщо дане`Closure`повертається`true`, завдання буде виконуватися до тих пір, поки жодні інші обмежувальні умови не заважають виконувати завдання:
 
     $schedule->command('emails:send')->daily()->when(function () {
         return true;
     });
 
-The `skip` method may be seen as the inverse of `when`. If the `skip` method returns `true`, the scheduled task will not be executed:
+`skip`Метод може розглядатися як зворотний`when`. Якщо`skip`метод повертає`true`, заплановане завдання не буде виконано:
 
     $schedule->command('emails:send')->daily()->skip(function () {
         return true;
     });
 
-When using chained `when` methods, the scheduled command will only execute if all `when` conditions return `true`.
+При використанні прикутий`when`методів, запланована команда виконуватиметься, лише якщо все`when`умови повертаються`true`.
 
 <a name="environment-constraints"></a>
-#### Environment Constraints
 
-The `environments` method may be used to execute tasks only on the given environments:
+#### Обмеження довкілля
+
+`environments`метод може бути використаний для виконання завдань лише в заданих середовищах:
 
     $schedule->command('emails:send')
                 ->daily()
                 ->environments(['staging', 'production']);
 
 <a name="timezones"></a>
-### Timezones
 
-Using the `timezone` method, you may specify that a scheduled task's time should be interpreted within a given timezone:
+### Часові зони
+
+Використання`timezone`методом, ви можете вказати, що час запланованого завдання повинен інтерпретуватися в межах заданого часового поясу:
 
     $schedule->command('report:generate')
              ->timezone('America/New_York')
              ->at('02:00')
 
-If you are assigning the same timezone to all of your scheduled tasks, you may wish to define a `scheduleTimezone` method in your `app/Console/Kernel.php` file. This method should return the default timezone that should be assigned to all scheduled tasks:
+Якщо ви призначаєте однаковий часовий пояс усім запланованим завданням, можливо, ви захочете визначити`scheduleTimezone`метод у вашому`app/Console/Kernel.php`файл. Цей метод повинен повертати часовий пояс за замовчуванням, який повинен бути призначений для всіх запланованих завдань:
 
     /**
      * Get the timezone that should be used by default for scheduled events.
@@ -245,29 +258,31 @@ If you are assigning the same timezone to all of your scheduled tasks, you may w
         return 'America/Chicago';
     }
 
-> {note} Remember that some timezones utilize daylight savings time. When daylight saving time changes occur, your scheduled task may run twice or even not run at all. For this reason, we recommend avoiding timezone scheduling when possible.
+> {note} Пам’ятайте, що деякі часові пояси використовують перехід на літній час. Коли відбуваються зміни переходу на літній час, заплановане завдання може виконуватися двічі або навіть не виконуватися взагалі. З цієї причини ми рекомендуємо уникати планування часових поясів, коли це можливо.
 
 <a name="preventing-task-overlaps"></a>
-### Preventing Task Overlaps
 
-By default, scheduled tasks will be run even if the previous instance of the task is still running. To prevent this, you may use the `withoutOverlapping` method:
+### Запобігання перекриванню завдань
+
+За замовчуванням заплановані завдання будуть виконуватися, навіть якщо попередній екземпляр завдання все ще працює. Щоб запобігти цьому, ви можете використовувати`withoutOverlapping`метод:
 
     $schedule->command('emails:send')->withoutOverlapping();
 
-In this example, the `emails:send` [Artisan command](/docs/{{version}}/artisan) will be run every minute if it is not already running. The `withoutOverlapping` method is especially useful if you have tasks that vary drastically in their execution time, preventing you from predicting exactly how long a given task will take.
+У цьому прикладі`emails:send`[Artisan командування](/docs/{{version}}/artisan)буде запускатися щохвилини, якщо вона ще не працює.`withoutOverlapping`метод особливо корисний, якщо у вас є завдання, які різко різняться за часом виконання, не даючи вам точно передбачити, скільки часу триватиме дане завдання.
 
-If needed, you may specify how many minutes must pass before the "without overlapping" lock expires. By default, the lock will expire after 24 hours:
+При необхідності ви можете вказати, скільки хвилин має пройти до закінчення терміну дії "без перекриття". За замовчуванням блокування закінчується через 24 години:
 
     $schedule->command('emails:send')->withoutOverlapping(10);
 
 <a name="running-tasks-on-one-server"></a>
-### Running Tasks On One Server
 
-> {note} To utilize this feature, your application must be using the `database`, `memcached`, or `redis` cache driver as your application's default cache driver. In addition, all servers must be communicating with the same central cache server.
+### Запуск завдань на одному сервері
 
-If your application is running on multiple servers, you may limit a scheduled job to only execute on a single server. For instance, assume you have a scheduled task that generates a new report every Friday night. If the task scheduler is running on three worker servers, the scheduled task will run on all three servers and generate the report three times. Not good!
+> {note} Щоб використовувати цю функцію, ваша програма повинна використовувати`database`,`memcached`, або`redis`кеш-драйвер як драйвер кешу вашого додатка за замовчуванням. Крім того, усі сервери повинні взаємодіяти з одним сервером центральної кеш-пам’яті.
 
-To indicate that the task should run on only one server, use the `onOneServer` method when defining the scheduled task. The first server to obtain the task will secure an atomic lock on the job to prevent other servers from running the same task at the same time:
+Якщо ваша програма працює на декількох серверах, ви можете обмежити заплановане завдання лише на одному сервері. Наприклад, припустимо, що у вас є заплановане завдання, яке генерує новий звіт щоп’ятниці ввечері. Якщо планувальник завдань працює на трьох робочих серверах, заплановане завдання буде виконуватися на всіх трьох серверах і тричі генеруватиме звіт. Не добре!
+
+Щоб вказати, що завдання має виконуватися лише на одному сервері, використовуйте`onOneServer`метод при визначенні запланованого завдання. Перший сервер, який отримає завдання, забезпечить атомний замок завдання, щоб запобігти одночасному виконанню того самого завдання на інших серверах:
 
     $schedule->command('report:generate')
                     ->fridays()
@@ -275,57 +290,61 @@ To indicate that the task should run on only one server, use the `onOneServer` m
                     ->onOneServer();
 
 <a name="background-tasks"></a>
-### Background Tasks
 
-By default, multiple commands scheduled at the same time will execute sequentially. If you have long-running commands, this may cause subsequent commands to start much later than anticipated. If you would like to run commands in the background so that they may all run simultaneously, you may use the `runInBackground` method:
+### Фонові завдання
+
+За замовчуванням кілька команд, запланованих одночасно, будуть виконуватися послідовно. Якщо у вас є тривалі команди, це може спричинити запуск наступних команд набагато пізніше, ніж передбачалося. Якщо ви хочете запускати команди у фоновому режимі, щоб усі вони могли працювати одночасно, ви можете використовувати`runInBackground`метод:
 
     $schedule->command('analytics:report')
              ->daily()
              ->runInBackground();
 
-> {note} The `runInBackground` method may only be used when scheduling tasks via the `command` and `exec` methods.
+> {примітка}`runInBackground`метод може використовуватися лише при плануванні завдань через`command`і`exec`методи.
 
 <a name="maintenance-mode"></a>
-### Maintenance Mode
 
-Laravel's scheduled tasks will not run when Laravel is in [maintenance mode](/docs/{{version}}/configuration#maintenance-mode), since we don't want your tasks to interfere with any unfinished maintenance you may be performing on your server. However, if you would like to force a task to run even in maintenance mode, you may use the `evenInMaintenanceMode` method:
+### Режим обслуговування
+
+Заплановані завдання Laravel не запускатимуться, коли Laravel працює[режим обслуговування](/docs/{{version}}/configuration#maintenance-mode), оскільки ми не хочемо, щоб ваші завдання заважали незавершеному обслуговуванню, яке ви можете виконувати на своєму сервері. Однак, якщо ви хочете змусити запустити завдання навіть у режимі обслуговування, ви можете використовувати`evenInMaintenanceMode`метод:
 
     $schedule->command('emails:send')->evenInMaintenanceMode();
 
 <a name="task-output"></a>
-## Task Output
 
-The Laravel scheduler provides several convenient methods for working with the output generated by scheduled tasks. First, using the `sendOutputTo` method, you may send the output to a file for later inspection:
+## Вихід завдання
+
+Планувальник Laravel надає кілька зручних методів для роботи з результатом, що генерується запланованими завданнями. По-перше, за допомогою`sendOutputTo`методом, ви можете надіслати вихідні дані у файл для подальшої перевірки:
 
     $schedule->command('emails:send')
              ->daily()
              ->sendOutputTo($filePath);
 
-If you would like to append the output to a given file, you may use the `appendOutputTo` method:
+Якщо ви хочете додати вихідні дані до даного файлу, ви можете використовувати файл`appendOutputTo`метод:
 
     $schedule->command('emails:send')
              ->daily()
              ->appendOutputTo($filePath);
 
-Using the `emailOutputTo` method, you may e-mail the output to an e-mail address of your choice. Before e-mailing the output of a task, you should configure Laravel's [e-mail services](/docs/{{version}}/mail):
+Використання`emailOutputTo`Ви можете надіслати вихідні дані на електронну адресу за вашим вибором. Перш ніж надсилати вихідні дані завдання електронною поштою, слід налаштувати Laravel[послуги електронної пошти](/docs/{{version}}/mail):
 
     $schedule->command('foo')
              ->daily()
              ->sendOutputTo($filePath)
              ->emailOutputTo('foo@example.com');
 
-If you only want to e-mail the output if the command fails, use the `emailOutputOnFailure` method:
+Якщо ви хочете надіслати вихідні дані лише електронною поштою, якщо команда не вдається, використовуйте`emailOutputOnFailure`метод:
 
     $schedule->command('foo')
              ->daily()
              ->emailOutputOnFailure('foo@example.com');
 
-> {note} The `emailOutputTo`, `emailOutputOnFailure`, `sendOutputTo`, and `appendOutputTo` methods are exclusive to the `command` and `exec` methods.
+> {примітка}`emailOutputTo`,`emailOutputOnFailure`,`sendOutputTo`, і`appendOutputTo`методи є ексклюзивними для`command`і`exec`методи.
 
 <a name="task-hooks"></a>
-## Task Hooks
 
-Using the `before` and `after` methods, you may specify code to be executed before and after the scheduled task is complete:
+## Гачки завдань
+
+Використання`before`і`after`методами, ви можете вказати код, який буде виконуватися до і після завершення запланованого завдання:
 
     $schedule->command('emails:send')
              ->daily()
@@ -336,7 +355,7 @@ Using the `before` and `after` methods, you may specify code to be executed befo
                  // Task is complete...
              });
 
-The `onSuccess` and `onFailure` methods allow you to specify code to be executed if the scheduled task succeeds or fails:
+`onSuccess`і`onFailure`Методи дозволяють вказати код, який буде виконуватися, якщо заплановане завдання вдається або не вдається:
 
     $schedule->command('emails:send')
              ->daily()
@@ -347,7 +366,7 @@ The `onSuccess` and `onFailure` methods allow you to specify code to be executed
                  // The task failed...
              });
 
-If output is available from your command, you may access it in your `after`, `onSuccess` or `onFailure` hooks by type-hinting an `Illuminate\Support\Stringable` instance as `$output` on your hook's Closure definition:
+Якщо вихідні дані доступні з вашої команди, ви можете отримати доступ до них у вашому`after`,`onSuccess`або`onFailure`гачки шляхом набору тексту`Illuminate\Support\Stringable`екземпляр як`$output`у визначенні закриття вашого гачка:
 
     use Illuminate\Support\Stringable;
 
@@ -361,29 +380,30 @@ If output is available from your command, you may access it in your `after`, `on
              });
 
 <a name="pinging-urls"></a>
-#### Pinging URLs
 
-Using the `pingBefore` and `thenPing` methods, the scheduler can automatically ping a given URL before or after a task is complete. This method is useful for notifying an external service, such as [Laravel Envoyer](https://envoyer.io), that your scheduled task is commencing or has finished execution:
+#### Пінг URL-адрес
+
+Використання`pingBefore`і`thenPing`методів, планувальник може автоматично пінгувати дану URL-адресу до або після завершення завдання. Цей метод корисний для сповіщення зовнішньої служби, наприклад[Laravel Send](https://envoyer.io), що ваше заплановане завдання розпочинається або завершило виконання:
 
     $schedule->command('emails:send')
              ->daily()
              ->pingBefore($url)
              ->thenPing($url);
 
-The `pingBeforeIf` and `thenPingIf` methods may be used to ping a given URL only if the given condition is `true`:
+`pingBeforeIf`і`thenPingIf`Методи можуть бути використані для пінгування даної URL-адреси, лише якщо задана умова`true`:
 
     $schedule->command('emails:send')
              ->daily()
              ->pingBeforeIf($condition, $url)
              ->thenPingIf($condition, $url);
 
-The `pingOnSuccess` and `pingOnFailure` methods may be used to ping a given URL only if the task succeeds or fails:
+`pingOnSuccess`і`pingOnFailure`Методи можуть бути використані для пінгування даної URL-адреси, лише якщо завдання успішне або не вдається:
 
     $schedule->command('emails:send')
              ->daily()
              ->pingOnSuccess($successUrl)
              ->pingOnFailure($failureUrl);
 
-All of the ping methods require the Guzzle HTTP library. You can add Guzzle to your project using the Composer package manager:
+Для всіх методів ping потрібна бібліотека Guzzle HTTP. Ви можете додати Guzzle до свого проекту за допомогою менеджера пакетів Composer:
 
     composer require guzzlehttp/guzzle

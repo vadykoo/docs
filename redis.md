@@ -1,28 +1,30 @@
-# Redis
+# Редіс
 
-- [Introduction](#introduction)
-    - [Configuration](#configuration)
-    - [Predis](#predis)
-    - [PhpRedis](#phpredis)
-- [Interacting With Redis](#interacting-with-redis)
-    - [Pipelining Commands](#pipelining-commands)
-- [Pub / Sub](#pubsub)
+-   [Вступ](#introduction)
+    -   [Конфігурація](#configuration)
+    -   [Преддіс](#predis)
+    -   [PhpRedis](#phpredis)
+-   [Взаємодія з Redis](#interacting-with-redis)
+    -   [Конвеєрні команди](#pipelining-commands)
+-   [Паб / Під](#pubsub)
 
 <a name="introduction"></a>
-## Introduction
 
-[Redis](https://redis.io) is an open source, advanced key-value store. It is often referred to as a data structure server since keys can contain [strings](https://redis.io/topics/data-types#strings), [hashes](https://redis.io/topics/data-types#hashes), [lists](https://redis.io/topics/data-types#lists), [sets](https://redis.io/topics/data-types#sets), and [sorted sets](https://redis.io/topics/data-types#sorted-sets).
+## Вступ
 
-Before using Redis with Laravel, we encourage you to install and use the [PhpRedis](https://github.com/phpredis/phpredis) PHP extension via PECL. The extension is more complex to install but may yield better performance for applications that make heavy use of Redis.
+[Редіс](https://redis.io)є розширеним сховищем ключ-значення з відкритим кодом. Його часто називають сервером структури даних, оскільки ключі можуть містити[струни](https://redis.io/topics/data-types#strings),[хеші](https://redis.io/topics/data-types#hashes),[списки](https://redis.io/topics/data-types#lists),[набори](https://redis.io/topics/data-types#sets), і[відсортовані набори](https://redis.io/topics/data-types#sorted-sets).
 
-Alternatively, you can install the `predis/predis` package via Composer:
+Перш ніж використовувати Redis з Laravel, радимо встановити та використовувати[PhpRedis](https://github.com/phpredis/phpredis)Розширення PHP через PECL. Розширення є більш складним для встановлення, але може забезпечити кращу продуктивність для програм, які інтенсивно використовують Redis.
+
+Крім того, ви можете встановити`predis/predis`пакет через Composer:
 
     composer require predis/predis
 
 <a name="configuration"></a>
-### Configuration
 
-The Redis configuration for your application is located in the `config/database.php` configuration file. Within this file, you will see a `redis` array containing the Redis servers utilized by your application:
+### Конфігурація
+
+Конфігурація Redis для вашої програми знаходиться в`config/database.php`файл конфігурації. У цьому файлі ви побачите файл`redis`масив, що містить сервери Redis, що використовуються вашим додатком:
 
     'redis' => [
 
@@ -44,7 +46,7 @@ The Redis configuration for your application is located in the `config/database.
 
     ],
 
-The default server configuration should suffice for development. However, you are free to modify this array based on your environment. Each Redis server defined in your configuration file is required to have a name, host, and port unless you define a single URL to represent the Redis connection:
+Конфігурації сервера за замовчуванням має бути достатньо для розробки. Однак ви можете змінювати цей масив, виходячи з вашого оточення. Кожен сервер Redis, визначений у вашому конфігураційному файлі, повинен мати ім'я, хост та порт, якщо ви не визначите одну URL-адресу, яка представляє з'єднання Redis:
 
     'redis' => [
 
@@ -61,9 +63,10 @@ The default server configuration should suffice for development. However, you ar
     ],
 
 <a name="configuring-the-connection-scheme"></a>
-#### Configuring The Connection Scheme
 
-By default, Redis clients will use the `tcp` scheme when connecting to your Redis servers; however, you may use TLS / SSL encryption by specifying a `scheme` configuration option in your Redis server configuration:
+#### Налаштування схеми підключення
+
+За замовчуванням клієнти Redis будуть використовувати`tcp`схема при підключенні до серверів Redis; однак ви можете використовувати шифрування TLS / SSL, вказавши a`scheme`параметр конфігурації у вашій конфігурації сервера Redis:
 
     'redis' => [
 
@@ -80,9 +83,10 @@ By default, Redis clients will use the `tcp` scheme when connecting to your Redi
     ],
 
 <a name="configuring-clusters"></a>
-#### Configuring Clusters
 
-If your application is utilizing a cluster of Redis servers, you should define these clusters within a `clusters` key of your Redis configuration:
+#### Налаштування кластерів
+
+Якщо у вашій програмі використовується кластер серверів Redis, вам слід визначити ці кластери в межах`clusters`ключ вашої конфігурації Redis:
 
     'redis' => [
 
@@ -101,7 +105,7 @@ If your application is utilizing a cluster of Redis servers, you should define t
 
     ],
 
-By default, clusters will perform client-side sharding across your nodes, allowing you to pool nodes and create a large amount of available RAM. However, note that client-side sharding does not handle failover; therefore, it is primarily suited for cached data that is available from another primary data store. If you would like to use native Redis clustering, you should specify this in the `options` key of your Redis configuration:
+За замовчуванням кластери виконуватимуть шардінг на стороні клієнта між вашими вузлами, що дозволить вам об'єднати вузли та створити велику кількість доступної оперативної пам'яті. Однак зверніть увагу, що на стороні клієнта шардінг не справляється з відмовою; тому він в першу чергу підходить для кешованих даних, доступних з іншого основного сховища даних. Якщо ви хочете використовувати рідну кластеризацію Redis, ви повинні вказати це в`options`ключ вашої конфігурації Redis:
 
     'redis' => [
 
@@ -118,9 +122,10 @@ By default, clusters will perform client-side sharding across your nodes, allowi
     ],
 
 <a name="predis"></a>
-### Predis
 
-To utilize the Predis extension, you should change the `REDIS_CLIENT` environment variable from `phpredis` to `predis`:
+### Преддіс
+
+Щоб використовувати розширення Predis, вам слід змінити`REDIS_CLIENT`змінна середовища від`phpredis`до`predis`:
 
     'redis' => [
 
@@ -129,7 +134,7 @@ To utilize the Predis extension, you should change the `REDIS_CLIENT` environmen
         // Rest of Redis configuration...
     ],
 
-In addition to the default `host`, `port`, `database`, and `password` server configuration options, Predis supports additional [connection parameters](https://github.com/nrk/predis/wiki/Connection-Parameters) that may be defined for each of your Redis servers. To utilize these additional configuration options, add them to your Redis server configuration in the `config/database.php` configuration file:
+На додаток до типового`host`,`port`,`database`, і`password`параметри конфігурації сервера, Predis підтримує додаткові[параметри з'єднання](https://github.com/nrk/predis/wiki/Connection-Parameters)які можуть бути визначені для кожного з ваших серверів Redis. Щоб використовувати ці додаткові параметри конфігурації, додайте їх до конфігурації сервера Redis у`config/database.php`файл конфігурації:
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
@@ -140,9 +145,10 @@ In addition to the default `host`, `port`, `database`, and `password` server con
     ],
 
 <a name="phpredis"></a>
+
 ### PhpRedis
 
-The PhpRedis extension is configured as default at `REDIS_CLIENT` env and in your `config/database.php`:
+Розширення PhpRedis налаштовано за замовчуванням на`REDIS_CLIENT`env та у вашому`config/database.php`:
 
     'redis' => [
 
@@ -151,11 +157,11 @@ The PhpRedis extension is configured as default at `REDIS_CLIENT` env and in you
         // Rest of Redis configuration...
     ],
 
-If you plan to use PhpRedis extension along with the `Redis` Facade alias, you should rename it to something else, like `RedisManager`, to avoid a collision with the Redis class. You can do that in the aliases section of your `app.php` config file.
+Якщо ви плануєте використовувати розширення PhpRedis разом із`Redis`Фасадний псевдонім, вам слід перейменувати його на щось інше, наприклад`RedisManager`, to avoid a collision with the Redis class. You can do that in the aliases section of your `app.php`конфігураційний файл.
 
     'RedisManager' => Illuminate\Support\Facades\Redis::class,
 
-In addition to the default `host`, `port`, `database`, and `password` server configuration options, PhpRedis supports the following additional connection parameters: `persistent`, `prefix`, `read_timeout`, `retry_interval`, `timeout`, and `context`. You may add any of these options to your Redis server configuration in the `config/database.php` configuration file:
+На додаток до типового`host`,`port`,`database`, і`password`Параметри конфігурації сервера, PhpRedis підтримує такі додаткові параметри підключення:`persistent`,`prefix`,`read_timeout`,`retry_interval`,`timeout`, і`context`. Ви можете додати будь-який із цих параметрів до конфігурації сервера Redis у`config/database.php`файл конфігурації:
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
@@ -170,14 +176,16 @@ In addition to the default `host`, `port`, `database`, and `password` server con
     ],
 
 <a name="the-redis-facade"></a>
-#### The Redis Facade
 
-To avoid class naming collisions with the Redis PHP extension itself, you will need to delete or rename the `Illuminate\Support\Facades\Redis` facade alias from your `app` configuration file's `aliases` array. Generally, you should remove this alias entirely and only reference the facade by its fully qualified class name while using the Redis PHP extension.
+#### Фасад Redis
+
+Щоб уникнути зіткнень імен класів із самим розширенням Redis PHP, вам потрібно буде видалити або перейменувати`Illuminate\Support\Facades\Redis`фасадний псевдонім від вашого`app`файли конфігурації`aliases`масив. Як правило, ви повинні повністю видалити цей псевдонім і посилатися на фасад лише за його повною назвою класу під час використання розширення Redis PHP.
 
 <a name="interacting-with-redis"></a>
-## Interacting With Redis
 
-You may interact with Redis by calling various methods on the `Redis` [facade](/docs/{{version}}/facades). The `Redis` facade supports dynamic methods, meaning you may call any [Redis command](https://redis.io/commands) on the facade and the command will be passed directly to Redis. In this example, we will call the Redis `GET` command by calling the `get` method on the `Redis` facade:
+## Взаємодія з Redis
+
+Ви можете взаємодіяти з Redis, викликаючи різні методи на`Redis`[фасад](/docs/{{version}}/facades).`Redis`фасад підтримує динамічні методи, тобто ви можете зателефонувати будь-яким[Команда Redis](https://redis.io/commands)на фасаді і команда буде передана безпосередньо Редісу. У цьому прикладі ми будемо називати Redis`GET`команда за допомогою виклику`get`метод на`Redis`фасад:
 
     <?php
 
@@ -202,31 +210,33 @@ You may interact with Redis by calling various methods on the `Redis` [facade](/
         }
     }
 
-As mentioned above, you may call any of the Redis commands on the `Redis` facade. Laravel uses magic methods to pass the commands to the Redis server, so pass the arguments the Redis command expects:
+Як зазначалося вище, ви можете викликати будь-яку з команд Redis на`Redis`фасад. Laravel використовує магічні методи для передачі команд серверу Redis, тому передайте аргументи, яких очікує команда Redis:
 
     Redis::set('name', 'Taylor');
 
     $values = Redis::lrange('names', 5, 10);
 
-Alternatively, you may also pass commands to the server using the `command` method, which accepts the name of the command as its first argument, and an array of values as its second argument:
+Крім того, ви також можете передавати команди серверу за допомогою`command`метод, який приймає ім'я команди як перший аргумент, а масив значень як другий аргумент:
 
     $values = Redis::command('lrange', ['name', 5, 10]);
 
 <a name="using-multiple-redis-connections"></a>
-#### Using Multiple Redis Connections
 
-You may get a Redis instance by calling the `Redis::connection` method:
+#### Використання декількох з'єднань Redis
+
+Ви можете отримати екземпляр Redis, зателефонувавши до`Redis::connection`метод:
 
     $redis = Redis::connection();
 
-This will give you an instance of the default Redis server. You may also pass the connection or cluster name to the `connection` method to get a specific server or cluster as defined in your Redis configuration:
+Це дасть вам екземпляр сервера Redis за замовчуванням. Ви також можете передати ім'я з'єднання або кластера в`connection`спосіб отримати певний сервер або кластер, як визначено у вашій конфігурації Redis:
 
     $redis = Redis::connection('my-connection');
 
 <a name="pipelining-commands"></a>
-### Pipelining Commands
 
-Pipelining should be used when you need to send many commands to the server. The `pipeline` method accepts one argument: a `Closure` that receives a Redis instance. You may issue all of your commands to this Redis instance and they will all be streamed to the server thus providing better performance:
+### Конвеєрні команди
+
+Конвеєризацію слід використовувати, коли вам потрібно надіслати багато команд на сервер.`pipeline`метод приймає один аргумент: a`Closure`що отримує екземпляр Redis. Ви можете видати всі свої команди цьому екземпляру Redis, і всі вони будуть передаватися на сервер, таким чином забезпечуючи кращу продуктивність:
 
     Redis::pipeline(function ($pipe) {
         for ($i = 0; $i < 1000; $i++) {
@@ -235,11 +245,12 @@ Pipelining should be used when you need to send many commands to the server. The
     });
 
 <a name="pubsub"></a>
-## Pub / Sub
 
-Laravel provides a convenient interface to the Redis `publish` and `subscribe` commands. These Redis commands allow you to listen for messages on a given "channel". You may publish messages to the channel from another application, or even using another programming language, allowing easy communication between applications and processes.
+## Паб / Під
 
-First, let's setup a channel listener using the `subscribe` method. We'll place this method call within an [Artisan command](/docs/{{version}}/artisan) since calling the `subscribe` method begins a long-running process:
+Laravel забезпечує зручний інтерфейс для Redis`publish`і`subscribe`команди. Ці команди Redis дозволяють прослуховувати повідомлення на даному "каналі". Ви можете публікувати повідомлення на каналі з іншої програми або навіть з використанням іншої мови програмування, що дозволяє легко спілкуватися між програмами та процесами.
+
+Спочатку налаштуємо слухач каналу за допомогою`subscribe`метод. Ми розмістимо цей виклик методу в межах[Artisan командування](/docs/{{version}}/artisan)з моменту виклику`subscribe`метод починає тривалий процес:
 
     <?php
 
@@ -277,7 +288,7 @@ First, let's setup a channel listener using the `subscribe` method. We'll place 
         }
     }
 
-Now we may publish messages to the channel using the `publish` method:
+Тепер ми можемо публікувати повідомлення на каналі за допомогою`publish`метод:
 
     Route::get('publish', function () {
         // Route logic...
@@ -286,9 +297,10 @@ Now we may publish messages to the channel using the `publish` method:
     });
 
 <a name="wildcard-subscriptions"></a>
-#### Wildcard Subscriptions
 
-Using the `psubscribe` method, you may subscribe to a wildcard channel, which may be useful for catching all messages on all channels. The `$channel` name will be passed as the second argument to the provided callback `Closure`:
+#### Підписка на підстановку
+
+Використання`psubscribe`Ви можете підписатись на підстановочний канал, що може бути корисним для перегляду всіх повідомлень на всіх каналах.`$channel`name буде передано як другий аргумент наданому зворотному виклику`Closure`:
 
     Redis::psubscribe(['*'], function ($message, $channel) {
         echo $message;

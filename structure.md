@@ -1,174 +1,200 @@
-# Directory Structure
+# Структура каталогу
 
-- [Introduction](#introduction)
-- [The Root Directory](#the-root-directory)
-    - [The `app` Directory](#the-root-app-directory)
-    - [The `bootstrap` Directory](#the-bootstrap-directory)
-    - [The `config` Directory](#the-config-directory)
-    - [The `database` Directory](#the-database-directory)
-    - [The `public` Directory](#the-public-directory)
-    - [The `resources` Directory](#the-resources-directory)
-    - [The `routes` Directory](#the-routes-directory)
-    - [The `storage` Directory](#the-storage-directory)
-    - [The `tests` Directory](#the-tests-directory)
-    - [The `vendor` Directory](#the-vendor-directory)
-- [The App Directory](#the-app-directory)
-    - [The `Broadcasting` Directory](#the-broadcasting-directory)
-    - [The `Console` Directory](#the-console-directory)
-    - [The `Events` Directory](#the-events-directory)
-    - [The `Exceptions` Directory](#the-exceptions-directory)
-    - [The `Http` Directory](#the-http-directory)
-    - [The `Jobs` Directory](#the-jobs-directory)
-    - [The `Listeners` Directory](#the-listeners-directory)
-    - [The `Mail` Directory](#the-mail-directory)
-    - [The `Models` Directory](#the-models-directory)
-    - [The `Notifications` Directory](#the-notifications-directory)
-    - [The `Policies` Directory](#the-policies-directory)
-    - [The `Providers` Directory](#the-providers-directory)
-    - [The `Rules` Directory](#the-rules-directory)
+-   [Вступ](#introduction)
+-   [Кореневий каталог](#the-root-directory)
+    -   [`app`Каталог](#the-root-app-directory)
+    -   [`bootstrap`Каталог](#the-bootstrap-directory)
+    -   [`config`Каталог](#the-config-directory)
+    -   [`database`Каталог](#the-database-directory)
+    -   [`public`Каталог](#the-public-directory)
+    -   [`resources`Каталог](#the-resources-directory)
+    -   [`routes`Каталог](#the-routes-directory)
+    -   [`storage`Каталог](#the-storage-directory)
+    -   [`tests`Каталог](#the-tests-directory)
+    -   [`vendor`Каталог](#the-vendor-directory)
+-   [Каталог програм](#the-app-directory)
+    -   [`Broadcasting`Каталог](#the-broadcasting-directory)
+    -   [`Console`Каталог](#the-console-directory)
+    -   [`Events`Каталог](#the-events-directory)
+    -   [`Exceptions`Каталог](#the-exceptions-directory)
+    -   [`Http`Каталог](#the-http-directory)
+    -   [`Jobs`Каталог](#the-jobs-directory)
+    -   [`Listeners`Каталог](#the-listeners-directory)
+    -   [`Mail`Каталог](#the-mail-directory)
+    -   [`Models`Каталог](#the-models-directory)
+    -   [`Notifications`Каталог](#the-notifications-directory)
+    -   [`Policies`Каталог](#the-policies-directory)
+    -   [`Providers`Каталог](#the-providers-directory)
+    -   [`Rules`Каталог](#the-rules-directory)
 
 <a name="introduction"></a>
-## Introduction
 
-The default Laravel application structure is intended to provide a great starting point for both large and small applications. But you are free to organize your application however you like. Laravel imposes almost no restrictions on where any given class is located - as long as Composer can autoload the class.
+## Вступ
+
+Структура програми Laravel за замовчуванням має на меті забезпечити чудову вихідну точку як для великих, так і для малих програм. Але ви можете організувати свою заявку як завгодно. Laravel майже не встановлює обмежень щодо розташування будь-якого класу - до тих пір, поки Composer може завантажувати клас автоматично.
 
 <a name="the-root-directory"></a>
-## The Root Directory
+
+## Кореневий каталог
 
 <a name="the-root-app-directory"></a>
-#### The App Directory
 
-The `app` directory contains the core code of your application. We'll explore this directory in more detail soon; however, almost all of the classes in your application will be in this directory.
+#### Каталог програм
+
+`app`каталог містить основний код вашої програми. Незабаром ми вивчимо цей каталог більш докладно; однак майже всі класи вашої програми будуть у цьому каталозі.
 
 <a name="the-bootstrap-directory"></a>
-#### The Bootstrap Directory
 
-The `bootstrap` directory contains the `app.php` file which bootstraps the framework. This directory also houses a `cache` directory which contains framework generated files for performance optimization such as the route and services cache files.
+#### Каталог Bootstrap
+
+`bootstrap`каталог містить`app.php`файл, який завантажує фреймворк. Цей каталог також містить a`cache`каталог, що містить файли, створені в рамках фреймворку для оптимізації продуктивності, такі як файли кешу маршрутів та служб.
 
 <a name="the-config-directory"></a>
-#### The Config Directory
 
-The `config` directory, as the name implies, contains all of your application's configuration files. It's a great idea to read through all of these files and familiarize yourself with all of the options available to you.
+#### Каталог конфігурації
+
+`config`каталог, як випливає з назви, містить усі файли конфігурації вашої програми. Прекрасна ідея прочитати всі ці файли та ознайомитись із усіма доступними для вас опціями.
 
 <a name="the-database-directory"></a>
-#### The Database Directory
 
-The `database` directory contains your database migrations, model factories, and seeds. If you wish, you may also use this directory to hold an SQLite database.
+#### Каталог баз даних
+
+`database`каталог містить міграції баз даних, фабрики моделей та насіння. Якщо ви хочете, ви також можете використовувати цей каталог для зберігання бази даних SQLite.
 
 <a name="the-public-directory"></a>
-#### The Public Directory
 
-The `public` directory contains the `index.php` file, which is the entry point for all requests entering your application and configures autoloading. This directory also houses your assets such as images, JavaScript, and CSS.
+#### Публічний довідник
+
+`public`каталог містить`index.php`файл, який є точкою входу для всіх запитів, що надходять у вашу програму, і налаштовує автоматичне завантаження. У цьому каталозі також зберігаються ваші активи, такі як зображення, JavaScript та CSS.
 
 <a name="the-resources-directory"></a>
-#### The Resources Directory
 
-The `resources` directory contains your views as well as your raw, un-compiled assets such as CSS or JavaScript. This directory also houses all of your language files.
+#### Каталог ресурсів
+
+`resources`Каталог містить ваші перегляди, а також ваші необроблені, некомпільовані ресурси, такі як CSS або JavaScript. У цьому каталозі також зберігаються всі ваші мовні файли.
 
 <a name="the-routes-directory"></a>
-#### The Routes Directory
 
-The `routes` directory contains all of the route definitions for your application. By default, several route files are included with Laravel: `web.php`, `api.php`, `console.php` and `channels.php`.
+#### Каталог маршрутів
 
-The `web.php` file contains routes that the `RouteServiceProvider` places in the `web` middleware group, which provides session state, CSRF protection, and cookie encryption. If your application does not offer a stateless, RESTful API, all of your routes will most likely be defined in the `web.php` file.
+`routes`каталог містить усі визначення маршруту для вашої програми. За замовчуванням до Laravel входить кілька файлів маршрутів:`web.php`,`api.php`,`console.php`і`channels.php`.
 
-The `api.php` file contains routes that the `RouteServiceProvider` places in the `api` middleware group, which provides rate limiting. These routes are intended to be stateless, so requests entering the application through these routes are intended to be authenticated via tokens and will not have access to session state.
+`web.php`файл містить маршрути, які`RouteServiceProvider`місця в`web`група проміжного програмного забезпечення, яка забезпечує стан сеансу, захист CSRF та шифрування файлів cookie. Якщо ваша програма не пропонує API RESTful без громадянства, усі ваші маршрути, швидше за все, будуть визначені в`web.php`файл.
 
-The `console.php` file is where you may define all of your Closure based console commands. Each Closure is bound to a command instance allowing a simple approach to interacting with each command's IO methods. Even though this file does not define HTTP routes, it defines console based entry points (routes) into your application.
+`api.php`файл містить маршрути, які`RouteServiceProvider`місця в`api`група проміжного програмного забезпечення, яка забезпечує обмеження швидкості. Ці маршрути призначені для безгромадянського стану, тому запити, що надходять у програму за допомогою цих маршрутів, призначені для автентифікації через маркери і не матимуть доступу до стану сеансу.
 
-The `channels.php` file is where you may register all of the event broadcasting channels that your application supports.
+`console.php`файл, де ви можете визначити всі свої команди консолі на основі закриття. Кожне закриття прив’язане до екземпляра команди, що дозволяє простий підхід до взаємодії з методами введення-виведення кожної команди. Незважаючи на те, що цей файл не визначає маршрути HTTP, він визначає точки входу (маршрути) на основі консолі у вашу програму.
+
+`channels.php`файл, де ви можете зареєструвати всі канали трансляції подій, які підтримує ваша програма.
 
 <a name="the-storage-directory"></a>
-#### The Storage Directory
 
-The `storage` directory contains your compiled Blade templates, file based sessions, file caches, and other files generated by the framework. This directory is segregated into `app`, `framework`, and `logs` directories. The `app` directory may be used to store any files generated by your application. The `framework` directory is used to store framework generated files and caches. Finally, the `logs` directory contains your application's log files.
+#### Каталог зберігання
 
-The `storage/app/public` directory may be used to store user-generated files, such as profile avatars, that should be publicly accessible. You should create a symbolic link at `public/storage` which points to this directory. You may create the link using the `php artisan storage:link` command.
+`storage`каталог містить ваші скомпільовані шаблони Blade, сеанси на основі файлів, кеші файлів та інші файли, створені фреймворком. Цей каталог відокремлений`app`,`framework`, і`logs`довідники.`app`каталог може використовуватися для зберігання будь-яких файлів, створених вашою програмою.`framework`каталог використовується для зберігання файлів та кеш-пам’яті, що генеруються в рамках. Нарешті,`logs`каталог містить файли журналів вашої програми.
+
+`storage/app/public`каталог може використовуватися для зберігання створених користувачами файлів, таких як аватари профілів, які повинні бути загальнодоступними. Вам слід створити символічне посилання за адресою`public/storage`що вказує на цей каталог. Ви можете створити посилання за допомогою`php artisan storage:link`команди.
 
 <a name="the-tests-directory"></a>
-#### The Tests Directory
 
-The `tests` directory contains your automated tests. An example [PHPUnit](https://phpunit.de/) test is provided out of the box. Each test class should be suffixed with the word `Test`. You may run your tests using the `phpunit` or `php vendor/bin/phpunit` commands.
+#### Довідник тестів
+
+`tests`каталог містить ваші автоматизовані тести. Приклад[PHPUnit](https://phpunit.de/)тест надається з коробки. Кожен тестовий клас повинен мати суфікс із словом`Test`. Ви можете запускати свої тести за допомогою`phpunit`або`php vendor/bin/phpunit`команди.
 
 <a name="the-vendor-directory"></a>
-#### The Vendor Directory
 
-The `vendor` directory contains your [Composer](https://getcomposer.org) dependencies.
+#### Каталог постачальників
+
+`vendor`каталог містить ваш[Композитор](https://getcomposer.org)залежності.
 
 <a name="the-app-directory"></a>
-## The App Directory
 
-The majority of your application is housed in the `app` directory. By default, this directory is namespaced under `App` and is autoloaded by Composer using the [PSR-4 autoloading standard](https://www.php-fig.org/psr/psr-4/).
+## Каталог програм
 
-The `app` directory contains a variety of additional directories such as `Console`, `Http`, and `Providers`. Think of the `Console` and `Http` directories as providing an API into the core of your application. The HTTP protocol and CLI are both mechanisms to interact with your application, but do not actually contain application logic. In other words, they are two ways of issuing commands to your application. The `Console` directory contains all of your Artisan commands, while the `Http` directory contains your controllers, middleware, and requests.
+Більшість ваших додатків розміщується в`app`каталог. За замовчуванням цей каталог має простір імен під`App`і завантажується автоматично композитором за допомогою[Стандарт автозавантаження PSR-4](https://www.php-fig.org/psr/psr-4/).
 
-A variety of other directories will be generated inside the `app` directory as you use the `make` Artisan commands to generate classes. So, for example, the `app/Jobs` directory will not exist until you execute the `make:job` Artisan command to generate a job class.
+`app`каталог містить безліч додаткових каталогів, таких як`Console`,`Http`, і`Providers`. Подумайте про`Console`і`Http`каталоги як надання API в ядро ​​вашої програми. Протокол HTTP та CLI є механізмами взаємодії з вашим додатком, але насправді не містять логіки програми. Іншими словами, це два способи видачі команд вашому додатку.`Console`каталог містить усі ваші команди Artisan, тоді як`Http`каталог містить ваші контролери, Middlware та запити.
 
-> {tip} Many of the classes in the `app` directory can be generated by Artisan via commands. To review the available commands, run the `php artisan list make` command in your terminal.
+Безліч інших каталогів буде сформовано всередині`app`, коли ви використовуєте`make`Artisan команди для створення класів. Так, наприклад,`app/Jobs`каталог не буде існувати, доки ви не виконаєте`make:job`Команда ремісника для створення робочого класу.
+
+> {tip} Багато класів у`app`каталог може бути створений Artisan за допомогою команд. Щоб переглянути доступні команди, запустіть`php artisan list make`у вашому терміналі.
 
 <a name="the-broadcasting-directory"></a>
-#### The Broadcasting Directory
 
-The `Broadcasting` directory contains all of the broadcast channel classes for your application. These classes are generated using the `make:channel` command. This directory does not exist by default, but will be created for you when you create your first channel. To learn more about channels, check out the documentation on [event broadcasting](/docs/{{version}}/broadcasting).
+#### Каталог мовлення
+
+`Broadcasting`каталог містить усі класи мовних каналів для вашої програми. Ці класи генеруються за допомогою`make:channel`команди. Цей каталог не існує за замовчуванням, але буде створений для вас під час створення першого каналу. Щоб дізнатись більше про канали, перегляньте документацію на[трансляція подій](/docs/{{version}}/broadcasting).
 
 <a name="the-console-directory"></a>
-#### The Console Directory
 
-The `Console` directory contains all of the custom Artisan commands for your application. These commands may be generated using the `make:command` command. This directory also houses your console kernel, which is where your custom Artisan commands are registered and your [scheduled tasks](/docs/{{version}}/scheduling) are defined.
+#### Каталог консолі
+
+`Console`каталог містить усі користувацькі команди Artisan для вашої програми. Ці команди можуть бути сформовані за допомогою`make:command`команди. У цьому каталозі також знаходиться ваше ядро ​​консолі, де зареєстровано власні команди Artisan та ваше[заплановані завдання](/docs/{{version}}/scheduling)визначені.
 
 <a name="the-events-directory"></a>
-#### The Events Directory
 
-This directory does not exist by default, but will be created for you by the `event:generate` and `make:event` Artisan commands. The `Events` directory houses [event classes](/docs/{{version}}/events). Events may be used to alert other parts of your application that a given action has occurred, providing a great deal of flexibility and decoupling.
+#### Каталог подій
+
+Цей каталог не існує за замовчуванням, але буде створений для вас`event:generate`і`make:event`Ремісничі команди.`Events`довідкові будинки[урокові заходи](/docs/{{version}}/events). Події можуть використовуватися для попередження інших частин вашої програми про те, що сталася певна дія, забезпечуючи велику гнучкість та роз'єднання.
 
 <a name="the-exceptions-directory"></a>
-#### The Exceptions Directory
 
-The `Exceptions` directory contains your application's exception handler and is also a good place to place any exceptions thrown by your application. If you would like to customize how your exceptions are logged or rendered, you should modify the `Handler` class in this directory.
+#### Каталог винятків
+
+`Exceptions`каталог містить обробник винятків вашої програми, а також є гарним місцем для розміщення будь-яких винятків, викликаних вашою програмою. Якщо ви хочете налаштувати спосіб реєстрації або відображення ваших винятків, вам слід змінити файл`Handler`клас у цьому каталозі.
 
 <a name="the-http-directory"></a>
-#### The Http Directory
 
-The `Http` directory contains your controllers, middleware, and form requests. Almost all of the logic to handle requests entering your application will be placed in this directory.
+#### Каталог Http
+
+`Http`каталог містить ваші контролери, Middlware та запити на форми. Майже вся логіка обробки запитів, що надходять у вашу програму, буде розміщена в цьому каталозі.
 
 <a name="the-jobs-directory"></a>
-#### The Jobs Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:job` Artisan command. The `Jobs` directory houses the [queueable jobs](/docs/{{version}}/queues) for your application. Jobs may be queued by your application or run synchronously within the current request lifecycle. Jobs that run synchronously during the current request are sometimes referred to as "commands" since they are an implementation of the [command pattern](https://en.wikipedia.org/wiki/Command_pattern).
+#### Каталог вакансій
+
+Цей каталог не існує за замовчуванням, але буде створений для вас, якщо ви виконаєте`make:job`Artisan командування.`Jobs`Каталог будинків[робочі місця, що чергуються](/docs/{{version}}/queues)для вашої заявки. Ваша програма може бути в черзі у вашій програмі або працювати синхронно протягом поточного життєвого циклу запиту. Завдання, які виконуються синхронно під час поточного запиту, іноді називають "командами", оскільки вони є реалізацією[шаблон команди](https://en.wikipedia.org/wiki/Command_pattern).
 
 <a name="the-listeners-directory"></a>
-#### The Listeners Directory
 
-This directory does not exist by default, but will be created for you if you execute the `event:generate` or `make:listener` Artisan commands. The `Listeners` directory contains the classes that handle your [events](/docs/{{version}}/events). Event listeners receive an event instance and perform logic in response to the event being fired. For example, a `UserRegistered` event might be handled by a `SendWelcomeEmail` listener.
+#### Каталог слухачів
+
+Цей каталог не існує за замовчуванням, але буде створений для вас, якщо ви виконаєте`event:generate`або`make:listener`Ремісничі команди.`Listeners`каталог містить класи, які обробляють ваш[події](/docs/{{version}}/events). Слухачі подій отримують екземпляр події та виконують логіку у відповідь на спрацьовувану подію. Наприклад, a`UserRegistered`подію може обробляти a`SendWelcomeEmail`слухач.
 
 <a name="the-mail-directory"></a>
-#### The Mail Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:mail` Artisan command. The `Mail` directory contains all of your classes that represent emails sent by your application. Mail objects allow you to encapsulate all of the logic of building an email in a single, simple class that may be sent using the `Mail::send` method.
+#### Поштовий каталог
+
+Цей каталог не існує за замовчуванням, але буде створений для вас, якщо ви виконаєте`make:mail`Artisan командування.`Mail`каталог містить усі ваші класи, які представляють електронні листи, надіслані вашим додатком. Об'єкти пошти дозволяють інкапсулювати всю логіку побудови електронного листа в одному простому класі, який може бути надісланий за`Mail::send`метод.
 
 <a name="the-models-directory"></a>
-#### The Models Directory
 
-The `Models` directory contains all of your Eloquent model classes. The Eloquent ORM included with Laravel provides a beautiful, simple ActiveRecord implementation for working with your database. Each database table has a corresponding "Model" which is used to interact with that table. Models allow you to query for data in your tables, as well as insert new records into the table.
+#### Каталог моделей
+
+`Models`каталог містить усі ваші класи Eloquent моделей. Eloquent ORM, що входить до складу Laravel, забезпечує чудову, просту реалізацію ActiveRecord для роботи з вашою базою даних. Кожна таблиця бази даних має відповідну "Модель", яка використовується для взаємодії з цією таблицею. Моделі дозволяють запитувати дані у ваших таблицях, а також вставляти нові записи до таблиці.
 
 <a name="the-notifications-directory"></a>
-#### The Notifications Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:notification` Artisan command. The `Notifications` directory contains all of the "transactional" notifications that are sent by your application, such as simple notifications about events that happen within your application. Laravel's notification features abstracts sending notifications over a variety of drivers such as email, Slack, SMS, or stored in a database.
+#### Каталог сповіщень
+
+Цей каталог не існує за замовчуванням, але буде створений для вас, якщо ви виконаєте`make:notification`Artisan командування.`Notifications`каталог містить усі сповіщення про транзакції, які надсилає ваша програма, наприклад, прості сповіщення про події, що відбуваються у вашій програмі. Функції сповіщень Laravel абстрагуються від надсилання сповіщень через різні драйвери, такі як електронна пошта, Slack, SMS або зберігаються в базі даних.
 
 <a name="the-policies-directory"></a>
-#### The Policies Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:policy` Artisan command. The `Policies` directory contains the authorization policy classes for your application. Policies are used to determine if a user can perform a given action against a resource. For more information, check out the [authorization documentation](/docs/{{version}}/authorization).
+#### Довідник політик
+
+Цей каталог не існує за замовчуванням, але буде створений для вас, якщо ви виконаєте`make:policy`Artisan командування.`Policies`каталог містить класи політики авторизації для вашої програми. Політики використовуються для визначення того, чи може користувач виконати певну дію щодо ресурсу. Для отримання додаткової інформації перегляньте[авторизаційна документація](/docs/{{version}}/authorization).
 
 <a name="the-providers-directory"></a>
-#### The Providers Directory
 
-The `Providers` directory contains all of the [service providers](/docs/{{version}}/providers) for your application. Service providers bootstrap your application by binding services in the service container, registering events, or performing any other tasks to prepare your application for incoming requests.
+#### Каталог постачальників
 
-In a fresh Laravel application, this directory will already contain several providers. You are free to add your own providers to this directory as needed.
+`Providers`каталог містить усі[постачальників послуг](/docs/{{version}}/providers)для вашої заявки. Постачальники послуг завантажують вашу програму, прив’язуючи служби до контейнера послуг, реєструючи події або виконуючи будь-які інші завдання, щоб підготувати вашу заявку до вхідних запитів.
+
+У новій програмі Laravel цей каталог вже міститиме декілька постачальників. Ви можете додавати власних провайдерів до цього каталогу за потреби.
 
 <a name="the-rules-directory"></a>
-#### The Rules Directory
 
-This directory does not exist by default, but will be created for you if you execute the `make:rule` Artisan command. The `Rules` directory contains the custom validation rule objects for your application. Rules are used to encapsulate complicated validation logic in a simple object. For more information, check out the [validation documentation](/docs/{{version}}/validation).
+#### Каталог правил
+
+Цей каталог не існує за замовчуванням, але буде створений для вас, якщо ви виконаєте`make:rule`Artisan командування.`Rules`каталог містить спеціальні об'єкти правила перевірки для вашої програми. Правила використовуються для інкапсуляції складної логіки перевірки в простий об'єкт. Для отримання додаткової інформації перегляньте[документація про перевірку](/docs/{{version}}/validation).

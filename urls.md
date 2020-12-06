@@ -1,26 +1,29 @@
-# URL Generation
+# Генерація URL-адрес
 
-- [Introduction](#introduction)
-- [The Basics](#the-basics)
-    - [Generating Basic URLs](#generating-basic-urls)
-    - [Accessing The Current URL](#accessing-the-current-url)
-- [URLs For Named Routes](#urls-for-named-routes)
-    - [Signed URLs](#signed-urls)
-- [URLs For Controller Actions](#urls-for-controller-actions)
-- [Default Values](#default-values)
+-   [Вступ](#introduction)
+-   [Основи](#the-basics)
+    -   [Створення базових URL-адрес](#generating-basic-urls)
+    -   [Доступ до поточної URL-адреси](#accessing-the-current-url)
+-   [URL-адреси для іменованих маршрутів](#urls-for-named-routes)
+    -   [Підписані URL-адреси](#signed-urls)
+-   [URL-адреси для дій контролера](#urls-for-controller-actions)
+-   [Значення за замовчуванням](#default-values)
 
 <a name="introduction"></a>
-## Introduction
 
-Laravel provides several helpers to assist you in generating URLs for your application. These are mainly helpful when building links in your templates and API responses, or when generating redirect responses to another part of your application.
+## Вступ
+
+Laravel надає кілька помічників, які допоможуть вам створити URL-адреси для вашої програми. Вони в основному корисні при побудові посилань у ваших шаблонах та відповідях API або при генерації переадресаційних відповідей на іншу частину вашої програми.
 
 <a name="the-basics"></a>
-## The Basics
+
+## Основи
 
 <a name="generating-basic-urls"></a>
-### Generating Basic URLs
 
-The `url` helper may be used to generate arbitrary URLs for your application. The generated URL will automatically use the scheme (HTTP or HTTPS) and host from the current request:
+### Створення базових URL-адрес
+
+`url`helper може використовуватися для створення довільних URL-адрес для вашої програми. Створена URL-адреса автоматично використовуватиме схему (HTTP або HTTPS) та хост із поточного запиту:
 
     $post = App\Models\Post::find(1);
 
@@ -29,9 +32,10 @@ The `url` helper may be used to generate arbitrary URLs for your application. Th
     // http://example.com/posts/1
 
 <a name="accessing-the-current-url"></a>
-### Accessing The Current URL
 
-If no path is provided to the `url` helper, an `Illuminate\Routing\UrlGenerator` instance is returned, allowing you to access information about the current URL:
+### Доступ до поточної URL-адреси
+
+Якщо шлях до`url`помічник, ан`Illuminate\Routing\UrlGenerator`повертається екземпляр, що дозволяє отримати доступ до інформації про поточну URL-адресу:
 
     // Get the current URL without the query string...
     echo url()->current();
@@ -42,38 +46,39 @@ If no path is provided to the `url` helper, an `Illuminate\Routing\UrlGenerator`
     // Get the full URL for the previous request...
     echo url()->previous();
 
-Each of these methods may also be accessed via the `URL` [facade](/docs/{{version}}/facades):
+Кожен із цих методів також може бути доступний через`URL`[фасад](/docs/{{version}}/facades):
 
     use Illuminate\Support\Facades\URL;
 
     echo URL::current();
 
 <a name="urls-for-named-routes"></a>
-## URLs For Named Routes
 
-The `route` helper may be used to generate URLs to named routes. Named routes allow you to generate URLs without being coupled to the actual URL defined on the route. Therefore, if the route's URL changes, no changes need to be made to your `route` function calls. For example, imagine your application contains a route defined like the following:
+## URL-адреси для іменованих маршрутів
+
+`route`helper може використовуватися для генерації URL-адрес до названих маршрутів. Іменовані маршрути дозволяють створювати URL-адреси без прив’язки до фактичної URL-адреси, визначеної на маршруті. Отже, якщо URL-адреса маршруту змінюється, ніяких змін у вашій вносити не потрібно`route` function calls. For example, imagine your application contains a route defined like the following:
 
     Route::get('/post/{post}', function () {
         //
     })->name('post.show');
 
-To generate a URL to this route, you may use the `route` helper like so:
+Щоб сформувати URL-адресу цього маршруту, ви можете використовувати`route`помічник ось так:
 
     echo route('post.show', ['post' => 1]);
 
     // http://example.com/post/1
 
-Any additional array parameters that do not correspond to the route's definition parameters will be added to the URL's query string:
+Будь-які додаткові параметри масиву, які не відповідають параметрам визначення маршруту, будуть додані до рядка запиту URL-адреси:
 
     echo route('post.show', ['post' => 1, 'search' => 'rocket']);
 
     // http://example.com/post/1?search=rocket
 
-You will often be generating URLs using the primary key of [Eloquent models](/docs/{{version}}/eloquent). For this reason, you may pass Eloquent models as parameter values. The `route` helper will automatically extract the model's primary key:
+Ви часто створюватимете URL-адреси за допомогою первинного ключа[Красномовні моделі](/docs/{{version}}/eloquent). З цієї причини ви можете передавати моделі Eloquent як значення параметрів.`route` helper will automatically extract the model's primary key:
 
     echo route('post.show', ['post' => $post]);
 
-The `route` helper may also be used to generate URLs for routes with multiple parameters:
+`route`helper також може використовуватися для генерації URL-адрес для маршрутів з декількома параметрами:
 
     Route::get('/post/{post}/comment/{comment}', function () {
         //
@@ -84,17 +89,18 @@ The `route` helper may also be used to generate URLs for routes with multiple pa
     // http://example.com/post/1/comment/3
 
 <a name="signed-urls"></a>
-### Signed URLs
 
-Laravel allows you to easily create "signed" URLs to named routes. These URLs have a "signature" hash appended to the query string which allows Laravel to verify that the URL has not been modified since it was created. Signed URLs are especially useful for routes that are publicly accessible yet need a layer of protection against URL manipulation.
+### Підписані URL-адреси
 
-For example, you might use signed URLs to implement a public "unsubscribe" link that is emailed to your customers. To create a signed URL to a named route, use the `signedRoute` method of the `URL` facade:
+Laravel дозволяє легко створювати "підписані" URL-адреси до названих маршрутів. Ці URL-адреси мають хеш "підпису", доданий до рядка запиту, що дозволяє Laravel перевірити, що URL-адреса не була змінена з моменту її створення. Підписані URL-адреси особливо корисні для маршрутів, які є загальнодоступними, проте потребують рівня захисту від маніпулювання URL-адресами.
+
+Наприклад, ви можете використовувати підписані URL-адреси для реалізації загальнодоступного посилання "скасувати підписку", яке надсилається вашим клієнтам електронною поштою. Щоб створити підписану URL-адресу для названого маршруту, використовуйте`signedRoute`метод`URL`фасад:
 
     use Illuminate\Support\Facades\URL;
 
     return URL::signedRoute('unsubscribe', ['user' => 1]);
 
-If you would like to generate a temporary signed route URL that expires, you may use the `temporarySignedRoute` method:
+Якщо ви хочете створити тимчасову підписану URL-адресу маршруту, термін дії якої закінчується, ви можете використовувати`temporarySignedRoute`метод:
 
     use Illuminate\Support\Facades\URL;
 
@@ -103,9 +109,10 @@ If you would like to generate a temporary signed route URL that expires, you may
     );
 
 <a name="validating-signed-route-requests"></a>
-#### Validating Signed Route Requests
 
-To verify that an incoming request has a valid signature, you should call the `hasValidSignature` method on the incoming `Request`:
+#### Перевірка підписаних запитів маршруту
+
+Щоб переконатися, що вхідний запит має дійсний підпис, вам слід зателефонувати до`hasValidSignature`метод на вхідний`Request`:
 
     use Illuminate\Http\Request;
 
@@ -117,7 +124,7 @@ To verify that an incoming request has a valid signature, you should call the `h
         // ...
     })->name('unsubscribe');
 
-Alternatively, you may assign the `Illuminate\Routing\Middleware\ValidateSignature` middleware to the route. If it is not already present, you should assign this middleware a key in your HTTP kernel's `routeMiddleware` array:
+Крім того, ви можете призначити`Illuminate\Routing\Middleware\ValidateSignature`Middlware до маршруту. Якщо його ще немає, слід призначити цьому проміжному програмному забезпеченню ключ у вашому ядрі HTTP`routeMiddleware`масив:
 
     /**
      * The application's route middleware.
@@ -130,35 +137,37 @@ Alternatively, you may assign the `Illuminate\Routing\Middleware\ValidateSignatu
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 
-Once you have registered the middleware in your kernel, you may attach it to a route. If the incoming request does not have a valid signature, the middleware will automatically return a `403` error response:
+Після реєстрації проміжного програмного забезпечення у своєму ядрі ви можете додати його до маршруту. Якщо вхідний запит не має дійсного підпису, Middlware автоматично поверне a`403`відповідь на помилку:
 
     Route::post('/unsubscribe/{user}', function (Request $request) {
         // ...
     })->name('unsubscribe')->middleware('signed');
 
 <a name="urls-for-controller-actions"></a>
-## URLs For Controller Actions
 
-The `action` function generates a URL for the given controller action:
+## URL-адреси для дій контролера
+
+`action`функція генерує URL-адресу для даної дії контролера:
 
     use App\Http\Controllers\HomeController;
 
     $url = action([HomeController::class, 'index']);
 
-If the controller method accepts route parameters, you may pass them as the second argument to the function:
+Якщо метод контролера приймає параметри маршруту, ви можете передати їх як другий аргумент функції:
 
     $url = action([UserController::class, 'profile'], ['id' => 1]);
 
 <a name="default-values"></a>
-## Default Values
 
-For some applications, you may wish to specify request-wide default values for certain URL parameters. For example, imagine many of your routes define a `{locale}` parameter:
+## Значення за замовчуванням
+
+У деяких програмах, можливо, ви захочете вказати значення за замовчуванням для певних параметрів URL-адрес. Наприклад, уявіть, що багато ваших маршрутів визначають a`{locale}`параметр:
 
     Route::get('/{locale}/posts', function () {
         //
     })->name('post.index');
 
-It is cumbersome to always pass the `locale` every time you call the `route` helper. So, you may use the `URL::defaults` method to define a default value for this parameter that will always be applied during the current request. You may wish to call this method from a [route middleware](/docs/{{version}}/middleware#assigning-middleware-to-routes) so that you have access to the current request:
+Завжди здавати`locale`кожного разу, коли ви телефонуєте на`route`помічник. Отже, ви можете використовувати`URL::defaults`метод для визначення значення за замовчуванням для цього параметра, яке завжди застосовуватиметься під час поточного запиту. Можливо, ви захочете викликати цей метод із[маршрут проміжного програмного забезпечення](/docs/{{version}}/middleware#assigning-middleware-to-routes) so that you have access to the current request:
 
     <?php
 
@@ -177,14 +186,15 @@ It is cumbersome to always pass the `locale` every time you call the `route` hel
         }
     }
 
-Once the default value for the `locale` parameter has been set, you are no longer required to pass its value when generating URLs via the `route` helper.
+Одного разу значення за замовчуванням для`locale`Параметр встановлено, вам більше не потрібно передавати його значення при генерації URL-адрес через`route`помічник.
 
 <a name="url-defaults-middleware-priority"></a>
-#### URL Defaults & Middleware Priority
 
-Setting URL default values can interfere with Laravel's handling of implicit model bindings. Therefore, you should [prioritize your middleware](https://laravel.com/docs/{{version}}/middleware#sorting-middleware) that set URL defaults to be executed before Laravel's own `SubstituteBindings` middleware. You can accomplish this by making sure your middleware occurs before the `SubstituteBindings` middleware within the `$middlewarePriority` property of your application's HTTP kernel.
+#### URL за замовчуванням та пріоритет проміжного програмного забезпечення
 
-The `$middlewarePriority` property is defined in the base `Illuminate\Foundation\Http\Kernel` class. You may copy its definition from that class and overwrite it in your application's HTTP kernel in order to modify it:
+Встановлення значень за замовчуванням URL може перешкодити обробці Laravel неявних прив'язок моделі. Тому вам слід[розставити пріоритети на Middlware](https://laravel.com/docs/{{version}}/middleware#sorting-middleware)що встановлює за замовчуванням URL-адреси, які будуть виконуватися перед власними Laravel`SubstituteBindings`Middlware. Ви можете досягти цього, переконавшись, що ваше Middlware відбувається до`SubstituteBindings`Middlware в`$middlewarePriority`властивість ядра HTTP вашої програми.
+
+`$middlewarePriority`властивість визначається в основі`Illuminate\Foundation\Http\Kernel`клас. Ви можете скопіювати його визначення з цього класу та перезаписати його в ядро ​​HTTP програми, щоб змінити його:
 
     /**
      * The priority-sorted list of middleware.

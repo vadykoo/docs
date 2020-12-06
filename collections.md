@@ -1,20 +1,21 @@
-# Collections
+# Колекції
 
-- [Introduction](#introduction)
-    - [Creating Collections](#creating-collections)
-    - [Extending Collections](#extending-collections)
-- [Available Methods](#available-methods)
-- [Higher Order Messages](#higher-order-messages)
-- [Lazy Collections](#lazy-collections)
-    - [Introduction](#lazy-collection-introduction)
-    - [Creating Lazy Collections](#creating-lazy-collections)
-    - [The Enumerable Contract](#the-enumerable-contract)
-    - [Lazy Collection Methods](#lazy-collection-methods)
+-   [Вступ](#introduction)
+    -   [Створення колекцій](#creating-collections)
+    -   [Розширення колекцій](#extending-collections)
+-   [Доступні методи](#available-methods)
+-   [Повідомлення вищого порядку](#higher-order-messages)
+-   [Ледачі колекції](#lazy-collections)
+    -   [Вступ](#lazy-collection-introduction)
+    -   [Створення ледачих колекцій](#creating-lazy-collections)
+    -   [Контракт, що перелічується](#the-enumerable-contract)
+    -   [Методи лінивого збору](#lazy-collection-methods)
 
 <a name="introduction"></a>
-## Introduction
 
-The `Illuminate\Support\Collection` class provides a fluent, convenient wrapper for working with arrays of data. For example, check out the following code. We'll use the `collect` helper to create a new collection instance from the array, run the `strtoupper` function on each element, and then remove all empty elements:
+## Вступ
+
+`Illuminate\Support\Collection`class забезпечує вільну, зручну обгортку для роботи з масивами даних. Наприклад, перевірте наступний код. Ми будемо використовувати`collect`помічник для створення нового екземпляра колекції з масиву, запустіть`strtoupper`функцію для кожного елемента, а потім видаліть усі порожні елементи:
 
     $collection = collect(['taylor', 'abigail', null])->map(function ($name) {
         return strtoupper($name);
@@ -23,21 +24,23 @@ The `Illuminate\Support\Collection` class provides a fluent, convenient wrapper 
         return empty($name);
     });
 
-As you can see, the `Collection` class allows you to chain its methods to perform fluent mapping and reducing of the underlying array. In general, collections are immutable, meaning every `Collection` method returns an entirely new `Collection` instance.
+Як бачите,`Collection`клас дозволяє зв’язати його методи для виконання плавного зіставлення та зменшення базового масиву. Загалом, колекції є незмінними, тобто кожен`Collection`метод повертає абсолютно новий`Collection`інстанції.
 
 <a name="creating-collections"></a>
-### Creating Collections
 
-As mentioned above, the `collect` helper returns a new `Illuminate\Support\Collection` instance for the given array. So, creating a collection is as simple as:
+### Створення колекцій
+
+Як зазначалося вище,`collect`Помічник повертає новий`Illuminate\Support\Collection`екземпляр для даного масиву. Отже, створити колекцію просто:
 
     $collection = collect([1, 2, 3]);
 
-> {tip} The results of [Eloquent](/docs/{{version}}/eloquent) queries are always returned as `Collection` instances.
+> {tip} Результати[Красномовний](/docs/{{version}}/eloquent)запити завжди повертаються як`Collection`екземпляри.
 
 <a name="extending-collections"></a>
-### Extending Collections
 
-Collections are "macroable", which allows you to add additional methods to the `Collection` class at run time. For example, the following code adds a `toUpper` method to the `Collection` class:
+### Розширення колекцій
+
+Колекції є "макроздатними", що дозволяє додавати додаткові методи до`Collection`клас під час виконання. Наприклад, наступний код додає a`toUpper`метод до`Collection`клас:
 
     use Illuminate\Support\Collection;
     use Illuminate\Support\Str;
@@ -54,12 +57,13 @@ Collections are "macroable", which allows you to add additional methods to the `
 
     // ['FIRST', 'SECOND']
 
-Typically, you should declare collection macros in a [service provider](/docs/{{version}}/providers).
+Як правило, ви повинні оголосити макроси колекції в[постачальник послуг](/docs/{{version}}/providers).
 
 <a name="available-methods"></a>
-## Available Methods
 
-For the remainder of this documentation, we'll discuss each method available on the `Collection` class. Remember, all of these methods may be chained to fluently manipulate the underlying array. Furthermore, almost every method returns a new `Collection` instance, allowing you to preserve the original copy of the collection when necessary:
+## Доступні методи
+
+Для решти цієї документації ми обговоримо кожен метод, доступний на`Collection`клас. Пам’ятайте, що всі ці методи можуть бути зв’язані ланцюгами для плавного маніпулювання базовим масивом. Крім того, майже кожен метод повертає новий`Collection`екземпляр, що дозволяє зберегти оригінальну копію колекції, коли це необхідно:
 
 <style>
     #collection-method-list > p {
@@ -74,137 +78,13 @@ For the remainder of this documentation, we'll discuss each method available on 
 
 <div id="collection-method-list" markdown="1">
 
-[all](#method-all)
-[average](#method-average)
-[avg](#method-avg)
-[chunk](#method-chunk)
-[chunkWhile](#method-chunkwhile)
-[collapse](#method-collapse)
-[collect](#method-collect)
-[combine](#method-combine)
-[concat](#method-concat)
-[contains](#method-contains)
-[containsStrict](#method-containsstrict)
-[count](#method-count)
-[countBy](#method-countBy)
-[crossJoin](#method-crossjoin)
-[dd](#method-dd)
-[diff](#method-diff)
-[diffAssoc](#method-diffassoc)
-[diffKeys](#method-diffkeys)
-[dump](#method-dump)
-[duplicates](#method-duplicates)
-[duplicatesStrict](#method-duplicatesstrict)
-[each](#method-each)
-[eachSpread](#method-eachspread)
-[every](#method-every)
-[except](#method-except)
-[filter](#method-filter)
-[first](#method-first)
-[firstWhere](#method-first-where)
-[flatMap](#method-flatmap)
-[flatten](#method-flatten)
-[flip](#method-flip)
-[forget](#method-forget)
-[forPage](#method-forpage)
-[get](#method-get)
-[groupBy](#method-groupby)
-[has](#method-has)
-[implode](#method-implode)
-[intersect](#method-intersect)
-[intersectByKeys](#method-intersectbykeys)
-[isEmpty](#method-isempty)
-[isNotEmpty](#method-isnotempty)
-[join](#method-join)
-[keyBy](#method-keyby)
-[keys](#method-keys)
-[last](#method-last)
-[macro](#method-macro)
-[make](#method-make)
-[map](#method-map)
-[mapInto](#method-mapinto)
-[mapSpread](#method-mapspread)
-[mapToGroups](#method-maptogroups)
-[mapWithKeys](#method-mapwithkeys)
-[max](#method-max)
-[median](#method-median)
-[merge](#method-merge)
-[mergeRecursive](#method-mergerecursive)
-[min](#method-min)
-[mode](#method-mode)
-[nth](#method-nth)
-[only](#method-only)
-[pad](#method-pad)
-[partition](#method-partition)
-[pipe](#method-pipe)
-[pipeInto](#method-pipeinto)
-[pluck](#method-pluck)
-[pop](#method-pop)
-[prepend](#method-prepend)
-[pull](#method-pull)
-[push](#method-push)
-[put](#method-put)
-[random](#method-random)
-[reduce](#method-reduce)
-[reject](#method-reject)
-[replace](#method-replace)
-[replaceRecursive](#method-replacerecursive)
-[reverse](#method-reverse)
-[search](#method-search)
-[shift](#method-shift)
-[shuffle](#method-shuffle)
-[skip](#method-skip)
-[skipUntil](#method-skipuntil)
-[skipWhile](#method-skipwhile)
-[slice](#method-slice)
-[some](#method-some)
-[sort](#method-sort)
-[sortBy](#method-sortby)
-[sortByDesc](#method-sortbydesc)
-[sortDesc](#method-sortdesc)
-[sortKeys](#method-sortkeys)
-[sortKeysDesc](#method-sortkeysdesc)
-[splice](#method-splice)
-[split](#method-split)
-[splitIn](#method-splitin)
-[sum](#method-sum)
-[take](#method-take)
-[takeUntil](#method-takeuntil)
-[takeWhile](#method-takewhile)
-[tap](#method-tap)
-[times](#method-times)
-[toArray](#method-toarray)
-[toJson](#method-tojson)
-[transform](#method-transform)
-[union](#method-union)
-[unique](#method-unique)
-[uniqueStrict](#method-uniquestrict)
-[unless](#method-unless)
-[unlessEmpty](#method-unlessempty)
-[unlessNotEmpty](#method-unlessnotempty)
-[unwrap](#method-unwrap)
-[values](#method-values)
-[when](#method-when)
-[whenEmpty](#method-whenempty)
-[whenNotEmpty](#method-whennotempty)
-[where](#method-where)
-[whereStrict](#method-wherestrict)
-[whereBetween](#method-wherebetween)
-[whereIn](#method-wherein)
-[whereInStrict](#method-whereinstrict)
-[whereInstanceOf](#method-whereinstanceof)
-[whereNotBetween](#method-wherenotbetween)
-[whereNotIn](#method-wherenotin)
-[whereNotInStrict](#method-wherenotinstrict)
-[whereNotNull](#method-wherenotnull)
-[whereNull](#method-wherenull)
-[wrap](#method-wrap)
-[zip](#method-zip)
+[всі](#method-all)[середній](#method-average)[сер](#method-avg)[шматок](#method-chunk)[шматок](#method-chunkwhile)[крах](#method-collapse)[збирати](#method-collect)[комбінувати](#method-combine)[конкат](#method-concat)[містить](#method-contains)[міститьStrict](#method-containsstrict)[рахувати](#method-count)[countBy](#method-countBy)[crossJoin](#method-crossjoin)[dd](#method-dd)[різниця](#method-diff)[diffAssoc](#method-diffassoc)[diffKeys](#method-diffkeys)[смітник](#method-dump)[дублікати](#method-duplicates)[дублікати Строгий](#method-duplicatesstrict)[кожен](#method-each)[коженРозширення](#method-eachspread)[кожен](#method-every)[крім](#method-except)[фільтр](#method-filter)[спочатку](#method-first)[першийДе](#method-first-where)[flatMap](#method-flatmap)[сплющити](#method-flatten)[перевернути](#method-flip)[забути](#method-forget)[forPage](#method-forpage)[отримати](#method-get)[groupBy](#method-groupby)[має](#method-has)[вибухнути](#method-implode)[перетинаються](#method-intersect)[intersectByKeys](#method-intersectbykeys)[пусто](#method-isempty)[isNotEmpty](#method-isnotempty)[приєднуватися](#method-join)[keyBy](#method-keyby)[клавіші](#method-keys)[останній](#method-last)[макрос](#method-macro)[зробити](#method-make)[карта](#method-map)[вступ](#method-mapinto)[mapSpread](#method-mapspread)[mapToGroups](#method-maptogroups)[mapWithKeys](#method-mapwithkeys)[макс](#method-max)[медіана](#method-median)[піти](#method-merge)[mergeRecursive](#method-mergerecursive)[хв](#method-min)[режимі](#method-mode)[n-й](#method-nth)[лише](#method-only)[подушечка](#method-pad)[розділ](#method-partition)[труба](#method-pipe)[πιπεΊντο](#method-pipeinto)[зривати](#method-pluck)[поп](#method-pop)[попередньо](#method-prepend)[тягнути](#method-pull)[штовхати](#method-push)[поставити](#method-put)[випадкові](#method-random)[зменшити](#method-reduce)[відкинути](#method-reject)[замінити](#method-replace)[replaceRecursive](#method-replacerecursive)[зворотний](#method-reverse)[пошук](#method-search)[зміна](#method-shift)[перетасувати](#method-shuffle)[пропустити](#method-skip)[shipUtil](#method-skipuntil)[skipWhile](#method-skipwhile)[скибочка](#method-slice)[дещо](#method-some)[сортувати](#method-sort)[сортувати за](#method-sortby)[sortByDesc](#method-sortbydesc)[sortDesc](#method-sortdesc)[sortKeys](#method-sortkeys)[sortKeysDesc](#method-sortkeysdesc)[зрощення](#method-splice)[розколоти](#method-split)[Спліт](#method-splitin)[сума](#method-sum)[приймати](#method-take)[takeUntil](#method-takeuntil)[takeWhile](#method-takewhile)[натисніть](#method-tap)[разів](#method-times)[toArray](#method-toarray)[до Джсона](#method-tojson)[перетворювати](#method-transform)[союз](#method-union)[унікальний](#method-unique)[uniqueStrict](#method-uniquestrict)[хіба що](#method-unless)[elseEmpty](#method-unlessempty)[ifNotEmpty](#method-unlessnotempty)[розгорнути](#method-unwrap)[значення](#method-values)[коли](#method-when)[whenEmpty](#method-whenempty)[whenNotEmpty](#method-whennotempty)[де](#method-where)[деStrict](#method-wherestrict)[де Між](#method-wherebetween)[де](#method-wherein)[whereInStrict](#method-whereinstrict)[whereInstanceOf](#method-whereinstanceof)[де не між](#method-wherenotbetween)[деНеВ](#method-wherenotin)[деNotInStrict](#method-wherenotinstrict)[де неНуль](#method-wherenotnull)[деНуль](#method-wherenull)[обернути](#method-wrap)[застібку-блискавку](#method-zip)
 
 </div>
 
 <a name="method-listing"></a>
-## Method Listing
+
+## Перелік методів
 
 <style>
     #collection-method code {
@@ -217,23 +97,26 @@ For the remainder of this documentation, we'll discuss each method available on 
 </style>
 
 <a name="method-all"></a>
-#### `all()` {#collection-method .first-collection-method}
 
-The `all` method returns the underlying array represented by the collection:
+#### `all()`{# collection-method .first-collection-method}
+
+`all`метод повертає базовий масив, представлений колекцією:
 
     collect([1, 2, 3])->all();
 
     // [1, 2, 3]
 
 <a name="method-average"></a>
-#### `average()` {#collection-method}
 
-Alias for the [`avg`](#method-avg) method.
+#### `average()`{# collection-method}
+
+Псевдонім для[`avg`](#method-avg)метод.
 
 <a name="method-avg"></a>
-#### `avg()` {#collection-method}
 
-The `avg` method returns the [average value](https://en.wikipedia.org/wiki/Average) of a given key:
+#### `avg()`{# collection-method}
+
+`avg`метод повертає[середнє значення](https://en.wikipedia.org/wiki/Average)даного ключа:
 
     $average = collect([['foo' => 10], ['foo' => 10], ['foo' => 20], ['foo' => 40]])->avg('foo');
 
@@ -244,9 +127,10 @@ The `avg` method returns the [average value](https://en.wikipedia.org/wiki/Avera
     // 2
 
 <a name="method-chunk"></a>
-#### `chunk()` {#collection-method}
 
-The `chunk` method breaks the collection into multiple, smaller collections of a given size:
+#### `chunk()`{# collection-method}
+
+`chunk`метод розбиває колекцію на кілька менших колекцій заданого розміру:
 
     $collection = collect([1, 2, 3, 4, 5, 6, 7]);
 
@@ -256,7 +140,7 @@ The `chunk` method breaks the collection into multiple, smaller collections of a
 
     // [[1, 2, 3, 4], [5, 6, 7]]
 
-This method is especially useful in [views](/docs/{{version}}/views) when working with a grid system such as [Bootstrap](https://getbootstrap.com/docs/4.1/layout/grid/). Imagine you have a collection of [Eloquent](/docs/{{version}}/eloquent) models you want to display in a grid:
+Цей метод особливо корисний у[погляди](/docs/{{version}}/views)при роботі з сітковою системою, такою як[Bootstrap](https://getbootstrap.com/docs/4.1/layout/grid/). Уявіть, у вас є колекція[Красномовний](/docs/{{version}}/eloquent)моделі, які потрібно відобразити в сітці:
 
     @foreach ($products->chunk(3) as $chunk)
         <div class="row">
@@ -267,9 +151,10 @@ This method is especially useful in [views](/docs/{{version}}/views) when workin
     @endforeach
 
 <a name="method-chunkwhile"></a>
-#### `chunkWhile()` {#collection-method}
 
-The `chunkWhile` method breaks the collection into multiple, smaller collections based on the evaluation of the given callback:
+#### `chunkWhile()`{# collection-method}
+
+`chunkWhile`метод розбиває колекцію на кілька менших колекцій на основі оцінки даного зворотного виклику:
 
     $collection = collect(str_split('AABBCCCD'));
 
@@ -282,9 +167,10 @@ The `chunkWhile` method breaks the collection into multiple, smaller collections
     // [['A', 'A'], ['B', 'B'], ['C', 'C', 'C'], ['D']]
 
 <a name="method-collapse"></a>
-#### `collapse()` {#collection-method}
 
-The `collapse` method collapses a collection of arrays into a single, flat collection:
+#### `collapse()`{# collection-method}
+
+`collapse`метод згортає колекцію масивів в єдину плоску колекцію:
 
     $collection = collect([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
 
@@ -295,9 +181,10 @@ The `collapse` method collapses a collection of arrays into a single, flat colle
     // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 <a name="method-combine"></a>
-#### `combine()` {#collection-method}
 
-The `combine` method combines the values of the collection, as keys, with the values of another array or collection:
+#### `combine()`{# collection-method}
+
+`combine`метод поєднує значення колекції, як ключі, зі значеннями іншого масиву або колекції:
 
     $collection = collect(['name', 'age']);
 
@@ -308,9 +195,10 @@ The `combine` method combines the values of the collection, as keys, with the va
     // ['name' => 'George', 'age' => 29]
 
 <a name="method-collect"></a>
-#### `collect()` {#collection-method}
 
-The `collect` method returns a new `Collection` instance with the items currently in the collection:
+#### `collect()`{# collection-method}
+
+`collect`метод повертає новий`Collection`екземпляр з предметами, що перебувають на даний момент у колекції:
 
     $collectionA = collect([1, 2, 3]);
 
@@ -320,7 +208,7 @@ The `collect` method returns a new `Collection` instance with the items currentl
 
     // [1, 2, 3]
 
-The `collect` method is primarily useful for converting [lazy collections](#lazy-collections) into standard `Collection` instances:
+`collect`метод в першу чергу корисний для перетворення[ледачі колекції](#lazy-collections)в стандартний`Collection`екземпляри:
 
     $lazyCollection = LazyCollection::make(function () {
         yield 1;
@@ -338,12 +226,13 @@ The `collect` method is primarily useful for converting [lazy collections](#lazy
 
     // [1, 2, 3]
 
-> {tip} The `collect` method is especially useful when you have an instance of `Enumerable` and need a non-lazy collection instance. Since `collect()` is part of the `Enumerable` contract, you can safely use it to get a `Collection` instance.
+> {tip} The`collect`метод особливо корисний, коли у вас є екземпляр`Enumerable`і потрібен не ледачий екземпляр колекції. Оскільки`collect()`є частиною`Enumerable`контракту, ви можете сміливо використовувати його для отримання`Collection`інстанції.
 
 <a name="method-concat"></a>
-#### `concat()` {#collection-method}
 
-The `concat` method appends the given `array` or collection values onto the end of the collection:
+#### `concat()`{# collection-method}
+
+`concat`метод додає поданий`array`або значення колекції в кінці колекції:
 
     $collection = collect(['John Doe']);
 
@@ -354,9 +243,10 @@ The `concat` method appends the given `array` or collection values onto the end 
     // ['John Doe', 'Jane Doe', 'Johnny Doe']
 
 <a name="method-contains"></a>
-#### `contains()` {#collection-method}
 
-The `contains` method determines whether the collection contains a given item:
+#### `contains()`{# collection-method}
+
+`contains`Метод визначає, чи містить колекція даний предмет:
 
     $collection = collect(['name' => 'Desk', 'price' => 100]);
 
@@ -368,7 +258,7 @@ The `contains` method determines whether the collection contains a given item:
 
     // false
 
-You may also pass a key / value pair to the `contains` method, which will determine if the given pair exists in the collection:
+Ви також можете передати пару ключ / значення в`contains`метод, який визначатиме, чи існує дана пара в колекції:
 
     $collection = collect([
         ['product' => 'Desk', 'price' => 200],
@@ -379,7 +269,7 @@ You may also pass a key / value pair to the `contains` method, which will determ
 
     // false
 
-Finally, you may also pass a callback to the `contains` method to perform your own truth test:
+Нарешті, ви також можете передати зворотний дзвінок на`contains`спосіб провести власний тест на істину:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -389,19 +279,21 @@ Finally, you may also pass a callback to the `contains` method to perform your o
 
     // false
 
-The `contains` method uses "loose" comparisons when checking item values, meaning a string with an integer value will be considered equal to an integer of the same value. Use the [`containsStrict`](#method-containsstrict) method to filter using "strict" comparisons.
+`contains`метод використовує "вільні" порівняння при перевірці значень елементів, тобто рядок із цілим значенням вважатиметься рівним цілому числу того самого значення. Використовувати[`containsStrict`](#method-containsstrict)метод фільтрації за допомогою "суворих" порівнянь.
 
 <a name="method-containsstrict"></a>
-#### `containsStrict()` {#collection-method}
 
-This method has the same signature as the [`contains`](#method-contains) method; however, all values are compared using "strict" comparisons.
+#### `containsStrict()`{# collection-method}
 
-> {tip} This method's behavior is modified when using [Eloquent Collections](/docs/{{version}}/eloquent-collections#method-contains).
+Цей метод має той самий підпис, що і[`contains`](#method-contains)метод; однак усі значення порівнюються за допомогою "суворих" порівнянь.
+
+> {tip} Поведінка цього методу змінюється під час використання[Красномовні колекції](/docs/{{version}}/eloquent-collections#method-contains).
 
 <a name="method-count"></a>
-#### `count()` {#collection-method}
 
-The `count` method returns the total number of items in the collection:
+#### `count()`{# collection-method}
+
+`count`метод повертає загальну кількість предметів у колекції:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -410,9 +302,10 @@ The `count` method returns the total number of items in the collection:
     // 4
 
 <a name="method-countBy"></a>
-#### `countBy()` {#collection-method}
 
-The `countBy` method counts the occurrences of values in the collection. By default, the method counts the occurrences of every element:
+#### `countBy()`{# collection-method}
+
+`countBy`метод підраховує випадки значень у колекції. За замовчуванням метод враховує випадки кожного елемента:
 
     $collection = collect([1, 2, 2, 2, 3]);
 
@@ -422,7 +315,7 @@ The `countBy` method counts the occurrences of values in the collection. By defa
 
     // [1 => 1, 2 => 3, 3 => 1]
 
-However, you pass a callback to the `countBy` method to count all items by a custom value:
+Однак ви передаєте зворотний дзвінок на`countBy`метод для підрахунку всіх елементів за власним значенням:
 
     $collection = collect(['alice@gmail.com', 'bob@yahoo.com', 'carlos@gmail.com']);
 
@@ -435,9 +328,10 @@ However, you pass a callback to the `countBy` method to count all items by a cus
     // ['gmail.com' => 2, 'yahoo.com' => 1]
 
 <a name="method-crossjoin"></a>
-#### `crossJoin()` {#collection-method}
 
-The `crossJoin` method cross joins the collection's values among the given arrays or collections, returning a Cartesian product with all possible permutations:
+#### `crossJoin()`{# collection-method}
+
+`crossJoin`метод cross поєднує значення колекції серед даних масивів або колекцій, повертаючи декартовий твір з усіма можливими перестановками:
 
     $collection = collect([1, 2]);
 
@@ -474,9 +368,10 @@ The `crossJoin` method cross joins the collection's values among the given array
     */
 
 <a name="method-dd"></a>
-#### `dd()` {#collection-method}
 
-The `dd` method dumps the collection's items and ends execution of the script:
+#### `dd()`{# collection-method}
+
+`dd`метод скидає елементи колекції і закінчує виконання сценарію:
 
     $collection = collect(['John Doe', 'Jane Doe']);
 
@@ -491,12 +386,13 @@ The `dd` method dumps the collection's items and ends execution of the script:
         }
     */
 
-If you do not want to stop executing the script, use the [`dump`](#method-dump) method instead.
+Якщо ви не хочете припиняти виконання сценарію, використовуйте[`dump`](#method-dump)замість цього.
 
 <a name="method-diff"></a>
-#### `diff()` {#collection-method}
 
-The `diff` method compares the collection against another collection or a plain PHP `array` based on its values. This method will return the values in the original collection that are not present in the given collection:
+#### `diff()`{# collection-method}
+
+`diff`метод порівнює колекцію з іншою колекцією або звичайним PHP`array`виходячи з його цінностей. Цей метод поверне значення у вихідній колекції, яких немає у даній колекції:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -506,12 +402,13 @@ The `diff` method compares the collection against another collection or a plain 
 
     // [1, 3, 5]
 
-> {tip} This method's behavior is modified when using [Eloquent Collections](/docs/{{version}}/eloquent-collections#method-diff).
+> {tip} Поведінка цього методу змінюється під час використання[Красномовні колекції](/docs/{{version}}/eloquent-collections#method-diff).
 
 <a name="method-diffassoc"></a>
-#### `diffAssoc()` {#collection-method}
 
-The `diffAssoc` method compares the collection against another collection or a plain PHP `array` based on its keys and values. This method will return the key / value pairs in the original collection that are not present in the given collection:
+#### `diffAssoc()`{# collection-method}
+
+`diffAssoc`метод порівнює колекцію з іншою колекцією або звичайним PHP`array`на основі його ключів та значень. Цей метод повертає пари ключ / значення в вихідній колекції, яких немає у даній колекції:
 
     $collection = collect([
         'color' => 'orange',
@@ -531,9 +428,10 @@ The `diffAssoc` method compares the collection against another collection or a p
     // ['color' => 'orange', 'remain' => 6]
 
 <a name="method-diffkeys"></a>
-#### `diffKeys()` {#collection-method}
 
-The `diffKeys` method compares the collection against another collection or a plain PHP `array` based on its keys. This method will return the key / value pairs in the original collection that are not present in the given collection:
+#### `diffKeys()`{# collection-method}
+
+`diffKeys`метод порівнює колекцію з іншою колекцією або звичайним PHP`array`на основі його ключів. Цей метод повертає пари ключ / значення в вихідній колекції, яких немає у даній колекції:
 
     $collection = collect([
         'one' => 10,
@@ -555,9 +453,10 @@ The `diffKeys` method compares the collection against another collection or a pl
     // ['one' => 10, 'three' => 30, 'five' => 50]
 
 <a name="method-dump"></a>
-#### `dump()` {#collection-method}
 
-The `dump` method dumps the collection's items:
+#### `dump()`{# collection-method}
+
+`dump`метод скидає елементи колекції:
 
     $collection = collect(['John Doe', 'Jane Doe']);
 
@@ -572,12 +471,13 @@ The `dump` method dumps the collection's items:
         }
     */
 
-If you want to stop executing the script after dumping the collection, use the [`dd`](#method-dd) method instead.
+Якщо ви хочете припинити виконання сценарію після скидання колекції, використовуйте[`dd`](#method-dd)замість цього.
 
 <a name="method-duplicates"></a>
-#### `duplicates()` {#collection-method}
 
-The `duplicates` method retrieves and returns duplicate values from the collection:
+#### `duplicates()`{# collection-method}
+
+`duplicates`метод отримує та повертає повторювані значення з колекції:
 
     $collection = collect(['a', 'b', 'a', 'c', 'b']);
 
@@ -585,7 +485,7 @@ The `duplicates` method retrieves and returns duplicate values from the collecti
 
     // [2 => 'a', 4 => 'b']
 
-If the collection contains arrays or objects, you can pass the key of the attributes that you wish to check for duplicate values:
+Якщо колекція містить масиви або об'єкти, ви можете передати ключ атрибутів, які потрібно перевірити на наявність повторюваних значень:
 
     $employees = collect([
         ['email' => 'abigail@example.com', 'position' => 'Developer'],
@@ -598,20 +498,22 @@ If the collection contains arrays or objects, you can pass the key of the attrib
     // [2 => 'Developer']
 
 <a name="method-duplicatesstrict"></a>
-#### `duplicatesStrict()` {#collection-method}
 
-This method has the same signature as the [`duplicates`](#method-duplicates) method; however, all values are compared using "strict" comparisons.
+#### `duplicatesStrict()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`duplicates`](#method-duplicates)метод; однак усі значення порівнюються за допомогою "суворих" порівнянь.
 
 <a name="method-each"></a>
-#### `each()` {#collection-method}
 
-The `each` method iterates over the items in the collection and passes each item to a callback:
+#### `each()`{# collection-method}
+
+`each`метод перебирає елементи в колекції і передає кожен елемент до зворотного виклику:
 
     $collection->each(function ($item, $key) {
         //
     });
 
-If you would like to stop iterating through the items, you may return `false` from your callback:
+Якщо ви хочете припинити перегляд елементів, ви можете повернутися`false`з вашого зворотного дзвінка:
 
     $collection->each(function ($item, $key) {
         if (/* some condition */) {
@@ -620,9 +522,10 @@ If you would like to stop iterating through the items, you may return `false` fr
     });
 
 <a name="method-eachspread"></a>
-#### `eachSpread()` {#collection-method}
 
-The `eachSpread` method iterates over the collection's items, passing each nested item value into the given callback:
+#### `eachSpread()`{# collection-method}
+
+`eachSpread`метод перебирає елементи колекції, передаючи кожне вкладене значення елемента в заданий зворотний виклик:
 
     $collection = collect([['John Doe', 35], ['Jane Doe', 33]]);
 
@@ -630,16 +533,17 @@ The `eachSpread` method iterates over the collection's items, passing each neste
         //
     });
 
-You may stop iterating through the items by returning `false` from the callback:
+Ви можете припинити перегляд елементів, повернувшись`false`із зворотного дзвінка:
 
     $collection->eachSpread(function ($name, $age) {
         return false;
     });
 
 <a name="method-every"></a>
-#### `every()` {#collection-method}
 
-The `every` method may be used to verify that all elements of a collection pass a given truth test:
+#### `every()`{# collection-method}
+
+`every`метод може бути використаний для перевірки того, що всі елементи колекції проходять заданий тест на істинність:
 
     collect([1, 2, 3, 4])->every(function ($value, $key) {
         return $value > 2;
@@ -647,7 +551,7 @@ The `every` method may be used to verify that all elements of a collection pass 
 
     // false
 
-If the collection is empty, `every` will return true:
+Якщо колекція порожня,`every`поверне true:
 
     $collection = collect([]);
 
@@ -658,9 +562,10 @@ If the collection is empty, `every` will return true:
     // true
 
 <a name="method-except"></a>
-#### `except()` {#collection-method}
 
-The `except` method returns all items in the collection except for those with the specified keys:
+#### `except()`{# collection-method}
+
+`except`метод повертає всі елементи колекції, крім тих, що мають вказані ключі:
 
     $collection = collect(['product_id' => 1, 'price' => 100, 'discount' => false]);
 
@@ -670,14 +575,15 @@ The `except` method returns all items in the collection except for those with th
 
     // ['product_id' => 1]
 
-For the inverse of `except`, see the [only](#method-only) method.
+Для оберненого до`except`, див[лише](#method-only)метод.
 
-> {tip} This method's behavior is modified when using [Eloquent Collections](/docs/{{version}}/eloquent-collections#method-except).
+> {tip} Поведінка цього методу змінюється під час використання[Красномовні колекції](/docs/{{version}}/eloquent-collections#method-except).
 
 <a name="method-filter"></a>
-#### `filter()` {#collection-method}
 
-The `filter` method filters the collection using the given callback, keeping only those items that pass a given truth test:
+#### `filter()`{# collection-method}
+
+`filter`метод фільтрує колекцію за допомогою заданого зворотного виклику, зберігаючи лише ті елементи, які проходять заданий тест на істинність:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -689,7 +595,7 @@ The `filter` method filters the collection using the given callback, keeping onl
 
     // [3, 4]
 
-If no callback is supplied, all entries of the collection that are equivalent to `false` will be removed:
+Якщо зворотного виклику не надано, усі записи колекції, які еквівалентні`false`буде видалено:
 
     $collection = collect([1, 2, 3, null, false, '', 0, []]);
 
@@ -697,12 +603,13 @@ If no callback is supplied, all entries of the collection that are equivalent to
 
     // [1, 2, 3]
 
-For the inverse of `filter`, see the [reject](#method-reject) method.
+Для оберненого до`filter`, див[відкинути](#method-reject)метод.
 
 <a name="method-first"></a>
-#### `first()` {#collection-method}
 
-The `first` method returns the first element in the collection that passes a given truth test:
+#### `first()`{# collection-method}
+
+`first`метод повертає перший елемент у колекції, який проходить заданий тест на істинність:
 
     collect([1, 2, 3, 4])->first(function ($value, $key) {
         return $value > 2;
@@ -710,16 +617,17 @@ The `first` method returns the first element in the collection that passes a giv
 
     // 3
 
-You may also call the `first` method with no arguments to get the first element in the collection. If the collection is empty, `null` is returned:
+Ви також можете зателефонувати до`first`метод без аргументів для отримання першого елемента в колекції. Якщо колекція порожня,`null`повертається:
 
     collect([1, 2, 3, 4])->first();
 
     // 1
 
 <a name="method-first-where"></a>
-#### `firstWhere()` {#collection-method}
 
-The `firstWhere` method returns the first element in the collection with the given key / value pair:
+#### `firstWhere()`{# collection-method}
+
+`firstWhere`метод повертає перший елемент у колекції із заданою парою ключ / значення:
 
     $collection = collect([
         ['name' => 'Regena', 'age' => null],
@@ -732,22 +640,23 @@ The `firstWhere` method returns the first element in the collection with the giv
 
     // ['name' => 'Linda', 'age' => 14]
 
-You may also call the `firstWhere` method with an operator:
+Ви також можете зателефонувати до`firstWhere`метод з оператором:
 
     $collection->firstWhere('age', '>=', 18);
 
     // ['name' => 'Diego', 'age' => 23]
 
-Like the [where](#method-where) method, you may pass one argument to the `firstWhere` method. In this scenario, the `firstWhere` method will return the first item where the given item key's value is "truthy":
+Подобається[де](#method-where)метод, ви можете передати один аргумент до`firstWhere`метод. У цьому випадку сценарій`firstWhere`метод поверне перший елемент, де значення даного ключа елемента "істинно":
 
     $collection->firstWhere('age');
 
     // ['name' => 'Linda', 'age' => 14]
 
 <a name="method-flatmap"></a>
-#### `flatMap()` {#collection-method}
 
-The `flatMap` method iterates through the collection and passes each value to the given callback. The callback is free to modify the item and return it, thus forming a new collection of modified items. Then, the array is flattened by a level:
+#### `flatMap()`{# collection-method}
+
+`flatMap`метод перебирає колекцію та передає кожне значення до заданого зворотного виклику. Зворотний дзвінок може змінювати товар та повертати його, таким чином формуючи нову колекцію модифікованих елементів. Потім масив згладжується рівнем:
 
     $collection = collect([
         ['name' => 'Sally'],
@@ -764,9 +673,10 @@ The `flatMap` method iterates through the collection and passes each value to th
     // ['name' => 'SALLY', 'school' => 'ARKANSAS', 'age' => '28'];
 
 <a name="method-flatten"></a>
-#### `flatten()` {#collection-method}
 
-The `flatten` method flattens a multi-dimensional collection into a single dimension:
+#### `flatten()`{# collection-method}
+
+`flatten`метод вирівнює багатовимірну колекцію в один вимір:
 
     $collection = collect(['name' => 'taylor', 'languages' => ['php', 'javascript']]);
 
@@ -776,7 +686,7 @@ The `flatten` method flattens a multi-dimensional collection into a single dimen
 
     // ['taylor', 'php', 'javascript'];
 
-You may optionally pass the function a "depth" argument:
+За бажанням ви можете передати функції аргумент "глибина":
 
     $collection = collect([
         'Apple' => [
@@ -798,12 +708,13 @@ You may optionally pass the function a "depth" argument:
         ]
     */
 
-In this example, calling `flatten` without providing the depth would have also flattened the nested arrays, resulting in `['iPhone 6S', 'Apple', 'Galaxy S7', 'Samsung']`. Providing a depth allows you to restrict the levels of nested arrays that will be flattened.
+У цьому прикладі виклик`flatten`без надання глибини також згладив би вкладені масиви, в результаті чого`['iPhone 6S', 'Apple', 'Galaxy S7', 'Samsung']`. Надання глибини дозволяє обмежити рівні вкладених масивів, які будуть згладжені.
 
 <a name="method-flip"></a>
-#### `flip()` {#collection-method}
 
-The `flip` method swaps the collection's keys with their corresponding values:
+#### `flip()`{# collection-method}
+
+`flip`метод міняє місцями ключі колекції з відповідними значеннями:
 
     $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
 
@@ -814,9 +725,10 @@ The `flip` method swaps the collection's keys with their corresponding values:
     // ['taylor' => 'name', 'laravel' => 'framework']
 
 <a name="method-forget"></a>
-#### `forget()` {#collection-method}
 
-The `forget` method removes an item from the collection by its key:
+#### `forget()`{# collection-method}
+
+`forget`метод видаляє елемент із колекції за його ключем:
 
     $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
 
@@ -826,12 +738,13 @@ The `forget` method removes an item from the collection by its key:
 
     // ['framework' => 'laravel']
 
-> {note} Unlike most other collection methods, `forget` does not return a new modified collection; it modifies the collection it is called on.
+> {note} На відміну від більшості інших методів збору,`forget`не повертає нову змінену колекцію; він змінює колекцію, до якої його викликають.
 
 <a name="method-forpage"></a>
-#### `forPage()` {#collection-method}
 
-The `forPage` method returns a new collection containing the items that would be present on a given page number. The method accepts the page number as its first argument and the number of items to show per page as its second argument:
+#### `forPage()`{# collection-method}
+
+`forPage`метод повертає нову колекцію, що містить елементи, які будуть присутні на заданому номері сторінки. Метод приймає номер сторінки як перший аргумент, а кількість елементів, що відображаються на сторінці, як другий аргумент:
 
     $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
@@ -842,9 +755,10 @@ The `forPage` method returns a new collection containing the items that would be
     // [4, 5, 6]
 
 <a name="method-get"></a>
-#### `get()` {#collection-method}
 
-The `get` method returns the item at a given key. If the key does not exist, `null` is returned:
+#### `get()`{# collection-method}
+
+`get`метод повертає елемент за заданим ключем. Якщо ключ не існує,`null`повертається:
 
     $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
 
@@ -852,7 +766,7 @@ The `get` method returns the item at a given key. If the key does not exist, `nu
 
     // taylor
 
-You may optionally pass a default value as the second argument:
+Ви можете додатково передати значення за замовчуванням як другий аргумент:
 
     $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
 
@@ -860,7 +774,7 @@ You may optionally pass a default value as the second argument:
 
     // default-value
 
-You may even pass a callback as the default value. The result of the callback will be returned if the specified key does not exist:
+Ви навіть можете передати зворотний дзвінок як значення за замовчуванням. Результат зворотного виклику буде повернено, якщо вказаний ключ не існує:
 
     $collection->get('email', function () {
         return 'default-value';
@@ -869,9 +783,10 @@ You may even pass a callback as the default value. The result of the callback wi
     // default-value
 
 <a name="method-groupby"></a>
-#### `groupBy()` {#collection-method}
 
-The `groupBy` method groups the collection's items by a given key:
+#### `groupBy()`{# collection-method}
+
+`groupBy`метод групує елементи колекції за заданим ключем:
 
     $collection = collect([
         ['account_id' => 'account-x10', 'product' => 'Chair'],
@@ -895,7 +810,7 @@ The `groupBy` method groups the collection's items by a given key:
         ]
     */
 
-Instead of passing a string `key`, you may pass a callback. The callback should return the value you wish to key the group by:
+Замість передачі рядка`key`, Ви можете передати зворотний дзвінок. Зворотний дзвінок повинен повернути значення, яке ви хочете ввести в групу:
 
     $grouped = $collection->groupBy(function ($item, $key) {
         return substr($item['account_id'], -3);
@@ -915,7 +830,7 @@ Instead of passing a string `key`, you may pass a callback. The callback should 
         ]
     */
 
-Multiple grouping criteria may be passed as an array. Each array element will be applied to the corresponding level within a multi-dimensional array:
+Кілька критеріїв групування можуть передаватися як масив. Кожен елемент масиву буде застосовано до відповідного рівня в багатовимірному масиві:
 
     $data = new Collection([
         10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
@@ -957,9 +872,10 @@ Multiple grouping criteria may be passed as an array. Each array element will be
     */
 
 <a name="method-has"></a>
-#### `has()` {#collection-method}
 
-The `has` method determines if a given key exists in the collection:
+#### `has()`{# collection-method}
+
+`has`Метод визначає, чи існує даний колекція в колекції:
 
     $collection = collect(['account_id' => 1, 'product' => 'Desk', 'amount' => 5]);
 
@@ -976,9 +892,10 @@ The `has` method determines if a given key exists in the collection:
     // false
 
 <a name="method-implode"></a>
-#### `implode()` {#collection-method}
 
-The `implode` method joins the items in a collection. Its arguments depend on the type of items in the collection. If the collection contains arrays or objects, you should pass the key of the attributes you wish to join, and the "glue" string you wish to place between the values:
+#### `implode()`{# collection-method}
+
+`implode`метод приєднує елементи до колекції. Його аргументи залежать від типу предметів у колекції. Якщо колекція містить масиви або об'єкти, ви повинні передати ключ атрибутів, до яких ви хочете приєднатися, і рядок "склеювання", який ви хочете розмістити між значеннями:
 
     $collection = collect([
         ['account_id' => 1, 'product' => 'Desk'],
@@ -989,16 +906,17 @@ The `implode` method joins the items in a collection. Its arguments depend on th
 
     // Desk, Chair
 
-If the collection contains simple strings or numeric values, pass the "glue" as the only argument to the method:
+Якщо колекція містить прості рядки або числові значення, передайте "клей" як єдиний аргумент методу:
 
     collect([1, 2, 3, 4, 5])->implode('-');
 
     // '1-2-3-4-5'
 
 <a name="method-intersect"></a>
-#### `intersect()` {#collection-method}
 
-The `intersect` method removes any values from the original collection that are not present in the given `array` or collection. The resulting collection will preserve the original collection's keys:
+#### `intersect()`{# collection-method}
+
+`intersect`метод видаляє будь-які значення з вихідної колекції, які відсутні в даному`array`або колекція. Отримана колекція збереже ключі оригінальної колекції:
 
     $collection = collect(['Desk', 'Sofa', 'Chair']);
 
@@ -1008,12 +926,13 @@ The `intersect` method removes any values from the original collection that are 
 
     // [0 => 'Desk', 2 => 'Chair']
 
-> {tip} This method's behavior is modified when using [Eloquent Collections](/docs/{{version}}/eloquent-collections#method-intersect).
+> {tip} Поведінка цього методу змінюється під час використання[Красномовні колекції](/docs/{{version}}/eloquent-collections#method-intersect).
 
 <a name="method-intersectbykeys"></a>
-#### `intersectByKeys()` {#collection-method}
 
-The `intersectByKeys` method removes any keys from the original collection that are not present in the given `array` or collection:
+#### `intersectByKeys()`{# collection-method}
+
+`intersectByKeys`метод видаляє будь-які ключі з оригінальної колекції, яких немає у даній`array`або колекція:
 
     $collection = collect([
         'serial' => 'UX301', 'type' => 'screen', 'year' => 2009,
@@ -1028,27 +947,30 @@ The `intersectByKeys` method removes any keys from the original collection that 
     // ['type' => 'screen', 'year' => 2009]
 
 <a name="method-isempty"></a>
-#### `isEmpty()` {#collection-method}
 
-The `isEmpty` method returns `true` if the collection is empty; otherwise, `false` is returned:
+#### `isEmpty()`{# collection-method}
+
+`isEmpty`метод повертає`true`якщо колекція порожня; інакше,`false`повертається:
 
     collect([])->isEmpty();
 
     // true
 
 <a name="method-isnotempty"></a>
-#### `isNotEmpty()` {#collection-method}
 
-The `isNotEmpty` method returns `true` if the collection is not empty; otherwise, `false` is returned:
+#### `isNotEmpty()`{# collection-method}
+
+`isNotEmpty`метод повертає`true`якщо колекція не порожня; інакше,`false`повертається:
 
     collect([])->isNotEmpty();
 
     // false
 
 <a name="method-join"></a>
-#### `join()` {#collection-method}
 
-The `join` method joins the collection's values with a string:
+#### `join()`{# collection-method}
+
+`join`метод об'єднує значення колекції за допомогою рядка:
 
     collect(['a', 'b', 'c'])->join(', '); // 'a, b, c'
     collect(['a', 'b', 'c'])->join(', ', ', and '); // 'a, b, and c'
@@ -1057,9 +979,10 @@ The `join` method joins the collection's values with a string:
     collect([])->join(', ', ' and '); // ''
 
 <a name="method-keyby"></a>
-#### `keyBy()` {#collection-method}
 
-The `keyBy` method keys the collection by the given key. If multiple items have the same key, only the last one will appear in the new collection:
+#### `keyBy()`{# collection-method}
+
+`keyBy`метод ключі колекція за даним ключем. Якщо кілька елементів мають однаковий ключ, у новій колекції з’явиться лише останній:
 
     $collection = collect([
         ['product_id' => 'prod-100', 'name' => 'Desk'],
@@ -1077,7 +1000,7 @@ The `keyBy` method keys the collection by the given key. If multiple items have 
         ]
     */
 
-You may also pass a callback to the method. The callback should return the value to key the collection by:
+Ви також можете передати метод зворотного виклику. Зворотний виклик повинен повернути значення для ключа колекції за допомогою:
 
     $keyed = $collection->keyBy(function ($item) {
         return strtoupper($item['product_id']);
@@ -1093,9 +1016,10 @@ You may also pass a callback to the method. The callback should return the value
     */
 
 <a name="method-keys"></a>
-#### `keys()` {#collection-method}
 
-The `keys` method returns all of the collection's keys:
+#### `keys()`{# collection-method}
+
+`keys`метод повертає всі ключі колекції:
 
     $collection = collect([
         'prod-100' => ['product_id' => 'prod-100', 'name' => 'Desk'],
@@ -1109,9 +1033,10 @@ The `keys` method returns all of the collection's keys:
     // ['prod-100', 'prod-200']
 
 <a name="method-last"></a>
-#### `last()` {#collection-method}
 
-The `last` method returns the last element in the collection that passes a given truth test:
+#### `last()`{# collection-method}
+
+`last`метод повертає останній елемент у колекції, який проходить заданий тест на істинність:
 
     collect([1, 2, 3, 4])->last(function ($value, $key) {
         return $value < 3;
@@ -1119,26 +1044,29 @@ The `last` method returns the last element in the collection that passes a given
 
     // 2
 
-You may also call the `last` method with no arguments to get the last element in the collection. If the collection is empty, `null` is returned:
+Ви також можете зателефонувати до`last`метод без аргументів для отримання останнього елемента в колекції. Якщо колекція порожня,`null`повертається:
 
     collect([1, 2, 3, 4])->last();
 
     // 4
 
 <a name="method-macro"></a>
-#### `macro()` {#collection-method}
 
-The static `macro` method allows you to add methods to the `Collection` class at run time. Refer to the documentation on [extending collections](#extending-collections) for more information.
+#### `macro()`{# collection-method}
+
+Статичний`macro`метод дозволяє додавати методи до`Collection`клас під час виконання. Зверніться до документації на[розширення колекцій](#extending-collections)для отримання додаткової інформації.
 
 <a name="method-make"></a>
-#### `make()` {#collection-method}
 
-The static `make` method creates a new collection instance. See the [Creating Collections](#creating-collections) section.
+#### `make()`{# collection-method}
+
+Статичний`make`метод створює новий екземпляр колекції. Див[Створення колекцій](#creating-collections)розділ.
 
 <a name="method-map"></a>
-#### `map()` {#collection-method}
 
-The `map` method iterates through the collection and passes each value to the given callback. The callback is free to modify the item and return it, thus forming a new collection of modified items:
+#### `map()`{# collection-method}
+
+`map`метод перебирає колекцію та передає кожне значення до заданого зворотного виклику. Зворотний дзвінок може змінювати товар та повертати його, таким чином формуючи нову колекцію модифікованих елементів:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1150,12 +1078,13 @@ The `map` method iterates through the collection and passes each value to the gi
 
     // [2, 4, 6, 8, 10]
 
-> {note} Like most other collection methods, `map` returns a new collection instance; it does not modify the collection it is called on. If you want to transform the original collection, use the [`transform`](#method-transform) method.
+> {note} Як і більшість інших методів збору,`map`повертає новий екземпляр колекції; він не змінює колекцію, до якої його викликають. Якщо ви хочете перетворити оригінальну колекцію, використовуйте[`transform`](#method-transform)метод.
 
 <a name="method-mapinto"></a>
-#### `mapInto()` {#collection-method}
 
-The `mapInto()` method iterates over the collection, creating a new instance of the given class by passing the value into the constructor:
+#### `mapInto()`{# collection-method}
+
+`mapInto()`метод перебирає колекцію, створюючи новий екземпляр даного класу, передаючи значення в конструктор:
 
     class Currency
     {
@@ -1180,9 +1109,10 @@ The `mapInto()` method iterates over the collection, creating a new instance of 
     // [Currency('USD'), Currency('EUR'), Currency('GBP')]
 
 <a name="method-mapspread"></a>
-#### `mapSpread()` {#collection-method}
 
-The `mapSpread` method iterates over the collection's items, passing each nested item value into the given callback. The callback is free to modify the item and return it, thus forming a new collection of modified items:
+#### `mapSpread()`{# collection-method}
+
+`mapSpread`метод перебирає елементи колекції, передаючи кожне вкладене значення елемента в заданий зворотний виклик. Зворотний дзвінок може змінювати товар та повертати його, таким чином формуючи нову колекцію модифікованих елементів:
 
     $collection = collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
@@ -1197,9 +1127,10 @@ The `mapSpread` method iterates over the collection's items, passing each nested
     // [1, 5, 9, 13, 17]
 
 <a name="method-maptogroups"></a>
-#### `mapToGroups()` {#collection-method}
 
-The `mapToGroups` method groups the collection's items by the given callback. The callback should return an associative array containing a single key / value pair, thus forming a new collection of grouped values:
+#### `mapToGroups()`{# collection-method}
+
+`mapToGroups`метод групує елементи колекції за даним зворотним викликом. Зворотний виклик повинен повернути асоціативний масив, що містить одну пару ключ / значення, формуючи таким чином нову колекцію згрупованих значень:
 
     $collection = collect([
         [
@@ -1234,9 +1165,10 @@ The `mapToGroups` method groups the collection's items by the given callback. Th
     // ['John Doe', 'Jane Doe']
 
 <a name="method-mapwithkeys"></a>
-#### `mapWithKeys()` {#collection-method}
 
-The `mapWithKeys` method iterates through the collection and passes each value to the given callback. The callback should return an associative array containing a single key / value pair:
+#### `mapWithKeys()`{# collection-method}
+
+`mapWithKeys`метод перебирає колекцію та передає кожне значення до заданого зворотного виклику. Зворотний виклик повинен повернути асоціативний масив, що містить одну пару ключ / значення:
 
     $collection = collect([
         [
@@ -1265,9 +1197,10 @@ The `mapWithKeys` method iterates through the collection and passes each value t
     */
 
 <a name="method-max"></a>
-#### `max()` {#collection-method}
 
-The `max` method returns the maximum value of a given key:
+#### `max()`{# collection-method}
+
+`max`метод повертає максимальне значення заданого ключа:
 
     $max = collect([['foo' => 10], ['foo' => 20]])->max('foo');
 
@@ -1278,9 +1211,10 @@ The `max` method returns the maximum value of a given key:
     // 5
 
 <a name="method-median"></a>
-#### `median()` {#collection-method}
 
-The `median` method returns the [median value](https://en.wikipedia.org/wiki/Median) of a given key:
+#### `median()`{# collection-method}
+
+`median`метод повертає[серединне значення](https://en.wikipedia.org/wiki/Median)даного ключа:
 
     $median = collect([['foo' => 10], ['foo' => 10], ['foo' => 20], ['foo' => 40]])->median('foo');
 
@@ -1291,9 +1225,10 @@ The `median` method returns the [median value](https://en.wikipedia.org/wiki/Med
     // 1.5
 
 <a name="method-merge"></a>
-#### `merge()` {#collection-method}
 
-The `merge` method merges the given array or collection with the original collection. If a string key in the given items matches a string key in the original collection, the given items's value will overwrite the value in the original collection:
+#### `merge()`{# collection-method}
+
+`merge`метод об'єднує даний масив або колекцію з вихідною колекцією. Якщо рядовий ключ у даних елементах відповідає строковому ключу в оригінальній колекції, значення даних елементів замінить значення в оригінальній колекції:
 
     $collection = collect(['product_id' => 1, 'price' => 100]);
 
@@ -1303,7 +1238,7 @@ The `merge` method merges the given array or collection with the original collec
 
     // ['product_id' => 1, 'price' => 200, 'discount' => false]
 
-If the given items's keys are numeric, the values will be appended to the end of the collection:
+Якщо ключі даних елементів є числовими, значення будуть додані до кінця колекції:
 
     $collection = collect(['Desk', 'Chair']);
 
@@ -1314,9 +1249,10 @@ If the given items's keys are numeric, the values will be appended to the end of
     // ['Desk', 'Chair', 'Bookcase', 'Door']
 
 <a name="method-mergerecursive"></a>
-#### `mergeRecursive()` {#collection-method}
 
-The `mergeRecursive` method merges the given array or collection recursively with the original collection. If a string key in the given items matches a string key in the original collection, then the values for these keys are merged together into an array, and this is done recursively:
+#### `mergeRecursive()`{# collection-method}
+
+`mergeRecursive`метод рекурсивно зливає даний масив або колекцію з вихідною колекцією. Якщо рядовий ключ у даних елементах відповідає рядковому ключу в оригінальній колекції, тоді значення цих ключів об’єднуються разом у масив, і це робиться рекурсивно:
 
     $collection = collect(['product_id' => 1, 'price' => 100]);
 
@@ -1327,9 +1263,10 @@ The `mergeRecursive` method merges the given array or collection recursively wit
     // ['product_id' => [1, 2], 'price' => [100, 200], 'discount' => false]
 
 <a name="method-min"></a>
-#### `min()` {#collection-method}
 
-The `min` method returns the minimum value of a given key:
+#### `min()`{# collection-method}
+
+`min`метод повертає мінімальне значення даного ключа:
 
     $min = collect([['foo' => 10], ['foo' => 20]])->min('foo');
 
@@ -1340,9 +1277,10 @@ The `min` method returns the minimum value of a given key:
     // 1
 
 <a name="method-mode"></a>
-#### `mode()` {#collection-method}
 
-The `mode` method returns the [mode value](https://en.wikipedia.org/wiki/Mode_(statistics)) of a given key:
+#### `mode()`{# collection-method}
+
+`mode`метод повертає[значення режиму](https://en.wikipedia.org/wiki/Mode_(statistics))даного ключа:
 
     $mode = collect([['foo' => 10], ['foo' => 10], ['foo' => 20], ['foo' => 40]])->mode('foo');
 
@@ -1353,9 +1291,10 @@ The `mode` method returns the [mode value](https://en.wikipedia.org/wiki/Mode_(s
     // [1]
 
 <a name="method-nth"></a>
-#### `nth()` {#collection-method}
 
-The `nth` method creates a new collection consisting of every n-th element:
+#### `nth()`{# collection-method}
+
+`nth`метод створює нову колекцію, що складається з кожного n-го елемента:
 
     $collection = collect(['a', 'b', 'c', 'd', 'e', 'f']);
 
@@ -1363,16 +1302,17 @@ The `nth` method creates a new collection consisting of every n-th element:
 
     // ['a', 'e']
 
-You may optionally pass an offset as the second argument:
+Ви можете додатково передати зміщення як другий аргумент:
 
     $collection->nth(4, 1);
 
     // ['b', 'f']
 
 <a name="method-only"></a>
-#### `only()` {#collection-method}
 
-The `only` method returns the items in the collection with the specified keys:
+#### `only()`{# collection-method}
+
+`only`метод повертає елементи в колекції із зазначеними ключами:
 
     $collection = collect(['product_id' => 1, 'name' => 'Desk', 'price' => 100, 'discount' => false]);
 
@@ -1382,16 +1322,17 @@ The `only` method returns the items in the collection with the specified keys:
 
     // ['product_id' => 1, 'name' => 'Desk']
 
-For the inverse of `only`, see the [except](#method-except) method.
+Для оберненого до`only`, див[крім](#method-except)метод.
 
-> {tip} This method's behavior is modified when using [Eloquent Collections](/docs/{{version}}/eloquent-collections#method-only).
+> {tip} Поведінка цього методу змінюється під час використання[Красномовні колекції](/docs/{{version}}/eloquent-collections#method-only).
 
 <a name="method-pad"></a>
-#### `pad()` {#collection-method}
 
-The `pad` method will fill the array with the given value until the array reaches the specified size. This method behaves like the [array_pad](https://secure.php.net/manual/en/function.array-pad.php) PHP function.
+#### `pad()`{# collection-method}
 
-To pad to the left, you should specify a negative size. No padding will take place if the absolute value of the given size is less than or equal to the length of the array:
+`pad`метод буде заповнювати масив заданим значенням, поки масив не досягне заданого розміру. Цей метод поводиться як[array_pad](https://secure.php.net/manual/en/function.array-pad.php)Функція PHP.
+
+Щоб додати ліворуч, слід вказати від’ємний розмір. Заповнення не відбудеться, якщо абсолютне значення заданого розміру менше або дорівнює довжині масиву:
 
     $collection = collect(['A', 'B', 'C']);
 
@@ -1408,9 +1349,10 @@ To pad to the left, you should specify a negative size. No padding will take pla
     // [0, 0, 'A', 'B', 'C']
 
 <a name="method-partition"></a>
-#### `partition()` {#collection-method}
 
-The `partition` method may be combined with the `list` PHP function to separate elements that pass a given truth test from those that do not:
+#### `partition()`{# collection-method}
+
+`partition`метод може поєднуватися з`list`Функція PHP для відокремлення елементів, які проходять заданий тест на істину, від тих, які цього не роблять:
 
     $collection = collect([1, 2, 3, 4, 5, 6]);
 
@@ -1427,9 +1369,10 @@ The `partition` method may be combined with the `list` PHP function to separate 
     // [3, 4, 5, 6]
 
 <a name="method-pipe"></a>
-#### `pipe()` {#collection-method}
 
-The `pipe` method passes the collection to the given callback and returns the result:
+#### `pipe()`{# collection-method}
+
+`pipe`метод передає колекцію даному зворотному виклику і повертає результат:
 
     $collection = collect([1, 2, 3]);
 
@@ -1440,9 +1383,10 @@ The `pipe` method passes the collection to the given callback and returns the re
     // 6
 
 <a name="method-pipeinto"></a>
-#### `pipeInto()` {#collection-method}
 
-The `pipeInto` method creates a new instance of the given class and passes the collection into the constructor:
+#### `pipeInto()`{# collection-method}
+
+`pipeInto`метод створює новий екземпляр даного класу і передає колекцію в конструктор:
 
     class ResourceCollection
     {
@@ -1472,9 +1416,10 @@ The `pipeInto` method creates a new instance of the given class and passes the c
     // [1, 2, 3]
 
 <a name="method-pluck"></a>
-#### `pluck()` {#collection-method}
 
-The `pluck` method retrieves all of the values for a given key:
+#### `pluck()`{# collection-method}
+
+`pluck`метод отримує всі значення для даного ключа:
 
     $collection = collect([
         ['product_id' => 'prod-100', 'name' => 'Desk'],
@@ -1487,7 +1432,7 @@ The `pluck` method retrieves all of the values for a given key:
 
     // ['Desk', 'Chair']
 
-You may also specify how you wish the resulting collection to be keyed:
+Ви також можете вказати, як ви хочете вводити отриману колекцію:
 
     $plucked = $collection->pluck('name', 'product_id');
 
@@ -1495,7 +1440,7 @@ You may also specify how you wish the resulting collection to be keyed:
 
     // ['prod-100' => 'Desk', 'prod-200' => 'Chair']
 
-The `pluck` method also supports retrieving nested values using "dot" notation:
+`pluck`метод також підтримує отримання вкладених значень за допомогою позначення "точка":
 
     $collection = collect([
         [
@@ -1512,7 +1457,7 @@ The `pluck` method also supports retrieving nested values using "dot" notation:
 
     // ['Rosa', 'Judith']
 
-If duplicate keys exist, the last matching element will be inserted into the plucked collection:
+Якщо існують повторювані ключі, останній відповідний елемент буде вставлений до зібраної колекції:
 
     $collection = collect([
         ['brand' => 'Tesla',  'color' => 'red'],
@@ -1528,9 +1473,10 @@ If duplicate keys exist, the last matching element will be inserted into the plu
     // ['Tesla' => 'black', 'Pagani' => 'orange']
 
 <a name="method-pop"></a>
-#### `pop()` {#collection-method}
 
-The `pop` method removes and returns the last item from the collection:
+#### `pop()`{# collection-method}
+
+`pop`метод видаляє та повертає останній елемент із колекції:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1543,9 +1489,10 @@ The `pop` method removes and returns the last item from the collection:
     // [1, 2, 3, 4]
 
 <a name="method-prepend"></a>
-#### `prepend()` {#collection-method}
 
-The `prepend` method adds an item to the beginning of the collection:
+#### `prepend()`{# collection-method}
+
+`prepend`метод додає елемент на початок колекції:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1555,7 +1502,7 @@ The `prepend` method adds an item to the beginning of the collection:
 
     // [0, 1, 2, 3, 4, 5]
 
-You may also pass a second argument to set the key of the prepended item:
+Ви також можете передати другий аргумент для встановлення ключа попередньо доданого елемента:
 
     $collection = collect(['one' => 1, 'two' => 2]);
 
@@ -1566,9 +1513,10 @@ You may also pass a second argument to set the key of the prepended item:
     // ['zero' => 0, 'one' => 1, 'two' => 2]
 
 <a name="method-pull"></a>
-#### `pull()` {#collection-method}
 
-The `pull` method removes and returns an item from the collection by its key:
+#### `pull()`{# collection-method}
+
+`pull`метод видаляє та повертає елемент із колекції за його ключем:
 
     $collection = collect(['product_id' => 'prod-100', 'name' => 'Desk']);
 
@@ -1581,9 +1529,10 @@ The `pull` method removes and returns an item from the collection by its key:
     // ['product_id' => 'prod-100']
 
 <a name="method-push"></a>
-#### `push()` {#collection-method}
 
-The `push` method appends an item to the end of the collection:
+#### `push()`{# collection-method}
+
+`push`метод додає елемент до кінця колекції:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -1594,9 +1543,10 @@ The `push` method appends an item to the end of the collection:
     // [1, 2, 3, 4, 5]
 
 <a name="method-put"></a>
-#### `put()` {#collection-method}
 
-The `put` method sets the given key and value in the collection:
+#### `put()`{# collection-method}
+
+`put`метод встановлює заданий ключ і значення в колекції:
 
     $collection = collect(['product_id' => 1, 'name' => 'Desk']);
 
@@ -1607,9 +1557,10 @@ The `put` method sets the given key and value in the collection:
     // ['product_id' => 1, 'name' => 'Desk', 'price' => 100]
 
 <a name="method-random"></a>
-#### `random()` {#collection-method}
 
-The `random` method returns a random item from the collection:
+#### `random()`{# collection-method}
+
+`random`метод повертає випадковий елемент із колекції:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1617,7 +1568,7 @@ The `random` method returns a random item from the collection:
 
     // 4 - (retrieved randomly)
 
-You may optionally pass an integer to `random` to specify how many items you would like to randomly retrieve. A collection of items is always returned when explicitly passing the number of items you wish to receive:
+За бажанням ви можете передати ціле число`random`щоб вказати, скільки елементів ви хотіли б отримати випадковим чином. Колекція предметів завжди повертається, коли явно передається кількість елементів, які ви хочете отримати:
 
     $random = $collection->random(3);
 
@@ -1625,12 +1576,13 @@ You may optionally pass an integer to `random` to specify how many items you wou
 
     // [2, 4, 5] - (retrieved randomly)
 
-If the Collection has fewer items than requested, the method will throw an `InvalidArgumentException`.
+Якщо у колекції менше предметів, ніж запитувалося, метод видасть`InvalidArgumentException`.
 
 <a name="method-reduce"></a>
-#### `reduce()` {#collection-method}
 
-The `reduce` method reduces the collection to a single value, passing the result of each iteration into the subsequent iteration:
+#### `reduce()`{# collection-method}
+
+`reduce`метод зменшує колекцію до одного значення, передаючи результат кожної ітерації в наступну ітерацію:
 
     $collection = collect([1, 2, 3]);
 
@@ -1640,7 +1592,7 @@ The `reduce` method reduces the collection to a single value, passing the result
 
     // 6
 
-The value for `$carry` on the first iteration is `null`; however, you may specify its initial value by passing a second argument to `reduce`:
+Значення для`$carry`на першій ітерації`null`; однак ви можете вказати його початкове значення, передавши другий аргумент`reduce`:
 
     $collection->reduce(function ($carry, $item) {
         return $carry + $item;
@@ -1649,9 +1601,10 @@ The value for `$carry` on the first iteration is `null`; however, you may specif
     // 10
 
 <a name="method-reject"></a>
-#### `reject()` {#collection-method}
 
-The `reject` method filters the collection using the given callback. The callback should return `true` if the item should be removed from the resulting collection:
+#### `reject()`{# collection-method}
+
+`reject`метод фільтрує колекцію за допомогою заданого зворотного виклику. Зворотний дзвінок повинен повернутися`true`якщо предмет слід вилучити з отриманої колекції:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -1663,12 +1616,13 @@ The `reject` method filters the collection using the given callback. The callbac
 
     // [1, 2]
 
-For the inverse of the `reject` method, see the [`filter`](#method-filter) method.
+Для оберненого до`reject`метод, див[`filter`](#method-filter)метод.
 
 <a name="method-replace"></a>
-#### `replace()` {#collection-method}
 
-The `replace` method behaves similarly to `merge`; however, in addition to overwriting matching items with string keys, the `replace` method will also overwrite items in the collection that have matching numeric keys:
+#### `replace()`{# collection-method}
+
+`replace`метод поводиться подібно до`merge`; однак, на додаток до перезапису відповідних елементів за допомогою рядкових ключів,`replace`метод також перезапише елементи в колекції, які мають відповідні числові клавіші:
 
     $collection = collect(['Taylor', 'Abigail', 'James']);
 
@@ -1679,9 +1633,10 @@ The `replace` method behaves similarly to `merge`; however, in addition to overw
     // ['Taylor', 'Victoria', 'James', 'Finn']
 
 <a name="method-replacerecursive"></a>
-#### `replaceRecursive()` {#collection-method}
 
-This method works like `replace`, but it will recur into arrays and apply the same replacement process to the inner values:
+#### `replaceRecursive()`{# collection-method}
+
+Цей метод працює як`replace`, але він перетвориться на масиви і застосує той самий процес заміни до внутрішніх значень:
 
     $collection = collect(['Taylor', 'Abigail', ['James', 'Victoria', 'Finn']]);
 
@@ -1692,9 +1647,10 @@ This method works like `replace`, but it will recur into arrays and apply the sa
     // ['Charlie', 'Abigail', ['James', 'King', 'Finn']]
 
 <a name="method-reverse"></a>
-#### `reverse()` {#collection-method}
 
-The `reverse` method reverses the order of the collection's items, preserving the original keys:
+#### `reverse()`{# collection-method}
+
+`reverse`метод змінює порядок предметів колекції, зберігаючи оригінальні ключі:
 
     $collection = collect(['a', 'b', 'c', 'd', 'e']);
 
@@ -1713,9 +1669,10 @@ The `reverse` method reverses the order of the collection's items, preserving th
     */
 
 <a name="method-search"></a>
-#### `search()` {#collection-method}
 
-The `search` method searches the collection for the given value and returns its key if found. If the item is not found, `false` is returned.
+#### `search()`{# collection-method}
+
+`search`метод шукає в колекції задане значення і повертає його ключ, якщо його знайдено. Якщо предмет не знайдено,`false`повертається.
 
     $collection = collect([2, 4, 6, 8]);
 
@@ -1723,13 +1680,13 @@ The `search` method searches the collection for the given value and returns its 
 
     // 1
 
-The search is done using a "loose" comparison, meaning a string with an integer value will be considered equal to an integer of the same value. To use "strict" comparison, pass `true` as the second argument to the method:
+Пошук здійснюється за допомогою "вільного" порівняння, тобто рядок із цілим значенням вважатиметься рівним цілому числу того самого значення. Щоб скористатися "суворим" порівнянням, здайте`true`як другий аргумент методу:
 
     $collection->search('4', true);
 
     // false
 
-Alternatively, you may pass in your own callback to search for the first item that passes your truth test:
+Крім того, ви можете передати власний зворотний дзвінок для пошуку першого елемента, який проходить тест на істину:
 
     $collection->search(function ($item, $key) {
         return $item > 5;
@@ -1738,9 +1695,10 @@ Alternatively, you may pass in your own callback to search for the first item th
     // 2
 
 <a name="method-shift"></a>
-#### `shift()` {#collection-method}
 
-The `shift` method removes and returns the first item from the collection:
+#### `shift()`{# collection-method}
+
+`shift`метод видаляє та повертає перший елемент із колекції:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1753,9 +1711,10 @@ The `shift` method removes and returns the first item from the collection:
     // [2, 3, 4, 5]
 
 <a name="method-shuffle"></a>
-#### `shuffle()` {#collection-method}
 
-The `shuffle` method randomly shuffles the items in the collection:
+#### `shuffle()`{# collection-method}
+
+`shuffle`метод випадковим чином перетасовує елементи колекції:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1766,9 +1725,10 @@ The `shuffle` method randomly shuffles the items in the collection:
     // [3, 2, 5, 1, 4] - (generated randomly)
 
 <a name="method-skip"></a>
-#### `skip()` {#collection-method}
 
-The `skip` method returns a new collection, without the first given amount of items:
+#### `skip()`{# collection-method}
+
+`skip`метод повертає нову колекцію без першої заданої кількості елементів:
 
     $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
@@ -1779,9 +1739,10 @@ The `skip` method returns a new collection, without the first given amount of it
     // [5, 6, 7, 8, 9, 10]
 
 <a name="method-skipuntil"></a>
-#### `skipUntil()` {#collection-method}
 
-The `skipUntil` method skips items until the given callback returns `true` and then returns the remaining items in the collection:
+#### `skipUntil()`{# collection-method}
+
+`skipUntil`метод пропускає елементи, поки не повернеться даний зворотний виклик`true`а потім повертає решту елементів у колекції:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -1793,7 +1754,7 @@ The `skipUntil` method skips items until the given callback returns `true` and t
 
     // [3, 4]
 
-You may also pass a simple value to the `skipUntil` method to skip all items until the given value is found:
+Ви також можете передати просте значення в`skipUntil`метод, щоб пропустити всі елементи, поки не буде знайдено задане значення:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -1803,12 +1764,13 @@ You may also pass a simple value to the `skipUntil` method to skip all items unt
 
     // [3, 4]
 
-> {note} If the given value is not found or the callback never returns `true`, the `skipUntil` method will return an empty collection.
+> {note} Якщо заданого значення не знайдено або зворотний виклик ніколи не повернеться`true`,`skipUntil`метод поверне порожню колекцію.
 
 <a name="method-skipwhile"></a>
-#### `skipWhile()` {#collection-method}
 
-The `skipWhile` method skips items while the given callback returns `true` and then returns the remaining items in the collection:
+#### `skipWhile()`{# collection-method}
+
+`skipWhile`метод пропускає елементи, поки наданий зворотний виклик повертається`true`а потім повертає решту елементів у колекції:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -1820,12 +1782,13 @@ The `skipWhile` method skips items while the given callback returns `true` and t
 
     // [4]
 
-> {note} If the callback never returns `true`, the `skipWhile` method will return an empty collection.
+> {note} Якщо зворотний дзвінок ніколи не повернеться`true`,`skipWhile`метод поверне порожню колекцію.
 
 <a name="method-slice"></a>
-#### `slice()` {#collection-method}
 
-The `slice` method returns a slice of the collection starting at the given index:
+#### `slice()`{# collection-method}
+
+`slice`метод повертає фрагмент колекції, починаючи з заданого індексу:
 
     $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
@@ -1835,7 +1798,7 @@ The `slice` method returns a slice of the collection starting at the given index
 
     // [5, 6, 7, 8, 9, 10]
 
-If you would like to limit the size of the returned slice, pass the desired size as the second argument to the method:
+Якщо ви хочете обмежити розмір повернутого фрагмента, передайте бажаний розмір як другий аргумент методу:
 
     $slice = $collection->slice(4, 2);
 
@@ -1843,17 +1806,19 @@ If you would like to limit the size of the returned slice, pass the desired size
 
     // [5, 6]
 
-The returned slice will preserve keys by default. If you do not wish to preserve the original keys, you can use the [`values`](#method-values) method to reindex them.
+Повернутий фрагмент збереже ключі за замовчуванням. Якщо ви не хочете зберігати оригінальні ключі, ви можете використовувати[`values`](#method-values)метод їх переіндексації.
 
 <a name="method-some"></a>
-#### `some()` {#collection-method}
 
-Alias for the [`contains`](#method-contains) method.
+#### `some()`{# collection-method}
+
+Псевдонім для[`contains`](#method-contains)метод.
 
 <a name="method-sort"></a>
-#### `sort()` {#collection-method}
 
-The `sort` method sorts the collection. The sorted collection keeps the original array keys, so in this example we'll use the [`values`](#method-values) method to reset the keys to consecutively numbered indexes:
+#### `sort()`{# collection-method}
+
+`sort`метод сортує колекцію. Відсортована колекція зберігає оригінальні ключі масиву, тому в цьому прикладі ми будемо використовувати[`values`](#method-values)метод скидання ключів до послідовно пронумерованих індексів:
 
     $collection = collect([5, 3, 1, 2, 4]);
 
@@ -1863,14 +1828,15 @@ The `sort` method sorts the collection. The sorted collection keeps the original
 
     // [1, 2, 3, 4, 5]
 
-If your sorting needs are more advanced, you may pass a callback to `sort` with your own algorithm. Refer to the PHP documentation on [`uasort`](https://secure.php.net/manual/en/function.uasort.php#refsect1-function.uasort-parameters), which is what the collection's `sort` method calls under the hood.
+Якщо ваші потреби у сортуванні є більш досконалими, ви можете передати зворотній дзвінок`sort`за власним алгоритмом. Зверніться до документації PHP на[`uasort`](https://secure.php.net/manual/en/function.uasort.php#refsect1-function.uasort-parameters), що є те, що колекція`sort`виклику методу під капотом.
 
-> {tip} If you need to sort a collection of nested arrays or objects, see the [`sortBy`](#method-sortby) and [`sortByDesc`](#method-sortbydesc) methods.
+> {tip} Якщо вам потрібно відсортувати колекцію вкладених масивів або об'єктів, див[`sortBy`](#method-sortby)і[`sortByDesc`](#method-sortbydesc)методи.
 
 <a name="method-sortby"></a>
-#### `sortBy()` {#collection-method}
 
-The `sortBy` method sorts the collection by the given key. The sorted collection keeps the original array keys, so in this example we'll use the [`values`](#method-values) method to reset the keys to consecutively numbered indexes:
+#### `sortBy()`{# collection-method}
+
+`sortBy`метод сортує колекцію за заданим ключем. Відсортована колекція зберігає оригінальні ключі масиву, тому в цьому прикладі ми будемо використовувати[`values`](#method-values)метод скидання ключів до послідовно пронумерованих індексів:
 
     $collection = collect([
         ['name' => 'Desk', 'price' => 200],
@@ -1890,7 +1856,7 @@ The `sortBy` method sorts the collection by the given key. The sorted collection
         ]
     */
 
-This method accepts [sort flags](https://www.php.net/manual/en/function.sort.php) as its second argument:
+Цей метод приймає[сортувати прапори](https://www.php.net/manual/en/function.sort.php)як другий аргумент:
 
     $collection = collect([
         ['title' => 'Item 1'],
@@ -1910,7 +1876,7 @@ This method accepts [sort flags](https://www.php.net/manual/en/function.sort.php
         ]
     */
 
-Alternatively, you may pass your own callback to determine how to sort the collection's values:
+Крім того, ви можете передати власний зворотний виклик, щоб визначити, як сортувати значення колекції:
 
     $collection = collect([
         ['name' => 'Desk', 'colors' => ['Black', 'Mahogany']],
@@ -1933,14 +1899,16 @@ Alternatively, you may pass your own callback to determine how to sort the colle
     */
 
 <a name="method-sortbydesc"></a>
-#### `sortByDesc()` {#collection-method}
 
-This method has the same signature as the [`sortBy`](#method-sortby) method, but will sort the collection in the opposite order.
+#### `sortByDesc()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`sortBy`](#method-sortby)метод, але сортуватиме колекцію в зворотному порядку.
 
 <a name="method-sortdesc"></a>
-#### `sortDesc()` {#collection-method}
 
-This method will sort the collection in the opposite order as the [`sort`](#method-sort) method:
+#### `sortDesc()`{# collection-method}
+
+Цей метод сортує колекцію в протилежному порядку як[`sort`](#method-sort)метод:
 
     $collection = collect([5, 3, 1, 2, 4]);
 
@@ -1950,12 +1918,13 @@ This method will sort the collection in the opposite order as the [`sort`](#meth
 
     // [5, 4, 3, 2, 1]
 
-Unlike `sort`, you may not pass a callback to `sortDesc`. If you wish to use a callback, you should use [`sort`](#method-sort) and invert your comparison.
+На відміну від`sort`, Ви не можете передати зворотній дзвінок`sortDesc`. Якщо ви хочете скористатися зворотним дзвінком, вам слід скористатися[`sort`](#method-sort)та оберніть своє порівняння.
 
 <a name="method-sortkeys"></a>
-#### `sortKeys()` {#collection-method}
 
-The `sortKeys` method sorts the collection by the keys of the underlying associative array:
+#### `sortKeys()`{# collection-method}
+
+`sortKeys`метод сортує колекцію за ключами базового асоціативного масиву:
 
     $collection = collect([
         'id' => 22345,
@@ -1976,14 +1945,16 @@ The `sortKeys` method sorts the collection by the keys of the underlying associa
     */
 
 <a name="method-sortkeysdesc"></a>
-#### `sortKeysDesc()` {#collection-method}
 
-This method has the same signature as the [`sortKeys`](#method-sortkeys) method, but will sort the collection in the opposite order.
+#### `sortKeysDesc()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`sortKeys`](#method-sortkeys)метод, але сортуватиме колекцію в зворотному порядку.
 
 <a name="method-splice"></a>
-#### `splice()` {#collection-method}
 
-The `splice` method removes and returns a slice of items starting at the specified index:
+#### `splice()`{# collection-method}
+
+`splice`метод видаляє та повертає фрагмент елементів, починаючи з вказаного індексу:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -1997,7 +1968,7 @@ The `splice` method removes and returns a slice of items starting at the specifi
 
     // [1, 2]
 
-You may pass a second argument to limit the size of the resulting chunk:
+Ви можете передати другий аргумент, щоб обмежити розмір отриманого фрагмента:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -2011,7 +1982,7 @@ You may pass a second argument to limit the size of the resulting chunk:
 
     // [1, 2, 4, 5]
 
-In addition, you can pass a third argument containing the new items to replace the items removed from the collection:
+Крім того, ви можете передати третій аргумент, що містить нові елементи, щоб замінити вилучені з колекції елементи:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -2026,9 +1997,10 @@ In addition, you can pass a third argument containing the new items to replace t
     // [1, 2, 10, 11, 4, 5]
 
 <a name="method-split"></a>
-#### `split()` {#collection-method}
 
-The `split` method breaks a collection into the given number of groups:
+#### `split()`{# collection-method}
+
+`split`метод розбиває колекцію на задану кількість груп:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -2039,9 +2011,10 @@ The `split` method breaks a collection into the given number of groups:
     // [[1, 2], [3, 4], [5]]
 
 <a name="method-splitin"></a>
-#### `splitIn()` {#collection-method}
 
-The `splitIn` method breaks a collection into the given number of groups, filling non-terminal groups completely before allocating the remainder to the final group:
+#### `splitIn()`{# collection-method}
+
+`splitIn`метод розбиває колекцію на задану кількість груп, повністю заповнюючи нетермінальні групи, перш ніж розподілити залишок до кінцевої групи:
 
     $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
@@ -2052,15 +2025,16 @@ The `splitIn` method breaks a collection into the given number of groups, fillin
     // [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10]]
 
 <a name="method-sum"></a>
-#### `sum()` {#collection-method}
 
-The `sum` method returns the sum of all items in the collection:
+#### `sum()`{# collection-method}
+
+`sum`метод повертає суму всіх предметів у колекції:
 
     collect([1, 2, 3, 4, 5])->sum();
 
     // 15
 
-If the collection contains nested arrays or objects, you should pass a key to use for determining which values to sum:
+Якщо колекція містить вкладені масиви або об'єкти, вам слід передати ключ, який буде використовуватися для визначення значень, які потрібно підсумувати:
 
     $collection = collect([
         ['name' => 'JavaScript: The Good Parts', 'pages' => 176],
@@ -2071,7 +2045,7 @@ If the collection contains nested arrays or objects, you should pass a key to us
 
     // 1272
 
-In addition, you may pass your own callback to determine which values of the collection to sum:
+Крім того, ви можете передати власний зворотний виклик, щоб визначити, які значення колекції підсумовувати:
 
     $collection = collect([
         ['name' => 'Chair', 'colors' => ['Black']],
@@ -2086,9 +2060,10 @@ In addition, you may pass your own callback to determine which values of the col
     // 6
 
 <a name="method-take"></a>
-#### `take()` {#collection-method}
 
-The `take` method returns a new collection with the specified number of items:
+#### `take()`{# collection-method}
+
+`take`метод повертає нову колекцію із зазначеною кількістю елементів:
 
     $collection = collect([0, 1, 2, 3, 4, 5]);
 
@@ -2098,7 +2073,7 @@ The `take` method returns a new collection with the specified number of items:
 
     // [0, 1, 2]
 
-You may also pass a negative integer to take the specified amount of items from the end of the collection:
+Ви також можете передати від’ємне ціле число, щоб взяти вказану кількість предметів з кінця колекції:
 
     $collection = collect([0, 1, 2, 3, 4, 5]);
 
@@ -2109,9 +2084,10 @@ You may also pass a negative integer to take the specified amount of items from 
     // [4, 5]
 
 <a name="method-takeuntil"></a>
-#### `takeUntil()` {#collection-method}
 
-The `takeUntil` method returns items in the collection until the given callback returns `true`:
+#### `takeUntil()`{# collection-method}
+
+`takeUntil`метод повертає елементи в колекції, поки не повернеться даний зворотний виклик`true`:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -2123,7 +2099,7 @@ The `takeUntil` method returns items in the collection until the given callback 
 
     // [1, 2]
 
-You may also pass a simple value to the `takeUntil` method to get the items until the given value is found:
+Ви також можете передати просте значення в`takeUntil`спосіб отримати елементи, поки не буде знайдено задане значення:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -2133,12 +2109,13 @@ You may also pass a simple value to the `takeUntil` method to get the items unti
 
     // [1, 2]
 
-> {note} If the given value is not found or the callback never returns `true`, the `takeUntil` method will return all items in the collection.
+> {note} Якщо заданого значення не знайдено або зворотний виклик ніколи не повернеться`true`,`takeUntil`метод поверне всі елементи колекції.
 
 <a name="method-takewhile"></a>
-#### `takeWhile()` {#collection-method}
 
-The `takeWhile` method returns items in the collection until the given callback returns `false`:
+#### `takeWhile()`{# collection-method}
+
+`takeWhile`метод повертає елементи в колекції, поки не повернеться даний зворотний виклик`false`:
 
     $collection = collect([1, 2, 3, 4]);
 
@@ -2150,12 +2127,13 @@ The `takeWhile` method returns items in the collection until the given callback 
 
     // [1, 2]
 
-> {note} If the callback never returns `false`, the `takeWhile` method will return all items in the collection.
+> {note} Якщо зворотний дзвінок ніколи не повернеться`false`,`takeWhile`метод поверне всі елементи колекції.
 
 <a name="method-tap"></a>
-#### `tap()` {#collection-method}
 
-The `tap` method passes the collection to the given callback, allowing you to "tap" into the collection at a specific point and do something with the items while not affecting the collection itself:
+#### `tap()`{# collection-method}
+
+`tap`метод передає колекцію даному зворотному виклику, дозволяючи "натискати" на колекцію в певний момент і робити щось із елементами, не впливаючи на саму колекцію:
 
     collect([2, 4, 3, 1, 5])
         ->sort()
@@ -2167,9 +2145,10 @@ The `tap` method passes the collection to the given callback, allowing you to "t
     // 1
 
 <a name="method-times"></a>
-#### `times()` {#collection-method}
 
-The static `times` method creates a new collection by invoking the callback a given amount of times:
+#### `times()`{# collection-method}
+
+Статичний`times`метод створює нову колекцію, викликаючи зворотний виклик задану кількість разів:
 
     $collection = Collection::times(10, function ($number) {
         return $number * 9;
@@ -2179,7 +2158,7 @@ The static `times` method creates a new collection by invoking the callback a gi
 
     // [9, 18, 27, 36, 45, 54, 63, 72, 81, 90]
 
-This method can be useful when combined with factories to create [Eloquent](/docs/{{version}}/eloquent) models:
+Цей метод може бути корисним у поєднанні з фабриками для створення[Красномовний](/docs/{{version}}/eloquent)моделі:
 
     $categories = Collection::times(3, function ($number) {
         return Category::factory()->create(['name' => "Category No. $number"]);
@@ -2196,9 +2175,10 @@ This method can be useful when combined with factories to create [Eloquent](/doc
     */
 
 <a name="method-toarray"></a>
-#### `toArray()` {#collection-method}
 
-The `toArray` method converts the collection into a plain PHP `array`. If the collection's values are [Eloquent](/docs/{{version}}/eloquent) models, the models will also be converted to arrays:
+#### `toArray()`{# collection-method}
+
+`toArray`метод перетворює колекцію на звичайний PHP`array`. Якщо значення колекції[Красномовний](/docs/{{version}}/eloquent)моделі, моделі також будуть перетворені в масиви:
 
     $collection = collect(['name' => 'Desk', 'price' => 200]);
 
@@ -2210,12 +2190,13 @@ The `toArray` method converts the collection into a plain PHP `array`. If the co
         ]
     */
 
-> {note} `toArray` also converts all of the collection's nested objects that are an instance of `Arrayable` to an array. If you want to get the raw underlying array, use the [`all`](#method-all) method instead.
+> {Примітка}`toArray`також перетворює всі вкладені об'єкти колекції, які є екземпляром`Arrayable`до масиву. Якщо ви хочете отримати необроблений базовий масив, використовуйте[`all`](#method-all)замість цього.
 
 <a name="method-tojson"></a>
-#### `toJson()` {#collection-method}
 
-The `toJson` method converts the collection into a JSON serialized string:
+#### `toJson()`{# collection-method}
+
+`toJson`метод перетворює колекцію в серіалізований рядок JSON:
 
     $collection = collect(['name' => 'Desk', 'price' => 200]);
 
@@ -2224,9 +2205,10 @@ The `toJson` method converts the collection into a JSON serialized string:
     // '{"name":"Desk", "price":200}'
 
 <a name="method-transform"></a>
-#### `transform()` {#collection-method}
 
-The `transform` method iterates over the collection and calls the given callback with each item in the collection. The items in the collection will be replaced by the values returned by the callback:
+#### `transform()`{# collection-method}
+
+`transform`метод перебирає колекцію та викликає заданий зворотний виклик з кожним елементом у колекції. Елементи колекції будуть замінені значеннями, повернутими зворотним викликом:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -2238,12 +2220,13 @@ The `transform` method iterates over the collection and calls the given callback
 
     // [2, 4, 6, 8, 10]
 
-> {note} Unlike most other collection methods, `transform` modifies the collection itself. If you wish to create a new collection instead, use the [`map`](#method-map) method.
+> {note} На відміну від більшості інших методів збору,`transform`модифікує саму колекцію. Якщо замість цього ви хочете створити нову колекцію, використовуйте[`map`](#method-map)метод.
 
 <a name="method-union"></a>
-#### `union()` {#collection-method}
 
-The `union` method adds the given array to the collection. If the given array contains keys that are already in the original collection, the original collection's values will be preferred:
+#### `union()`{# collection-method}
+
+`union`метод додає даний масив до колекції. Якщо даний масив містить ключі, які вже є в оригінальній колекції, переважними будуть значення оригінальної колекції:
 
     $collection = collect([1 => ['a'], 2 => ['b']]);
 
@@ -2254,9 +2237,10 @@ The `union` method adds the given array to the collection. If the given array co
     // [1 => ['a'], 2 => ['b'], 3 => ['c']]
 
 <a name="method-unique"></a>
-#### `unique()` {#collection-method}
 
-The `unique` method returns all of the unique items in the collection. The returned collection keeps the original array keys, so in this example we'll use the [`values`](#method-values) method to reset the keys to consecutively numbered indexes:
+#### `unique()`{# collection-method}
+
+`unique`метод повертає всі унікальні предмети в колекції. Повернена колекція зберігає оригінальні ключі масиву, тому в цьому прикладі ми будемо використовувати[`values`](#method-values)метод скидання ключів до послідовно пронумерованих індексів:
 
     $collection = collect([1, 1, 2, 2, 3, 4, 2]);
 
@@ -2266,7 +2250,7 @@ The `unique` method returns all of the unique items in the collection. The retur
 
     // [1, 2, 3, 4]
 
-When dealing with nested arrays or objects, you may specify the key used to determine uniqueness:
+Маючи справу з вкладеними масивами або об’єктами, ви можете вказати ключ, що використовується для визначення унікальності:
 
     $collection = collect([
         ['name' => 'iPhone 6', 'brand' => 'Apple', 'type' => 'phone'],
@@ -2287,7 +2271,7 @@ When dealing with nested arrays or objects, you may specify the key used to dete
         ]
     */
 
-You may also pass your own callback to determine item uniqueness:
+Ви також можете передати власний зворотний дзвінок, щоб визначити унікальність товару:
 
     $unique = $collection->unique(function ($item) {
         return $item['brand'].$item['type'];
@@ -2304,19 +2288,21 @@ You may also pass your own callback to determine item uniqueness:
         ]
     */
 
-The `unique` method uses "loose" comparisons when checking item values, meaning a string with an integer value will be considered equal to an integer of the same value. Use the [`uniqueStrict`](#method-uniquestrict) method to filter using "strict" comparisons.
+`unique`метод використовує "вільні" порівняння при перевірці значень елементів, тобто рядок із цілим значенням вважатиметься рівним цілому числу того самого значення. Використовувати[`uniqueStrict`](#method-uniquestrict)метод фільтрації за допомогою "суворих" порівнянь.
 
-> {tip} This method's behavior is modified when using [Eloquent Collections](/docs/{{version}}/eloquent-collections#method-unique).
+> {tip} Поведінка цього методу змінюється під час використання[Красномовні колекції](/docs/{{version}}/eloquent-collections#method-unique).
 
 <a name="method-uniquestrict"></a>
-#### `uniqueStrict()` {#collection-method}
 
-This method has the same signature as the [`unique`](#method-unique) method; however, all values are compared using "strict" comparisons.
+#### `uniqueStrict()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`unique`](#method-unique)метод; однак усі значення порівнюються за допомогою "суворих" порівнянь.
 
 <a name="method-unless"></a>
-#### `unless()` {#collection-method}
 
-The `unless` method will execute the given callback unless the first argument given to the method evaluates to `true`:
+#### `unless()`{# collection-method}
+
+`unless`method виконає даний зворотний виклик, якщо перший аргумент, наданий методу, не має значення`true`:
 
     $collection = collect([1, 2, 3]);
 
@@ -2332,22 +2318,25 @@ The `unless` method will execute the given callback unless the first argument gi
 
     // [1, 2, 3, 5]
 
-For the inverse of `unless`, see the [`when`](#method-when) method.
+Для оберненого до`unless`, див[`when`](#method-when)метод.
 
 <a name="method-unlessempty"></a>
-#### `unlessEmpty()` {#collection-method}
 
-Alias for the [`whenNotEmpty`](#method-whennotempty) method.
+#### `unlessEmpty()`{# collection-method}
+
+Псевдонім для[`whenNotEmpty`](#method-whennotempty)метод.
 
 <a name="method-unlessnotempty"></a>
-#### `unlessNotEmpty()` {#collection-method}
 
-Alias for the [`whenEmpty`](#method-whenempty) method.
+#### `unlessNotEmpty()`{# collection-method}
+
+Псевдонім для[`whenEmpty`](#method-whenempty)метод.
 
 <a name="method-unwrap"></a>
-#### `unwrap()` {#collection-method}
 
-The static `unwrap` method returns the collection's underlying items from the given value when applicable:
+#### `unwrap()`{# collection-method}
+
+Статичний`unwrap`метод повертає основні елементи колекції із заданого значення, коли це застосовно:
 
     Collection::unwrap(collect('John Doe'));
 
@@ -2362,9 +2351,10 @@ The static `unwrap` method returns the collection's underlying items from the gi
     // 'John Doe'
 
 <a name="method-values"></a>
-#### `values()` {#collection-method}
 
-The `values` method returns a new collection with the keys reset to consecutive integers:
+#### `values()`{# collection-method}
+
+`values`метод повертає нову колекцію із скиданням ключів до послідовних цілих чисел:
 
     $collection = collect([
         10 => ['product' => 'Desk', 'price' => 200],
@@ -2383,9 +2373,10 @@ The `values` method returns a new collection with the keys reset to consecutive 
     */
 
 <a name="method-when"></a>
-#### `when()` {#collection-method}
 
-The `when` method will execute the given callback when the first argument given to the method evaluates to `true`:
+#### `when()`{# collection-method}
+
+`when`method виконає даний зворотний виклик, коли перший аргумент, наданий методу, оцінюється як`true`:
 
     $collection = collect([1, 2, 3]);
 
@@ -2401,12 +2392,13 @@ The `when` method will execute the given callback when the first argument given 
 
     // [1, 2, 3, 4]
 
-For the inverse of `when`, see the [`unless`](#method-unless) method.
+Для оберненого до`when`, див[`unless`](#method-unless)метод.
 
 <a name="method-whenempty"></a>
-#### `whenEmpty()` {#collection-method}
 
-The `whenEmpty` method will execute the given callback when the collection is empty:
+#### `whenEmpty()`{# collection-method}
+
+`whenEmpty`метод виконає даний зворотний виклик, коли колекція порожня:
 
     $collection = collect(['michael', 'tom']);
 
@@ -2442,12 +2434,13 @@ The `whenEmpty` method will execute the given callback when the collection is em
 
     // ['michael', 'tom', 'taylor']
 
-For the inverse of `whenEmpty`, see the [`whenNotEmpty`](#method-whennotempty) method.
+Для оберненого до`whenEmpty`, див[`whenNotEmpty`](#method-whennotempty)метод.
 
 <a name="method-whennotempty"></a>
-#### `whenNotEmpty()` {#collection-method}
 
-The `whenNotEmpty` method will execute the given callback when the collection is not empty:
+#### `whenNotEmpty()`{# collection-method}
+
+`whenNotEmpty`метод виконає даний зворотний виклик, коли колекція не порожня:
 
     $collection = collect(['michael', 'tom']);
 
@@ -2483,12 +2476,13 @@ The `whenNotEmpty` method will execute the given callback when the collection is
 
     // ['taylor']
 
-For the inverse of `whenNotEmpty`, see the [`whenEmpty`](#method-whenempty) method.
+Для оберненого до`whenNotEmpty`, див[`whenEmpty`](#method-whenempty)метод.
 
 <a name="method-where"></a>
-#### `where()` {#collection-method}
 
-The `where` method filters the collection by a given key / value pair:
+#### `where()`{# collection-method}
+
+`where`метод фільтрує колекцію за заданою парою ключ / значення:
 
     $collection = collect([
         ['product' => 'Desk', 'price' => 200],
@@ -2508,9 +2502,9 @@ The `where` method filters the collection by a given key / value pair:
         ]
     */
 
-The `where` method uses "loose" comparisons when checking item values, meaning a string with an integer value will be considered equal to an integer of the same value. Use the [`whereStrict`](#method-wherestrict) method to filter using "strict" comparisons.
+`where`метод використовує "вільні" порівняння при перевірці значень елементів, тобто рядок із цілим значенням вважатиметься рівним цілому числу того самого значення. Використовувати[`whereStrict`](#method-wherestrict)метод фільтрації за допомогою "суворих" порівнянь.
 
-Optionally, you may pass a comparison operator as the second parameter.
+За бажанням ви можете передати оператор порівняння як другий параметр.
 
     $collection = collect([
         ['name' => 'Jim', 'deleted_at' => '2019-01-01 00:00:00'],
@@ -2530,14 +2524,16 @@ Optionally, you may pass a comparison operator as the second parameter.
     */
 
 <a name="method-wherestrict"></a>
-#### `whereStrict()` {#collection-method}
 
-This method has the same signature as the [`where`](#method-where) method; however, all values are compared using "strict" comparisons.
+#### `whereStrict()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`where`](#method-where)метод; однак усі значення порівнюються за допомогою "суворих" порівнянь.
 
 <a name="method-wherebetween"></a>
-#### `whereBetween()` {#collection-method}
 
-The `whereBetween` method filters the collection within a given range:
+#### `whereBetween()`{# collection-method}
+
+`whereBetween`метод фільтрує колекцію в заданому діапазоні:
 
     $collection = collect([
         ['product' => 'Desk', 'price' => 200],
@@ -2560,9 +2556,10 @@ The `whereBetween` method filters the collection within a given range:
     */
 
 <a name="method-wherein"></a>
-#### `whereIn()` {#collection-method}
 
-The `whereIn` method filters the collection by a given key / value contained within the given array:
+#### `whereIn()`{# collection-method}
+
+`whereIn`метод фільтрує колекцію за заданим ключем / значенням, що містяться в даному масиві:
 
     $collection = collect([
         ['product' => 'Desk', 'price' => 200],
@@ -2582,17 +2579,19 @@ The `whereIn` method filters the collection by a given key / value contained wit
         ]
     */
 
-The `whereIn` method uses "loose" comparisons when checking item values, meaning a string with an integer value will be considered equal to an integer of the same value. Use the [`whereInStrict`](#method-whereinstrict) method to filter using "strict" comparisons.
+`whereIn`метод використовує "вільні" порівняння при перевірці значень елементів, тобто рядок із цілим значенням вважатиметься рівним цілому числу того самого значення. Використовувати[`whereInStrict`](#method-whereinstrict)метод фільтрації за допомогою "суворих" порівнянь.
 
 <a name="method-whereinstrict"></a>
-#### `whereInStrict()` {#collection-method}
 
-This method has the same signature as the [`whereIn`](#method-wherein) method; however, all values are compared using "strict" comparisons.
+#### `whereInStrict()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`whereIn`](#method-wherein)метод; однак усі значення порівнюються за допомогою "суворих" порівнянь.
 
 <a name="method-whereinstanceof"></a>
-#### `whereInstanceOf()` {#collection-method}
 
-The `whereInstanceOf` method filters the collection by a given class type:
+#### `whereInstanceOf()`{# collection-method}
+
+`whereInstanceOf`метод фільтрує колекцію за заданим типом класу:
 
     use App\Models\User;
     use App\Models\Post;
@@ -2610,9 +2609,10 @@ The `whereInstanceOf` method filters the collection by a given class type:
     // [App\Models\User, App\Models\User]
 
 <a name="method-wherenotbetween"></a>
-#### `whereNotBetween()` {#collection-method}
 
-The `whereNotBetween` method filters the collection within a given range:
+#### `whereNotBetween()`{# collection-method}
+
+`whereNotBetween`метод фільтрує колекцію в заданому діапазоні:
 
     $collection = collect([
         ['product' => 'Desk', 'price' => 200],
@@ -2634,9 +2634,10 @@ The `whereNotBetween` method filters the collection within a given range:
     */
 
 <a name="method-wherenotin"></a>
-#### `whereNotIn()` {#collection-method}
 
-The `whereNotIn` method filters the collection by a given key / value not contained within the given array:
+#### `whereNotIn()`{# collection-method}
+
+`whereNotIn`метод фільтрує колекцію за заданим ключем / значенням, що не містяться в даному масиві:
 
     $collection = collect([
         ['product' => 'Desk', 'price' => 200],
@@ -2656,17 +2657,19 @@ The `whereNotIn` method filters the collection by a given key / value not contai
         ]
     */
 
-The `whereNotIn` method uses "loose" comparisons when checking item values, meaning a string with an integer value will be considered equal to an integer of the same value. Use the [`whereNotInStrict`](#method-wherenotinstrict) method to filter using "strict" comparisons.
+`whereNotIn`метод використовує "вільні" порівняння при перевірці значень елементів, тобто рядок із цілим значенням вважатиметься рівним цілому числу того самого значення. Використовувати[`whereNotInStrict`](#method-wherenotinstrict)метод фільтрації за допомогою "суворих" порівнянь.
 
 <a name="method-wherenotinstrict"></a>
-#### `whereNotInStrict()` {#collection-method}
 
-This method has the same signature as the [`whereNotIn`](#method-wherenotin) method; however, all values are compared using "strict" comparisons.
+#### `whereNotInStrict()`{# collection-method}
+
+Цей метод має той самий підпис, що і[`whereNotIn`](#method-wherenotin)метод; однак усі значення порівнюються за допомогою "суворих" порівнянь.
 
 <a name="method-wherenotnull"></a>
-#### `whereNotNull()` {#collection-method}
 
-The `whereNotNull` method filters items where the given key is not null:
+#### `whereNotNull()`{# collection-method}
+
+`whereNotNull`метод фільтрує елементи, де даний ключ не має значення null:
 
     $collection = collect([
         ['name' => 'Desk'],
@@ -2686,9 +2689,10 @@ The `whereNotNull` method filters items where the given key is not null:
     */
 
 <a name="method-wherenull"></a>
-#### `whereNull()` {#collection-method}
 
-The `whereNull` method filters items where the given key is null:
+#### `whereNull()`{# collection-method}
+
+`whereNull`метод фільтрує елементи, де даний ключ має значення null:
 
     $collection = collect([
         ['name' => 'Desk'],
@@ -2706,11 +2710,11 @@ The `whereNull` method filters items where the given key is null:
         ]
     */
 
-
 <a name="method-wrap"></a>
-#### `wrap()` {#collection-method}
 
-The static `wrap` method wraps the given value in a collection when applicable:
+#### `wrap()`{# collection-method}
+
+Статичний`wrap`метод обертає задане значення у колекції, коли це застосовно:
 
     $collection = Collection::wrap('John Doe');
 
@@ -2731,9 +2735,10 @@ The static `wrap` method wraps the given value in a collection when applicable:
     // ['John Doe']
 
 <a name="method-zip"></a>
-#### `zip()` {#collection-method}
 
-The `zip` method merges together the values of the given array with the values of the original collection at the corresponding index:
+#### `zip()`{# collection-method}
+
+`zip`метод об'єднує значення даного масиву зі значеннями вихідної колекції за відповідним індексом:
 
     $collection = collect(['Chair', 'Desk']);
 
@@ -2744,33 +2749,36 @@ The `zip` method merges together the values of the given array with the values o
     // [['Chair', 100], ['Desk', 200]]
 
 <a name="higher-order-messages"></a>
-## Higher Order Messages
 
-Collections also provide support for "higher order messages", which are short-cuts for performing common actions on collections. The collection methods that provide higher order messages are: [`average`](#method-average), [`avg`](#method-avg), [`contains`](#method-contains), [`each`](#method-each), [`every`](#method-every), [`filter`](#method-filter), [`first`](#method-first), [`flatMap`](#method-flatmap), [`groupBy`](#method-groupby), [`keyBy`](#method-keyby), [`map`](#method-map), [`max`](#method-max), [`min`](#method-min), [`partition`](#method-partition), [`reject`](#method-reject), [`skipUntil`](#method-skipuntil), [`skipWhile`](#method-skipwhile), [`some`](#method-some), [`sortBy`](#method-sortby), [`sortByDesc`](#method-sortbydesc), [`sum`](#method-sum), [`takeUntil`](#method-takeuntil), [`takeWhile`](#method-takewhile) and [`unique`](#method-unique).
+## Повідомлення вищого порядку
 
-Each higher order message can be accessed as a dynamic property on a collection instance. For instance, let's use the `each` higher order message to call a method on each object within a collection:
+Колекції також забезпечують підтримку "повідомлень вищого порядку", які є комбінаціями клавіш для виконання загальних дій над колекціями. Методами збору, які надають повідомлення вищого порядку, є:[`average`](#method-average),[`avg`](#method-avg),[`contains`](#method-contains),[`each`](#method-each),[`every`](#method-every),[`filter`](#method-filter),[`first`](#method-first),[`flatMap`](#method-flatmap),[`groupBy`](#method-groupby), [`keyBy`](#method-keyby),[`map`](#method-map),[`max`](#method-max),[`min`](#method-min),[`partition`](#method-partition),[`reject`](#method-reject),[`skipUntil`](#method-skipuntil),[`skipWhile`](#method-skipwhile),[`some`](#method-some),[`sortBy`](#method-sortby),[`sortByDesc`](#method-sortbydesc),[`sum`](#method-sum),[`takeUntil`](#method-takeuntil),[`takeWhile`](#method-takewhile)і[`unique`](#method-unique).
+
+Кожне повідомлення вищого порядку можна отримати як динамічну властивість на екземплярі колекції. Наприклад, давайте використаємо`each`повідомлення вищого порядку для виклику методу для кожного об’єкта в колекції:
 
     $users = User::where('votes', '>', 500)->get();
 
     $users->each->markAsVip();
 
-Likewise, we can use the `sum` higher order message to gather the total number of "votes" for a collection of users:
+Так само ми можемо використовувати`sum`повідомлення вищого порядку, щоб зібрати загальну кількість "голосів" для набору користувачів:
 
     $users = User::where('group', 'Development')->get();
 
     return $users->sum->votes;
 
 <a name="lazy-collections"></a>
-## Lazy Collections
+
+## Ледачі колекції
 
 <a name="lazy-collection-introduction"></a>
-### Introduction
 
-> {note} Before learning more about Laravel's lazy collections, take some time to familiarize yourself with [PHP generators](https://www.php.net/manual/en/language.generators.overview.php).
+### Вступ
 
-To supplement the already powerful `Collection` class, the `LazyCollection` class leverages PHP's [generators](https://www.php.net/manual/en/language.generators.overview.php) to allow you to work with very large datasets while keeping memory usage low.
+> {note} Перш ніж дізнатись більше про ледачі колекції Laravel, знайдіть трохи часу, щоб ознайомитись із ними[PHP-генератори](https://www.php.net/manual/en/language.generators.overview.php).
 
-For example, imagine your application needs to process a multi-gigabyte log file while taking advantage of Laravel's collection methods to parse the logs. Instead of reading the entire file into memory at once, lazy collections may be used to keep only a small part of the file in memory at a given time:
+Доповнити і без того потужний`Collection`клас,`LazyCollection`клас використовує PHP[генератори](https://www.php.net/manual/en/language.generators.overview.php)щоб дозволити вам працювати з дуже великими наборами даних, зберігаючи при цьому низьке використання пам'яті.
+
+Наприклад, уявіть, що вашій програмі потрібно обробити файл журналу на декілька гігабайт, користуючись методами збору Laravel для аналізу журналів. Замість зчитування всього файлу в пам’ять одночасно, ліниві колекції можуть використовуватися для збереження лише невеликої частини файлу в пам’яті на даний момент:
 
     use App\Models\LogEntry;
     use Illuminate\Support\LazyCollection;
@@ -2787,13 +2795,13 @@ For example, imagine your application needs to process a multi-gigabyte log file
         // Process the log entry...
     });
 
-Or, imagine you need to iterate through 10,000 Eloquent models. When using traditional Laravel collections, all 10,000 Eloquent models must be loaded into memory at the same time:
+Або уявіть, що вам потрібно переглядати 10 000 Eloquent моделей. При використанні традиційних колекцій Laravel усі 10000 Eloquent моделей повинні завантажуватися в пам’ять одночасно:
 
     $users = App\Models\User::all()->filter(function ($user) {
         return $user->id > 500;
     });
 
-However, the query builder's `cursor` method returns a `LazyCollection` instance. This allows you to still only run a single query against the database but also only keep one Eloquent model loaded in memory at a time. In this example, the `filter` callback is not executed until we actually iterate over each user individually, allowing for a drastic reduction in memory usage:
+Однак запит розробника`cursor`метод повертає a`LazyCollection`інстанції. Це дозволяє виконувати лише один запит до бази даних, але одночасно зберігати в пам'яті лише одну модель Eloquent. У цьому прикладі`filter`зворотний виклик не виконується, поки ми фактично не повторимо кожного користувача окремо, що дозволить різко зменшити використання пам'яті:
 
     $users = App\Models\User::cursor()->filter(function ($user) {
         return $user->id > 500;
@@ -2804,9 +2812,10 @@ However, the query builder's `cursor` method returns a `LazyCollection` instance
     }
 
 <a name="creating-lazy-collections"></a>
-### Creating Lazy Collections
 
-To create a lazy collection instance, you should pass a PHP generator function to the collection's `make` method:
+### Створення ледачих колекцій
+
+Щоб створити ледачий екземпляр колекції, вам слід передати функцію генератора PHP колекції`make`метод:
 
     use Illuminate\Support\LazyCollection;
 
@@ -2819,9 +2828,10 @@ To create a lazy collection instance, you should pass a PHP generator function t
     });
 
 <a name="the-enumerable-contract"></a>
-### The Enumerable Contract
 
-Almost all methods available on the `Collection` class are also available on the `LazyCollection` class. Both of these classes implement the `Illuminate\Support\Enumerable` contract, which defines the following methods:
+### Контракт, що перелічується
+
+Майже всі методи, доступні на`Collection`клас також доступні на`LazyCollection`клас. Обидва ці класи реалізують`Illuminate\Support\Enumerable`контракт, який визначає такі методи:
 
 <div id="collection-method-list" markdown="1">
 
@@ -2936,17 +2946,19 @@ Almost all methods available on the `Collection` class are also available on the
 
 </div>
 
-> {note} Methods that mutate the collection (such as `shift`, `pop`, `prepend` etc.) are _not_ available on the `LazyCollection` class.
+> {note} Методи, що мутують колекцію (наприклад`shift`,`pop`,`prepend`тощо)_ні_доступні на`LazyCollection`клас.
 
 <a name="lazy-collection-methods"></a>
-### Lazy Collection Methods
 
-In addition to the methods defined in the `Enumerable` contract, the `LazyCollection` class contains the following methods:
+### Методи лінивого збору
+
+На додаток до методів, визначених у`Enumerable`контракт,`LazyCollection`клас містить такі методи:
 
 <a name="method-tapEach"></a>
-#### `tapEach()` {#collection-method}
 
-While the `each` method calls the given callback for each item in the collection right away, the `tapEach` method only calls the given callback as the items are being pulled out of the list one by one:
+#### `tapEach()`{# collection-method}
+
+Поки`each`метод викликає даний зворотний виклик для кожного елемента в колекції відразу,`tapEach`метод викликає лише даний зворотний виклик, оскільки елементи витягуються зі списку по одному:
 
     $lazyCollection = LazyCollection::times(INF)->tapEach(function ($value) {
         dump($value);
@@ -2961,9 +2973,10 @@ While the `each` method calls the given callback for each item in the collection
     // 3
 
 <a name="method-remember"></a>
-#### `remember()` {#collection-method}
 
-The `remember` method returns a new lazy collection that will remember any values that have already been enumerated and will not retrieve them again when the collection is enumerated again:
+#### `remember()`{# collection-method}
+
+`remember`Метод повертає нову ліниву колекцію, яка запам'ятає всі перераховані значення і не отримає їх знову, коли колекція буде перерахована знову:
 
     $users = User::cursor()->remember();
 
