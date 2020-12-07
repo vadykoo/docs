@@ -64,7 +64,7 @@
 
 <a name="pusher-channels"></a>
 
-#### Канали штовхача
+#### Канали Pusher
 
 Якщо ви транслюєте свої події[Канали штовхача](https://pusher.com/channels), вам слід встановити PHP SDK Pusher Channels за допомогою менеджера пакетів Composer:
 
