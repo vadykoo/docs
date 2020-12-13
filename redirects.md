@@ -87,7 +87,7 @@
         return redirect('dashboard')->with('status', 'Profile updated!');
     });
 
-Після перенаправлення користувача ви можете відобразити блимає повідомлення з[сесія](/docs/{{version}}/session). Наприклад, використовуючи[Леза синтаксису](/docs/{{version}}/blade):
+Після перенаправлення користувача ви можете відобразити блимає повідомлення з[сесія](/docs/{{version}}/session). Наприклад, використовуючи[Blade синтаксису](/docs/{{version}}/blade):
 
     @if (session('status'))
         <div class="alert alert-success">
