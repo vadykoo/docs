@@ -2,30 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="953e146f-1ad6-4b9c-8104-e72814345703" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/artisan.md" beforeDir="false" afterPath="$PROJECT_DIR$/artisan.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/authorization.md" beforeDir="false" afterPath="$PROJECT_DIR$/authorization.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blade.md" beforeDir="false" afterPath="$PROJECT_DIR$/blade.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cashier-paddle.md" beforeDir="false" afterPath="$PROJECT_DIR$/cashier-paddle.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configuration.md" beforeDir="false" afterPath="$PROJECT_DIR$/configuration.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/eloquent-resources.md" beforeDir="false" afterPath="$PROJECT_DIR$/eloquent-resources.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/envoy.md" beforeDir="false" afterPath="$PROJECT_DIR$/envoy.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers.md" beforeDir="false" afterPath="$PROJECT_DIR$/helpers.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/http-tests.md" beforeDir="false" afterPath="$PROJECT_DIR$/http-tests.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/localization.md" beforeDir="false" afterPath="$PROJECT_DIR$/localization.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mail.md" beforeDir="false" afterPath="$PROJECT_DIR$/mail.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notifications.md" beforeDir="false" afterPath="$PROJECT_DIR$/notifications.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pagination.md" beforeDir="false" afterPath="$PROJECT_DIR$/pagination.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/passwords.md" beforeDir="false" afterPath="$PROJECT_DIR$/passwords.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redirects.md" beforeDir="false" afterPath="$PROJECT_DIR$/redirects.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/releases.md" beforeDir="false" afterPath="$PROJECT_DIR$/releases.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requests.md" beforeDir="false" afterPath="$PROJECT_DIR$/requests.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/responses.md" beforeDir="false" afterPath="$PROJECT_DIR$/responses.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routing.md" beforeDir="false" afterPath="$PROJECT_DIR$/routing.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scout.md" beforeDir="false" afterPath="$PROJECT_DIR$/scout.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/session.md" beforeDir="false" afterPath="$PROJECT_DIR$/session.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/valet.md" beforeDir="false" afterPath="$PROJECT_DIR$/valet.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/validation.md" beforeDir="false" afterPath="$PROJECT_DIR$/validation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views.md" beforeDir="false" afterPath="$PROJECT_DIR$/views.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/installation.md" beforeDir="false" afterPath="$PROJECT_DIR$/installation.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -33,6 +12,44 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="envoy.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/envoy.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor>
+                <caret selection-end-line="2" selection-end-column="3" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="artisan.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/artisan.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor />
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="installation.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/installation.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="48">
+                <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -51,6 +68,14 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/envoy.md" />
+        <option value="$PROJECT_DIR$/installation.md" />
+      </list>
+    </option>
+  </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsGulpfileManager">
@@ -60,7 +85,7 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-10" />
     <option name="y" value="-10" />
     <option name="width" value="1940" />
@@ -114,23 +139,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1607868962241</updated>
-      <workItem from="1607868963570" duration="2041000" />
+      <workItem from="1607868963570" duration="2444000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2041000" />
+    <option name="totallyTimeSpent" value="2444000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="7" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" />
-      <window_info active="true" anchor="bottom" id="Terminal" visible="true" weight="0.32905984" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
+      <window_info anchor="bottom" id="Terminal" visible="true" weight="0.32905984" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24966443" />
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="right" id="Database" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -150,5 +176,35 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/envoy.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor>
+            <caret selection-end-line="2" selection-end-column="3" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/artisan.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/installation.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="48">
+            <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
