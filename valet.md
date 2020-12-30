@@ -259,7 +259,7 @@ Let's take a look at a sample implementation of each method your custom Valet dr
 
 `serves`метод повинен повернутися`true`якщо ваш драйвер повинен обробляти вхідний запит. В іншому випадку метод повинен повернутися`false`. Отже, в рамках цього методу ви повинні спробувати визначити, чи є даний`$sitePath`містить проект типу, якому ви намагаєтесь обслуговувати.
 
-Наприклад, давайте зробимо вигляд, що пишемо a`WordPressValetDriver`. Наші`serves`метод може виглядати приблизно так:
+Наприклад, давайте зробимо Шаблон, що пишемо a`WordPressValetDriver`. Наші`serves`метод може виглядати приблизно так:
 
     /**
      * Determine if the driver serves the request.
